@@ -4,6 +4,8 @@ target/
 !**/src/main/**
 !**/src/test/**
 
+.attach_pid**
+
 ### STS ###
 .apt_generated
 .classpath

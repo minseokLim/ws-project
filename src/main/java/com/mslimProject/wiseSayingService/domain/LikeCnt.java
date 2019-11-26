@@ -1,5 +1,7 @@
 package com.mslimProject.wiseSayingService.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -11,10 +13,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class LikeCnt {
+public class LikeCnt implements Serializable {
 	
+	private static final long serialVersionUID = 5254404325738810327L;
+
 	@Id
-	private String ownerId;
+	private String userId;
 	
 	@Id
 	private Long wsId;
@@ -22,8 +26,8 @@ public class LikeCnt {
 	private int likeCnt;
 	
 	@Builder
-	public LikeCnt(String ownerId, Long wsId, int likeCnt) {
-		this.ownerId = ownerId;
+	public LikeCnt(String userId, Long wsId, int likeCnt) {
+		this.userId = userId;
 		this.wsId = wsId;
 		this.likeCnt = likeCnt;
 	}

@@ -1,1 +1,13 @@
-
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+  data:
+    rest:
+      base-path: /api
+      default-page-size: 10    
+server:
+  port: 8080

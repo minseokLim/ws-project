@@ -1,5 +1,7 @@
 package com.mslimProject.wiseSayingService.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,8 +18,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class WS extends BaseTimeEntity {
-	
+public class WiseSaying extends BaseTimeEntity implements Serializable {
+
+	private static final long serialVersionUID = -8023948837054910029L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -33,7 +37,7 @@ public class WS extends BaseTimeEntity {
 	private String ownerId;
 	
 	@Builder
-	public WS(String content, String author, WS_Type type, boolean byAdmin, String ownerId) {
+	public WiseSaying(String content, String author, WS_Type type, boolean byAdmin, String ownerId) {
 		this.content = content;
 		this.author = author;
 		this.type = type;
