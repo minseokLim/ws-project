@@ -1,4 +1,4 @@
-package com.mslimProject.wiseSayingService.domain;
+package com.wsProject.wsService.domain;
 
 import java.time.LocalDateTime;
 

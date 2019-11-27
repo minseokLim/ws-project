@@ -1,4 +1,4 @@
-package com.mslimProject.wiseSayingService.domain;
+package com.wsProject.wsService.domain;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.mslimProject.wiseSayingService.domain.enums.WS_Type;
+import com.wsProject.wsService.domain.enums.WS_Type;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class WiseSaying extends BaseTimeEntity implements Serializable {
+public class WS extends BaseTimeEntity implements Serializable {
 
 	private static final long serialVersionUID = -8023948837054910029L;
 
@@ -37,7 +37,7 @@ public class WiseSaying extends BaseTimeEntity implements Serializable {
 	private String ownerId;
 	
 	@Builder
-	public WiseSaying(String content, String author, WS_Type type, boolean byAdmin, String ownerId) {
+	public WS(String content, String author, WS_Type type, boolean byAdmin, String ownerId) {
 		this.content = content;
 		this.author = author;
 		this.type = type;

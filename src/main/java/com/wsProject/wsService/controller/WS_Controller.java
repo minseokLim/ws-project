@@ -1,4 +1,4 @@
-package com.mslimProject.wiseSayingService.controller;
+package com.wsProject.wsService.controller;
 
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 

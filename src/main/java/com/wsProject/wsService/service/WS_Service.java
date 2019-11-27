@@ -1,4 +1,4 @@
-package com.mslimProject.wiseSayingService.service;
+package com.wsProject.wsService.service;
 
 import org.springframework.stereotype.Service;
 
