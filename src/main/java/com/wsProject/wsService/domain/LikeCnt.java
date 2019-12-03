@@ -2,6 +2,7 @@ package com.wsProject.wsService.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -18,6 +19,7 @@ public class LikeCnt implements Serializable {
 	private static final long serialVersionUID = 5254404325738810327L;
 
 	@Id
+	@Column(length = 50)
 	private String userId;
 	
 	@Id
