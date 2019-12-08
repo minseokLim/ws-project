@@ -1,12 +1,12 @@
 package com.wsProject.wsService.domain;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.wsProject.wsService.domain.enums.WS_Type;
 
@@ -18,9 +18,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class WS extends BaseTimeEntity implements Serializable {
-
-	private static final long serialVersionUID = -8023948837054910029L;
+@Table(name = "TBL_WS")
+public class WS extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,15 +33,20 @@ public class WS extends BaseTimeEntity implements Serializable {
 	
 	private boolean byAdmin;
 	
-	@Column(length = 50)
+	@Column(length = 100)
 	private String ownerEmail;
 	
+	@Transient
+	private boolean like;
+	
 	@Builder
-	public WS(String content, String author, WS_Type type, boolean byAdmin, String ownerEmail) {
+	public WS(Long id, String content, String author, WS_Type type, boolean byAdmin, String ownerEmail, boolean like) {
+		this.id = id;
 		this.content = content;
 		this.author = author;
 		this.type = type;
 		this.byAdmin = byAdmin;
 		this.ownerEmail = ownerEmail;
-	}	
+		this.like = like;
+	}
 }
