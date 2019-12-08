@@ -22,12 +22,12 @@ public class WS_ServiceApplication {
 	public CommandLineRunner runner(WS_Repository repository) {
 		return args -> {
 			WS saying = WS.builder()
-									.author("찰리 채플린")
-									.content("진정으로 웃으려면 고통을 참아야 하며, 나아가 고통을 즐길 줄 알아야 한다.")
-									.byAdmin(true)
-									.type(WS_Type.SELF_DEV)
-									.ownerId("admin")
-									.build();
+						.author("찰리 채플린")
+						.content("진정으로 웃으려면 고통을 참아야 하며, 나아가 고통을 즐길 줄 알아야 한다.")
+						.byAdmin(true)
+						.type(WS_Type.SELF_DEV)
+						.ownerEmail("mslim8803@naver.com")
+						.build();
 			
 			repository.save(saying);
 		};

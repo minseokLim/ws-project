@@ -20,7 +20,7 @@ public class LikeCnt implements Serializable {
 
 	@Id
 	@Column(length = 50)
-	private String userId;
+	private String userEmail;
 	
 	@Id
 	private Long wsId;
@@ -28,8 +28,8 @@ public class LikeCnt implements Serializable {
 	private int likeCnt;
 	
 	@Builder
-	public LikeCnt(String userId, Long wsId, int likeCnt) {
-		this.userId = userId;
+	public LikeCnt(String userEmail, Long wsId, int likeCnt) {
+		this.userEmail = userEmail;
 		this.wsId = wsId;
 		this.likeCnt = likeCnt;
 	}

@@ -2,6 +2,7 @@ package com.wsProject.wsService.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,14 +35,15 @@ public class WS extends BaseTimeEntity implements Serializable {
 	
 	private boolean byAdmin;
 	
-	private String ownerId;
+	@Column(length = 50)
+	private String ownerEmail;
 	
 	@Builder
-	public WS(String content, String author, WS_Type type, boolean byAdmin, String ownerId) {
+	public WS(String content, String author, WS_Type type, boolean byAdmin, String ownerEmail) {
 		this.content = content;
 		this.author = author;
 		this.type = type;
 		this.byAdmin = byAdmin;
-		this.ownerId = ownerId;
+		this.ownerEmail = ownerEmail;
 	}	
 }
