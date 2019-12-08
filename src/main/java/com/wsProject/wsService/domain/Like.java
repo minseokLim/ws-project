@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class LikeCnt implements Serializable {
+public class Like implements Serializable {
 	
 	private static final long serialVersionUID = 5254404325738810327L;
 
@@ -24,13 +24,10 @@ public class LikeCnt implements Serializable {
 	
 	@Id
 	private Long wsId;
-	
-	private int likeCnt;
-	
+		
 	@Builder
-	public LikeCnt(String userEmail, Long wsId, int likeCnt) {
+	public Like(String userEmail, Long wsId) {
 		this.userEmail = userEmail;
 		this.wsId = wsId;
-		this.likeCnt = likeCnt;
 	}
 }

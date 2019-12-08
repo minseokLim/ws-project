@@ -15,7 +15,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 // TODO need to optimize size of each column
-// TODO foreign key?? ownerId? is it possible and reasonable?
 @Entity
 @Getter
 @NoArgsConstructor
