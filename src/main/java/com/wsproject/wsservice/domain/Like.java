@@ -1,4 +1,4 @@
-package com.wsProject.wsService.domain;
+package com.wsproject.wsservice.domain;
 
 import java.io.Serializable;
 
