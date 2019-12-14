@@ -8,8 +8,10 @@ import com.wsproject.wsservice.domain.WS;
 import com.wsproject.wsservice.domain.enums.WS_Type;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class WS_DTO extends RepresentationModel<WS_DTO> {
 	
 	private Long id;
@@ -37,5 +39,9 @@ public class WS_DTO extends RepresentationModel<WS_DTO> {
 		this.ownerEmail = ws.getOwnerEmail();
 		this.createdDate = ws.getCreatedDate();
 		this.modifiedDate = ws.getModifiedDate();
+	}
+	
+	public WS toEntity() {
+		return WS.builder().content(content).author(author).type(type).byAdmin(byAdmin).ownerEmail(ownerEmail).build();
 	}
 }

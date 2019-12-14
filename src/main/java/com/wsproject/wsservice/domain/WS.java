@@ -41,5 +41,13 @@ public class WS extends BaseTimeEntity {
 		this.type = type;
 		this.byAdmin = byAdmin;
 		this.ownerEmail = ownerEmail;
-	}	
+	}
+
+	public void update(WS ws) {
+		this.content = ws.getContent();
+		this.author = ws.getAuthor();
+		this.type = ws.getType();
+		this.byAdmin = ws.isByAdmin();
+		this.ownerEmail = ws.getOwnerEmail();
+	}
 }
