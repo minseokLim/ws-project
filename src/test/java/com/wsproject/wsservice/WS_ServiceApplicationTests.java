@@ -1,4 +1,4 @@
-package com.wsProject.wsService;
+package com.wsproject.wsservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
