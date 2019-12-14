@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import com.wsproject.wsservice.domain.enums.WS_Type;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "TBL_WS")
+@Table(name = "TBL_WS", indexes = {@Index(columnList = "ownerEmail")})
 public class WS extends BaseTimeEntity {
 
 	@Id
