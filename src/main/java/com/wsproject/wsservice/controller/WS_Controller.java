@@ -22,7 +22,8 @@ public class WS_Controller {
 	private WS_Service service;
 	
 	@GetMapping
-	public ResponseEntity<PagedModel<WS_DTO>> findWSesByUserEmail(@PageableDefault Pageable pageable, @RequestParam String userEmail) {
-		return null;
+	public ResponseEntity<PagedModel<WS_DTO>> findWSesByUserEmail(@RequestParam String userEmail, @PageableDefault Pageable pageable) {
+		PagedModel<WS_DTO> model = service.findWSesByUserEmail(userEmail, pageable);
+		return ResponseEntity.ok(model);
 	}	
 }

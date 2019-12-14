@@ -1,11 +1,9 @@
 package com.wsproject.wsservice.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.wsproject.wsservice.domain.enums.WS_Type;
@@ -33,11 +31,7 @@ public class WS extends BaseTimeEntity {
 	
 	private boolean byAdmin;
 	
-	@Column(length = 100)
 	private String ownerEmail;
-	
-	@OneToMany
-	Like like;
 	
 	@Builder
 	public WS(String content, String author, WS_Type type, boolean byAdmin, String ownerEmail) {
