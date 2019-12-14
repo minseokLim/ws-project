@@ -34,7 +34,13 @@ public class WS_ServiceImpl implements WS_Service {
 	
 	@Override
 	public PagedModel<WS_DTO> findWSesByUserEmail(String userEmail, Pageable pageable) {
-		Page<WS> page = repository.findByOwnerEmailOrByAdmin(userEmail, true, pageable);
+		Page<WS> page;
+		
+		if(userEmail != null) {
+			page = repository.findByOwnerEmailOrByAdmin(userEmail, true, pageable);
+		} else {
+			page = repository.findByByAdmin(true, pageable);
+		}
 		
 		List<WS_DTO> content = page.stream().map(elem -> {
 			WS_DTO dto = new WS_DTO(elem);
