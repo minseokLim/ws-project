@@ -15,27 +15,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wsproject.wsservice.dto.WS_DTO;
-import com.wsproject.wsservice.service.WS_Service;
+import com.wsproject.wsservice.dto.WsDto;
+import com.wsproject.wsservice.service.WsService;
 
 import lombok.AllArgsConstructor;;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/wses")
-public class WS_Controller {
+public class WsController {
 		
-	private WS_Service service;
+	private WsService service;
 	
 	@GetMapping
-	public ResponseEntity<PagedModel<WS_DTO>> selectWSes(@RequestParam(required = false) String userEmail, @PageableDefault Pageable pageable) {
-		PagedModel<WS_DTO> model = service.selectWSes(userEmail, pageable);
+	public ResponseEntity<PagedModel<WsDto>> selectWses(@RequestParam(required = false) String userEmail, @PageableDefault Pageable pageable) {
+		PagedModel<WsDto> model = service.selectWses(userEmail, pageable);
 		return ResponseEntity.ok(model);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<WS_DTO> selectWSById(@PathVariable("id") Long id) {
-		WS_DTO result = service.selectWSById(id);
+	public ResponseEntity<WsDto> selectWsById(@PathVariable("id") Long id) {
+		WsDto result = service.selectWsById(id);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -45,14 +45,14 @@ public class WS_Controller {
 	}
 	
 	@PostMapping
-	public ResponseEntity<WS_DTO> insertWS(@RequestBody WS_DTO dto) {
-		WS_DTO result = service.insertWS(dto);
-		return new ResponseEntity<WS_DTO>(result, HttpStatus.CREATED);
+	public ResponseEntity<WsDto> insertWs(@RequestBody WsDto dto) {
+		WsDto result = service.insertWs(dto);
+		return new ResponseEntity<WsDto>(result, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<WS_DTO> updateWSById(@PathVariable("id") Long id, @RequestBody WS_DTO dto) {
-		WS_DTO result = service.updateWSById(id, dto);
+	public ResponseEntity<WsDto> updateWsById(@PathVariable("id") Long id, @RequestBody WsDto dto) {
+		WsDto result = service.updateWsById(id, dto);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -62,8 +62,8 @@ public class WS_Controller {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteWSById(@PathVariable("id") Long id) {
-		boolean result = service.deleteWSById(id);
+	public ResponseEntity<Void> deleteWsById(@PathVariable("id") Long id) {
+		boolean result = service.deleteWsById(id);
 		
 		if(result) {
 			return ResponseEntity.noContent().build();

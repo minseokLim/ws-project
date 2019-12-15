@@ -1,5 +1,5 @@
 package com.wsproject.wsservice.domain.enums;
 
-public enum WS_Type {
+public enum WsType {
 	SELF_DEV, YOLO, ETC
 }

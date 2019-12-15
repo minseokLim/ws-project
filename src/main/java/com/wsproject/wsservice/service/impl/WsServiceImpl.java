@@ -13,26 +13,26 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.stereotype.Service;
 
-import com.wsproject.wsservice.controller.WS_Controller;
-import com.wsproject.wsservice.domain.WS;
-import com.wsproject.wsservice.dto.WS_DTO;
-import com.wsproject.wsservice.repository.WS_Repository;
-import com.wsproject.wsservice.service.WS_Service;
+import com.wsproject.wsservice.controller.WsController;
+import com.wsproject.wsservice.domain.Ws;
+import com.wsproject.wsservice.dto.WsDto;
+import com.wsproject.wsservice.repository.WsRepository;
+import com.wsproject.wsservice.service.WsService;
 import com.wsproject.wsservice.util.CommonUtil;
 
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class WS_ServiceImpl implements WS_Service {
+public class WsServiceImpl implements WsService {
 
-	private WS_Repository repository;
+	private WsRepository repository;
 	
 	private CommonUtil commonUtil;
 	
 	@Override
-	public PagedModel<WS_DTO> selectWSes(String userEmail, Pageable pageable) {
-		Page<WS> page;
+	public PagedModel<WsDto> selectWses(String userEmail, Pageable pageable) {
+		Page<Ws> page;
 		
 		if(userEmail != null) {
 			page = repository.findByOwnerEmailOrByAdmin(userEmail, true, pageable);
@@ -40,67 +40,67 @@ public class WS_ServiceImpl implements WS_Service {
 			page = repository.findByByAdmin(true, pageable);
 		}
 		
-		List<WS_DTO> content = page.stream().map(elem -> {
-			WS_DTO dto = new WS_DTO(elem);
-			dto.add(linkTo(WS_Controller.class).slash(dto.getId()).withSelfRel());
+		List<WsDto> content = page.stream().map(elem -> {
+			WsDto dto = new WsDto(elem);
+			dto.add(linkTo(WsController.class).slash(dto.getId()).withSelfRel());
 			return dto;
 		}).collect(Collectors.toList());
 		
 		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
-		PagedModel<WS_DTO> model = new PagedModel<>(content, pageMetadata, linkTo(methodOn(WS_Controller.class).selectWSes(userEmail, pageable)).withSelfRel());
+		PagedModel<WsDto> model = new PagedModel<>(content, pageMetadata, linkTo(methodOn(WsController.class).selectWses(userEmail, pageable)).withSelfRel());
 		commonUtil.setPageLinksAdvice(model, page);
 		
 		return model;
 	}
 
 	@Override
-	public WS_DTO selectWSById(Long id) {
-		Optional<WS> data = repository.findById(id);
+	public WsDto selectWsById(Long id) {
+		Optional<Ws> data = repository.findById(id);
 		
 		if(!data.isPresent()) {
 			return null;
 		}
 		
-		WS_DTO result = new WS_DTO(data.get());
-		result.add(linkTo(WS_Controller.class).slash(id).withSelfRel());
+		WsDto result = new WsDto(data.get());
+		result.add(linkTo(WsController.class).slash(id).withSelfRel());
 		
 		return result;
 	}
 
 	@Override
-	public WS_DTO insertWS(WS_DTO dto) {
-		WS ws = repository.save(dto.toEntity());
-		WS_DTO result = new WS_DTO(ws);
-		result.add(linkTo(WS_Controller.class).slash(result.getId()).withSelfRel());
+	public WsDto insertWs(WsDto dto) {
+		Ws ws = repository.save(dto.toEntity());
+		WsDto result = new WsDto(ws);
+		result.add(linkTo(WsController.class).slash(result.getId()).withSelfRel());
 		
 		return result;
 	}
 
 	@Override
-	public WS_DTO updateWSById(Long id, WS_DTO dto) {
+	public WsDto updateWsById(Long id, WsDto dto) {
 		// 사실 효율성 관점에서는 멍청한 방법이다.
 		// createdDate를 가져와야한다. 안그러면 업데이트 하면서 createdDate 값이 null이 되버린다-_-
 		// TODO JPA save가 문제인건가...
-		Optional<WS> data = repository.findById(id);
+		Optional<Ws> data = repository.findById(id);
 		
 		if(!data.isPresent()) {
 			return null;
 		}
 		
-		WS ws = data.get();
+		Ws ws = data.get();
 		ws.update(dto.toEntity());
 		
 		ws = repository.save(ws);
 		
-		WS_DTO result = new WS_DTO(ws);
-		result.add(linkTo(WS_Controller.class).slash(id).withSelfRel());
+		WsDto result = new WsDto(ws);
+		result.add(linkTo(WsController.class).slash(id).withSelfRel());
 		
 		return result;
 	}
 
 	@Override
-	public boolean deleteWSById(Long id) {
-		Optional<WS> data = repository.findById(id);
+	public boolean deleteWsById(Long id) {
+		Optional<Ws> data = repository.findById(id);
 		
 		if(!data.isPresent()) {
 			return false;

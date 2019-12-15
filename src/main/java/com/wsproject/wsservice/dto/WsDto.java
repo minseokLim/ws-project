@@ -4,15 +4,15 @@ import java.time.LocalDateTime;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import com.wsproject.wsservice.domain.WS;
-import com.wsproject.wsservice.domain.enums.WS_Type;
+import com.wsproject.wsservice.domain.Ws;
+import com.wsproject.wsservice.domain.enums.WsType;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class WS_DTO extends RepresentationModel<WS_DTO> {
+public class WsDto extends RepresentationModel<WsDto> {
 	
 	private Long id;
 	
@@ -20,7 +20,7 @@ public class WS_DTO extends RepresentationModel<WS_DTO> {
 	
 	private String author;
 	
-	private WS_Type type;
+	private WsType type;
 	
 	private boolean byAdmin;
 	
@@ -30,7 +30,7 @@ public class WS_DTO extends RepresentationModel<WS_DTO> {
 	
 	private LocalDateTime modifiedDate;
 
-	public WS_DTO(WS ws) {
+	public WsDto(Ws ws) {
 		this.id = ws.getId();
 		this.content = ws.getContent();
 		this.author = ws.getAuthor();
@@ -41,7 +41,7 @@ public class WS_DTO extends RepresentationModel<WS_DTO> {
 		this.modifiedDate = ws.getModifiedDate();
 	}
 	
-	public WS toEntity() {
-		return WS.builder().content(content).author(author).type(type).byAdmin(byAdmin).ownerEmail(ownerEmail).build();
+	public Ws toEntity() {
+		return Ws.builder().content(content).author(author).type(type).byAdmin(byAdmin).ownerEmail(ownerEmail).build();
 	}
 }

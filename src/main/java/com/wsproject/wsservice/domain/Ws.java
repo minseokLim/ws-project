@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
-import com.wsproject.wsservice.domain.enums.WS_Type;
+import com.wsproject.wsservice.domain.enums.WsType;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "TBL_WS", indexes = {@Index(columnList = "ownerEmail")})
-public class WS extends BaseTimeEntity {
+public class Ws extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,14 +28,14 @@ public class WS extends BaseTimeEntity {
 	
 	private String author;
 	
-	private WS_Type type;
+	private WsType type;
 	
 	private boolean byAdmin;
 	
 	private String ownerEmail;
 	
 	@Builder
-	public WS(String content, String author, WS_Type type, boolean byAdmin, String ownerEmail) {
+	public Ws(String content, String author, WsType type, boolean byAdmin, String ownerEmail) {
 		this.content = content;
 		this.author = author;
 		this.type = type;
@@ -43,7 +43,7 @@ public class WS extends BaseTimeEntity {
 		this.ownerEmail = ownerEmail;
 	}
 
-	public void update(WS ws) {
+	public void update(Ws ws) {
 		this.content = ws.getContent();
 		this.author = ws.getAuthor();
 		this.type = ws.getType();
