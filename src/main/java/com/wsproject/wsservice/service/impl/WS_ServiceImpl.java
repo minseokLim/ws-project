@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
@@ -25,7 +23,6 @@ import com.wsproject.wsservice.util.CommonUtil;
 import lombok.AllArgsConstructor;
 
 @Service
-@Transactional
 @AllArgsConstructor
 public class WS_ServiceImpl implements WS_Service {
 
@@ -93,7 +90,7 @@ public class WS_ServiceImpl implements WS_Service {
 		WS ws = data.get();
 		ws.update(dto.toEntity());
 		
-		ws = repository.saveAndFlush(ws);
+		ws = repository.save(ws);
 		
 		WS_DTO result = new WS_DTO(ws);
 		result.add(linkTo(WS_Controller.class).slash(id).withSelfRel());
