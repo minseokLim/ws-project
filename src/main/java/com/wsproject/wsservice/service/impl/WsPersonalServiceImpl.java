@@ -41,27 +41,27 @@ public class WsPersonalServiceImpl implements WsPersonalService {
 
 		List<WsPersonalDto> content = page.stream().map(elem -> {
 			WsPersonalDto dto = new WsPersonalDto(elem);
-			dto.add(linkTo(methodOn(WsPersonalController.class).selectWsPersonalById(userEmail, dto.getId())).withSelfRel());
+			dto.add(linkTo(methodOn(WsPersonalController.class).selectWsPersonal(userEmail, dto.getId())).withSelfRel());
 			return dto;
 		}).collect(Collectors.toList());
 		
 		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
-		PagedModel<WsPersonalDto> result = new PagedModel<>(content, pageMetadata, linkTo(methodOn(WsPersonalController.class).selectWsPersonals(userEmail, search, pageable)).withSelfRel());
+		PagedModel<WsPersonalDto> result = new PagedModel<>(content, pageMetadata, linkTo(methodOn(WsPersonalController.class).selectWsPersonalPage(userEmail, search, pageable)).withSelfRel());
 		commonUtil.setPageLinksAdvice(result, page);
 		
 		return result;
 	}
 
 	@Override
-	public WsPersonalDto selectWsPersonalById(Long id) {
-		Optional<WsPersonal> data = repository.findById(id);
+	public WsPersonalDto selectWsPersonal(String userEmail,Long id) {
+		Optional<WsPersonal> data = repository.findByIdAndOwnerEmail(id, userEmail);
 		
 		if(!data.isPresent()) {
 			return null;
 		}
 		
 		WsPersonalDto result = new WsPersonalDto(data.get());
-		result.add(linkTo(methodOn(WsPersonalController.class).selectWsPersonalById(result.getOwnerEmail(), result.getId())).withSelfRel());
+		result.add(linkTo(methodOn(WsPersonalController.class).selectWsPersonal(result.getOwnerEmail(), result.getId())).withSelfRel());
 		
 		return result;
 	}
@@ -70,14 +70,14 @@ public class WsPersonalServiceImpl implements WsPersonalService {
 	public WsPersonalDto insertWsPersonal(WsPersonalDto dto) {
 		WsPersonal wsPersonal = repository.save(dto.toEntity());
 		WsPersonalDto result = new WsPersonalDto(wsPersonal);
-		result.add(linkTo(methodOn(WsPersonalController.class).selectWsPersonalById(result.getOwnerEmail(), result.getId())).withSelfRel());
+		result.add(linkTo(methodOn(WsPersonalController.class).selectWsPersonal(result.getOwnerEmail(), result.getId())).withSelfRel());
 		
 		return result;
 	}
 
 	@Override
-	public WsPersonalDto updateWsPersonalById(Long id, WsPersonalDto dto) {
-		Optional<WsPersonal> data = repository.findById(id);
+	public WsPersonalDto updateWsPersonal(String userEmail, Long id, WsPersonalDto dto) {
+		Optional<WsPersonal> data = repository.findByIdAndOwnerEmail(id, userEmail);
 		
 		if(!data.isPresent()) {
 			return null;
@@ -89,14 +89,14 @@ public class WsPersonalServiceImpl implements WsPersonalService {
 		wsPersonal = repository.save(wsPersonal);
 		
 		WsPersonalDto result = new WsPersonalDto(wsPersonal);
-		result.add(linkTo(methodOn(WsPersonalController.class).selectWsPersonalById(result.getOwnerEmail(), result.getId())).withSelfRel());
+		result.add(linkTo(methodOn(WsPersonalController.class).selectWsPersonal(result.getOwnerEmail(), result.getId())).withSelfRel());
 		
 		return result;
 	}
 
 	@Override
-	public boolean deleteWsPersonalById(Long id) {
-		Optional<WsPersonal> data = repository.findById(id);
+	public boolean deleteWsPersonal(String userEmail, Long id) {
+		Optional<WsPersonal> data = repository.findByIdAndOwnerEmail(id, userEmail);
 		
 		if(!data.isPresent()) {
 			return false;

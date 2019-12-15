@@ -28,7 +28,7 @@ public class WsPersonalController {
 	private WsPersonalService service;
 	
 	@GetMapping
-	public ResponseEntity<PagedModel<WsPersonalDto>> selectWsPersonals(@PathVariable("userEmail") String userEmail, 
+	public ResponseEntity<PagedModel<WsPersonalDto>> selectWsPersonalPage(@PathVariable("userEmail") String userEmail, 
 			@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
 		PagedModel<WsPersonalDto> result = service.selectWsPersonals(userEmail, search, pageable);
 		
@@ -40,8 +40,8 @@ public class WsPersonalController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<WsPersonalDto> selectWsPersonalById(@PathVariable("userEmail") String userEmail, @PathVariable("id") Long id) {
-		WsPersonalDto result = service.selectWsPersonalById(id);
+	public ResponseEntity<WsPersonalDto> selectWsPersonal(@PathVariable("userEmail") String userEmail, @PathVariable("id") Long id) {
+		WsPersonalDto result = service.selectWsPersonal(userEmail, id);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -51,14 +51,19 @@ public class WsPersonalController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<WsPersonalDto> insertWsPersonal(@RequestBody WsPersonalDto dto) {
+	public ResponseEntity<WsPersonalDto> insertWsPersonal(@PathVariable("userEmail") String userEmail, @RequestBody WsPersonalDto dto) {
+		
+		if(!userEmail.equals(dto.getOwnerEmail())) {
+			return ResponseEntity.badRequest().build();
+		}
+		
 		WsPersonalDto result = service.insertWsPersonal(dto);
 		return new ResponseEntity<WsPersonalDto>(result, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<WsPersonalDto> updateWsPersonalById(@PathVariable("id") Long id, @RequestBody WsPersonalDto dto) {
-		WsPersonalDto result = service.updateWsPersonalById(id, dto);
+	public ResponseEntity<WsPersonalDto> updateWsPersonal(@PathVariable("userEmail") String userEmail, @PathVariable("id") Long id, @RequestBody WsPersonalDto dto) {
+		WsPersonalDto result = service.updateWsPersonal(userEmail, id, dto);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -68,9 +73,9 @@ public class WsPersonalController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteWsById(@PathVariable("id") Long id) {
+	public ResponseEntity<Void> deleteWsPersonal(@PathVariable("userEmail") String userEmail, @PathVariable("id") Long id) {
 		
-		boolean result = service.deleteWsPersonalById(id);
+		boolean result = service.deleteWsPersonal(userEmail, id);
 		
 		if(result) {
 			return ResponseEntity.noContent().build();

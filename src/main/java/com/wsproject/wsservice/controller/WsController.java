@@ -28,7 +28,7 @@ public class WsController {
 	private WsService service;
 	
 	@GetMapping
-	public ResponseEntity<PagedModel<WsDto>> selectWses(@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
+	public ResponseEntity<PagedModel<WsDto>> selectWsPage(@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
 		PagedModel<WsDto> result = service.selectWses(search, pageable);
 		
 		if(result != null) {
@@ -39,8 +39,8 @@ public class WsController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<WsDto> selectWsById(@PathVariable("id") Long id) {
-		WsDto result = service.selectWsById(id);
+	public ResponseEntity<WsDto> selectWs(@PathVariable("id") Long id) {
+		WsDto result = service.selectWs(id);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -56,8 +56,8 @@ public class WsController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<WsDto> updateWsById(@PathVariable("id") Long id, @RequestBody WsDto dto) {
-		WsDto result = service.updateWsById(id, dto);
+	public ResponseEntity<WsDto> updateWs(@PathVariable("id") Long id, @RequestBody WsDto dto) {
+		WsDto result = service.updateWs(id, dto);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -67,8 +67,8 @@ public class WsController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteWsById(@PathVariable("id") Long id) {
-		boolean result = service.deleteWsById(id);
+	public ResponseEntity<Void> deleteWs(@PathVariable("id") Long id) {
+		boolean result = service.deleteWs(id);
 		
 		if(result) {
 			return ResponseEntity.noContent().build();

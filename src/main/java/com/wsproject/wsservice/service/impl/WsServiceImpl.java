@@ -80,14 +80,14 @@ public class WsServiceImpl implements WsService {
 		}).collect(Collectors.toList());
 		
 		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
-		PagedModel<WsDto> result = new PagedModel<>(content, pageMetadata, linkTo(methodOn(WsController.class).selectWses(search, pageable)).withSelfRel());
+		PagedModel<WsDto> result = new PagedModel<>(content, pageMetadata, linkTo(methodOn(WsController.class).selectWsPage(search, pageable)).withSelfRel());
 		commonUtil.setPageLinksAdvice(result, page);
 		
 		return result;
 	}
 
 	@Override
-	public WsDto selectWsById(Long id) {
+	public WsDto selectWs(Long id) {
 		Optional<Ws> data = repository.findById(id);
 		
 		if(!data.isPresent()) {
@@ -110,7 +110,7 @@ public class WsServiceImpl implements WsService {
 	}
 
 	@Override
-	public WsDto updateWsById(Long id, WsDto dto) {
+	public WsDto updateWs(Long id, WsDto dto) {
 		// TODO 효율성 관점에서 봤을 때는 좋지 않아보임. 
 		// 현재 이 과정 없이 update를 진행하면, createdDate가 null이 되어버림
 		Optional<Ws> data = repository.findById(id);
@@ -131,7 +131,7 @@ public class WsServiceImpl implements WsService {
 	}
 
 	@Override
-	public boolean deleteWsById(Long id) {
+	public boolean deleteWs(Long id) {
 		Optional<Ws> data = repository.findById(id);
 		
 		if(!data.isPresent()) {

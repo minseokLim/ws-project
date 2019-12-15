@@ -7,8 +7,8 @@ import com.wsproject.wsservice.dto.WsDto;
 
 public interface WsService {		
 	public PagedModel<WsDto> selectWses(String search, Pageable pageable);
-	public WsDto selectWsById(Long id);
+	public WsDto selectWs(Long id);
 	public WsDto insertWs(WsDto dto);
-	public WsDto updateWsById(Long id, WsDto dto);
-	public boolean deleteWsById(Long id);
+	public WsDto updateWs(Long id, WsDto dto);
+	public boolean deleteWs(Long id);
 }
