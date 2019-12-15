@@ -41,7 +41,7 @@ public class CommonUtil {
 		UriComponentsBuilder firstBuilder = replacePageParams(original, PageRequest.of(0, page.getSize(), page.getSort()));
 		model.add(new Link(firstBuilder.toUriString()).withRel("first"));
 		
-		UriComponentsBuilder lastBuilder = replacePageParams(original, PageRequest.of(page.getTotalPages() - 1, page.getSize(), page.getSort()));
+		UriComponentsBuilder lastBuilder = replacePageParams(original, PageRequest.of(page.getTotalPages() - 1 >= 0 ? page.getTotalPages() - 1 : 0, page.getSize(), page.getSort()));
 		model.add(new Link(lastBuilder.toUriString()).withRel("last"));	
 	}
 

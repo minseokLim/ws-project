@@ -3,10 +3,16 @@ package com.wsproject.wsservice.service.impl;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
@@ -15,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import com.wsproject.wsservice.controller.WsController;
 import com.wsproject.wsservice.domain.Ws;
+import com.wsproject.wsservice.domain.enums.WsType;
 import com.wsproject.wsservice.dto.WsDto;
 import com.wsproject.wsservice.repository.WsRepository;
 import com.wsproject.wsservice.service.WsService;
@@ -25,19 +32,45 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class WsServiceImpl implements WsService {
-
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(WsServiceImpl.class);
+	
 	private WsRepository repository;
 	
 	private CommonUtil commonUtil;
 	
 	@Override
-	public PagedModel<WsDto> selectWses(String userEmail, Pageable pageable) {
+	public PagedModel<WsDto> selectWses(String search, Pageable pageable) {
 		Page<Ws> page;
 		
-		if(userEmail != null) {
-			page = repository.findByOwnerEmailOrByAdmin(userEmail, true, pageable);
+		if(search == null) {
+			page = repository.findAll(pageable);
 		} else {
-			page = repository.findByByAdmin(true, pageable);
+			try {
+				// search 파라미터가 'content=내용'과 같은 형식으로 넘어온다.
+				search = URLDecoder.decode(search, "UTF-8");
+				
+				StringTokenizer st = new StringTokenizer(search, "=");
+				String key = st.nextToken();
+				String value = st.nextToken();
+				
+				switch (key) {
+				case "content":
+					page = repository.findByContentLike("%" + value + "%", pageable);
+					break;
+				case "author":
+					page = repository.findByAuthorLike("%" + value + "%", pageable);
+					break;
+				case "type":
+					page = repository.findByType(WsType.valueOf(value), pageable);
+					break;
+				default:
+					return null;
+				}
+			} catch (UnsupportedEncodingException | NoSuchElementException e) {
+				LOGGER.error("{} occured, due to invalid parameters.", e.toString());
+				return null;
+			}	
 		}
 		
 		List<WsDto> content = page.stream().map(elem -> {
@@ -47,10 +80,10 @@ public class WsServiceImpl implements WsService {
 		}).collect(Collectors.toList());
 		
 		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
-		PagedModel<WsDto> model = new PagedModel<>(content, pageMetadata, linkTo(methodOn(WsController.class).selectWses(userEmail, pageable)).withSelfRel());
-		commonUtil.setPageLinksAdvice(model, page);
+		PagedModel<WsDto> result = new PagedModel<>(content, pageMetadata, linkTo(methodOn(WsController.class).selectWses(search, pageable)).withSelfRel());
+		commonUtil.setPageLinksAdvice(result, page);
 		
-		return model;
+		return result;
 	}
 
 	@Override
@@ -78,9 +111,8 @@ public class WsServiceImpl implements WsService {
 
 	@Override
 	public WsDto updateWsById(Long id, WsDto dto) {
-		// 사실 효율성 관점에서는 멍청한 방법이다.
-		// createdDate를 가져와야한다. 안그러면 업데이트 하면서 createdDate 값이 null이 되버린다-_-
-		// TODO JPA save가 문제인건가...
+		// TODO 효율성 관점에서 봤을 때는 좋지 않아보임. 
+		// 현재 이 과정 없이 update를 진행하면, createdDate가 null이 되어버림
 		Optional<Ws> data = repository.findById(id);
 		
 		if(!data.isPresent()) {

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import com.wsproject.wsservice.domain.enums.WsType;
@@ -12,13 +13,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// TODO need to optimize size of each column
+//TODO need to optimize size of each column
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "TBL_WS_ADMIN")
-public class Ws extends BaseTimeEntity {
-
+@Table(name = "TBL_WS_PERSONAL", indexes = {@Index(columnList = "ownerEmail")})
+public class WsPersonal extends BaseTimeEntity {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -28,17 +29,21 @@ public class Ws extends BaseTimeEntity {
 	private String author;
 	
 	private WsType type;
-	
+		
+	private String ownerEmail;
+
 	@Builder
-	public Ws(String content, String author, WsType type) {
+	public WsPersonal(String content, String author, WsType type, String ownerEmail) {
 		this.content = content;
 		this.author = author;
 		this.type = type;
+		this.ownerEmail = ownerEmail;
 	}
-
-	public void update(Ws ws) {
-		this.content = ws.getContent();
-		this.author = ws.getAuthor();
-		this.type = ws.getType();
+	
+	public void update(WsPersonal wsPersonal) {
+		this.content = wsPersonal.getContent();
+		this.author = wsPersonal.getAuthor();
+		this.type = wsPersonal.getType();
+		this.ownerEmail = wsPersonal.getOwnerEmail();
 	}
 }

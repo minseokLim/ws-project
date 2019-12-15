@@ -15,21 +15,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wsproject.wsservice.dto.WsDto;
-import com.wsproject.wsservice.service.WsService;
+import com.wsproject.wsservice.dto.WsPersonalDto;
+import com.wsproject.wsservice.service.WsPersonalService;
 
-import lombok.AllArgsConstructor;;
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/v1.0/api/wses")
-public class WsController {
-		
-	private WsService service;
+@RequestMapping("/v1.0/api/users/{userEmail}/wses")
+public class WsPersonalController {
+	
+	private WsPersonalService service;
 	
 	@GetMapping
-	public ResponseEntity<PagedModel<WsDto>> selectWses(@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
-		PagedModel<WsDto> result = service.selectWses(search, pageable);
+	public ResponseEntity<PagedModel<WsPersonalDto>> selectWsPersonals(@PathVariable("userEmail") String userEmail, 
+			@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
+		PagedModel<WsPersonalDto> result = service.selectWsPersonals(userEmail, search, pageable);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -39,8 +40,8 @@ public class WsController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<WsDto> selectWsById(@PathVariable("id") Long id) {
-		WsDto result = service.selectWsById(id);
+	public ResponseEntity<WsPersonalDto> selectWsPersonalById(@PathVariable("userEmail") String userEmail, @PathVariable("id") Long id) {
+		WsPersonalDto result = service.selectWsPersonalById(id);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -50,14 +51,14 @@ public class WsController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<WsDto> insertWs(@RequestBody WsDto dto) {
-		WsDto result = service.insertWs(dto);
-		return new ResponseEntity<WsDto>(result, HttpStatus.CREATED);
+	public ResponseEntity<WsPersonalDto> insertWsPersonal(@RequestBody WsPersonalDto dto) {
+		WsPersonalDto result = service.insertWsPersonal(dto);
+		return new ResponseEntity<WsPersonalDto>(result, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<WsDto> updateWsById(@PathVariable("id") Long id, @RequestBody WsDto dto) {
-		WsDto result = service.updateWsById(id, dto);
+	public ResponseEntity<WsPersonalDto> updateWsPersonalById(@PathVariable("id") Long id, @RequestBody WsPersonalDto dto) {
+		WsPersonalDto result = service.updateWsPersonalById(id, dto);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -68,7 +69,8 @@ public class WsController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteWsById(@PathVariable("id") Long id) {
-		boolean result = service.deleteWsById(id);
+		
+		boolean result = service.deleteWsPersonalById(id);
 		
 		if(result) {
 			return ResponseEntity.noContent().build();

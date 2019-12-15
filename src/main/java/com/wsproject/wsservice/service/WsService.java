@@ -5,9 +5,8 @@ import org.springframework.hateoas.PagedModel;
 
 import com.wsproject.wsservice.dto.WsDto;
 
-public interface WsService {
-		
-	public PagedModel<WsDto> selectWses(String userEmail, Pageable pageable);
+public interface WsService {		
+	public PagedModel<WsDto> selectWses(String search, Pageable pageable);
 	public WsDto selectWsById(Long id);
 	public WsDto insertWs(WsDto dto);
 	public WsDto updateWsById(Long id, WsDto dto);

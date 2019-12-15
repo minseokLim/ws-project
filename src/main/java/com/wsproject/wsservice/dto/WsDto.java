@@ -21,11 +21,7 @@ public class WsDto extends RepresentationModel<WsDto> {
 	private String author;
 	
 	private WsType type;
-	
-	private boolean byAdmin;
-	
-	private String ownerEmail;
-	
+		
 	private LocalDateTime createdDate;
 	
 	private LocalDateTime modifiedDate;
@@ -35,13 +31,11 @@ public class WsDto extends RepresentationModel<WsDto> {
 		this.content = ws.getContent();
 		this.author = ws.getAuthor();
 		this.type = ws.getType();
-		this.byAdmin = ws.isByAdmin();
-		this.ownerEmail = ws.getOwnerEmail();
 		this.createdDate = ws.getCreatedDate();
 		this.modifiedDate = ws.getModifiedDate();
 	}
 	
 	public Ws toEntity() {
-		return Ws.builder().content(content).author(author).type(type).byAdmin(byAdmin).ownerEmail(ownerEmail).build();
+		return Ws.builder().content(content).author(author).type(type).build();
 	}
 }
