@@ -1,5 +1,6 @@
 package com.wsproject.wsservice.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,7 +30,8 @@ public class WsPersonal extends BaseTimeEntity {
 	private String author;
 	
 	private WsType type;
-		
+	
+	@Column(length = 100)
 	private String ownerEmail;
 
 	@Builder

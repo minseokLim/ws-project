@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "TBL_WS_ADMIN")
+@Table(name = "TBL_WS")
 public class Ws extends BaseTimeEntity {
 
 	@Id

@@ -1,21 +1,2 @@
 server:
   port: 8080
-  
-spring:
-#  datasource:
-#    url: "jdbc:mariadb://localhost:3306/ws_service"
-#    username: "mslim"
-#    password: "mslim8803"
-#    dbcp2:
-#      test-while-idle: true  
-#      validation-query: "SELECT 1"
-  jpa:
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-    show-sql: true   
-    hibernate:
-      ddl-auto: update
-  h2:
-    console:
-      enabled: true

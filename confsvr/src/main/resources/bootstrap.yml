@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    config:
+      server:
+        encrypt:
+          enabled: false
+        git:
+          uri: https://github.com/minseokLim/ws-project-config
+          search-paths:
+          - ws-service
+          username: minseokLim
+          password: "{cipher}69ba078a13febf2d86f577ee2588ed6a256ae1356adb3eab475ed71fa690d6e9"

@@ -6,3 +6,22 @@ services:
       - 8080:8080
     environment:
       PROFILE: "dev"
+      CONFIGSERVER_URI: "http://confsvr:8888"
+      CONFIGSERVER_PORT: "8888"
+      DATABASESERVER_PORT: "3306"
+      ENCRYPT_KEY: ${ENCRYPT_KEY}
+  confsvr:
+    image: ws-project/confsvr:1
+    ports:
+      - 8888:8888
+    environment:
+      ENCRYPT_KEY: ${ENCRYPT_KEY}
+  database:
+    image: mariadb:10.1
+    ports:
+       - 3307:3306
+    restart: always
+    environment:
+       MYSQL_DATABASE: ws_service
+       MYSQL_ROOT_PASSWORD: mslim8803
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
