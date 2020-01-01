@@ -15,6 +15,7 @@ echo "Database Server has started"
 echo "********************************************************"
 echo "Starting Wise Saying Service"
 echo "********************************************************"
-java -Dspring.profiles.active=$PROFILE \
+java -Djava.security.egd=file:/dev/./urandom \
+	 -Dspring.profiles.active=$PROFILE \
 	 -Dspring.cloud.config.uri=$CONFIGSERVER_URI \
 	 -jar /usr/local/ws-service/@project.build.finalName@.jar
