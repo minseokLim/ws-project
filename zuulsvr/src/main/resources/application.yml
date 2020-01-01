@@ -1,3 +1,6 @@
+server:
+  port: 5555
+
 eureka:
   instance:
     prefer-ip-address: true
@@ -6,3 +9,6 @@ eureka:
     fetch-registry: true
     service-url:
       default-zone: http://localhost:8761/eureka/
+
+zuul:
+  prefix: /api

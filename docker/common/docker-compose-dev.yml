@@ -24,6 +24,13 @@ services:
     image: ws-project/eurekasvr:1
     ports:
       - 8761:8761
+  zuulsvr:
+    image: ws-project/zuulsvr:1
+    ports:
+      - 5555:5555
+    environment:
+      EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
+      EUREKASERVER_PORT: "8761"
   database:
     image: mariadb:10.1
     ports:
