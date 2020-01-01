@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/v1.0/api/wses")
+@RequestMapping("/v1.0/wses")
 public class WsController {
 		
 	private WsService service;

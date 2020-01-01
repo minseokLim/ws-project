@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/v1.0/api/users/{userEmail}/wses")
+@RequestMapping("/v1.0/users/{userEmail}/wses")
 public class WsPersonalController {
 	
 	private WsPersonalService service;
