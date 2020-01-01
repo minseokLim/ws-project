@@ -9,13 +9,21 @@ services:
       CONFIGSERVER_URI: "http://confsvr:8888"
       CONFIGSERVER_PORT: "8888"
       DATABASESERVER_PORT: "3306"
+      EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
+      EUREKASERVER_PORT: "8761"
       ENCRYPT_KEY: ${ENCRYPT_KEY}
   confsvr:
     image: ws-project/confsvr:1
     ports:
       - 8888:8888
     environment:
+      EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
+      EUREKASERVER_PORT: "8761"
       ENCRYPT_KEY: ${ENCRYPT_KEY}
+  eurekasvr:
+    image: ws-project/eurekasvr:1
+    ports:
+      - 8761:8761
   database:
     image: mariadb:10.1
     ports:
