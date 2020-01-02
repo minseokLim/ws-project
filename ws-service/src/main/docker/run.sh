@@ -1,4 +1,4 @@
- #!/bin/sh
+#!/bin/sh
 
 echo "********************************************************"
 echo "Waiting for the Eureka server to start on port $EUREKASERVER_PORT"
@@ -22,7 +22,7 @@ echo "********************************************************"
 echo "Starting Wise Saying Service"
 echo "********************************************************"
 java -Djava.security.egd=file:/dev/./urandom \
-	 -Dspring.profiles.active=$PROFILE \
-	 -Dspring.cloud.config.uri=$CONFIGSERVER_URI \
-	 -Deureka.client.serviceUrl.defaultZone=$EUREKASERVER_URI \
-	 -jar /usr/local/ws-service/@project.build.finalName@.jar
+     -Dspring.profiles.active=$PROFILE \
+     -Deureka.client.serviceUrl.defaultZone=$EUREKASERVER_URI \
+     -Dspring.cloud.config.uri=$CONFIGSERVER_URI \
+     -jar /usr/local/ws-service/@project.build.finalName@.jar
