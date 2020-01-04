@@ -11,5 +11,4 @@ public class ZuulsvrApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ZuulsvrApplication.class, args);
 	}
-
 }

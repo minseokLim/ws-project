@@ -11,5 +11,4 @@ public class ConfsvrApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ConfsvrApplication.class, args);
 	}
-
 }
