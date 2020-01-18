@@ -12,10 +12,10 @@ services:
       CONFIGSERVER_PORT: "8888"
       DATABASESERVER_PORT: "3306"  
       ENCRYPT_KEY: ${ENCRYPT_KEY}
-  clientsvr:
-    image: ws-project/clientsvr:1
+  user-service:
+    image: ws-project/user-service:1
     ports:
-      - 8081:8081
+      - 8082:8082
     environment:
       PROFILE: "dev"
       EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
@@ -24,6 +24,18 @@ services:
       CONFIGSERVER_PORT: "8888"
       DATABASESERVER_PORT: "3306"  
       ENCRYPT_KEY: ${ENCRYPT_KEY}
+#  clientsvr:
+#    image: ws-project/clientsvr:1
+#    ports:
+#      - 8081:8081
+#    environment:
+#      PROFILE: "dev"
+#      EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
+#      EUREKASERVER_PORT: "8761"
+#      CONFIGSERVER_URI: "http://confsvr:8888"
+#      CONFIGSERVER_PORT: "8888"
+#      DATABASESERVER_PORT: "3306"  
+#      ENCRYPT_KEY: ${ENCRYPT_KEY}
   confsvr:
     image: ws-project/confsvr:1
     ports:
@@ -49,7 +61,7 @@ services:
       - 3307:3306
     restart: always
     environment:
-       MYSQL_DATABASE: ws_service
+       MYSQL_DATABASE: dev_test
        MYSQL_ROOT_PASSWORD: mslim8803
        MYSQL_ROOT_HOST: '%'
     command: --character-set-server=utf8 --collation-server=utf8_unicode_ci

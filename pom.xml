@@ -12,15 +12,16 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.2.RELEASE</version>
+		<version>2.2.3.RELEASE</version>
 	</parent>
   	
   	<modules>
   		<module>ws-service</module>
+  		<module>user-service</module>
   		<module>confsvr</module>
   		<module>eurekasvr</module>
   		<module>zuulsvr</module>
-  		<module>clientsvr</module>
+  		<!-- <module>clientsvr</module> -->
   		<!-- <module>authenticationsvr</module> -->
   	</modules>
   	

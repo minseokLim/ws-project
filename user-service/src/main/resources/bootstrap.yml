@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: user-service
+  cloud:
+    config:
+      uri:
+      - http://localhost:8888
+  data:
+    rest:
+      base-path: /v1.0
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      default-zone: http://localhost:8761/eureka/

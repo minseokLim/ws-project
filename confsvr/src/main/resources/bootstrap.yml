@@ -8,6 +8,7 @@ spring:
           uri: https://github.com/minseokLim/ws-project-config
           search-paths:
           - ws-service
+          - user-service
           - clientsvr
           - zuulsvr
           username: minseokLim
