@@ -51,6 +51,7 @@ services:
     ports:
       - 5555:5555
     environment:
+      PROFILE: "dev"
       EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
       EUREKASERVER_PORT: "8761"
       CONFIGSERVER_URI: "http://confsvr:8888"

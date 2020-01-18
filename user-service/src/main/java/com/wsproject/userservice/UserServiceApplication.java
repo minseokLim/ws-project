@@ -1,5 +1,7 @@
 package com.wsproject.userservice;
 
+import java.util.UUID;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -42,7 +44,7 @@ public class UserServiceApplication {
 				
 				repository.save(User.builder()
 								.name("minseok" + i)
-								.email("mslim" + i + "@naver.com")
+								.email(UUID.randomUUID().toString() + i + "@naver.com")
 								.principal(String.valueOf(i))
 								.socialType(socialType)
 								.pictureUrl("")
