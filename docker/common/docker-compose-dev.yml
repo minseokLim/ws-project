@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 services:
   ws-service:
     image: ws-project/ws-service:1
@@ -24,18 +24,6 @@ services:
       CONFIGSERVER_PORT: "8888"
       DATABASESERVER_PORT: "3306"  
       ENCRYPT_KEY: ${ENCRYPT_KEY}
-#  clientsvr:
-#    image: ws-project/clientsvr:1
-#    ports:
-#      - 8081:8081
-#    environment:
-#      PROFILE: "dev"
-#      EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
-#      EUREKASERVER_PORT: "8761"
-#      CONFIGSERVER_URI: "http://confsvr:8888"
-#      CONFIGSERVER_PORT: "8888"
-#      DATABASESERVER_PORT: "3306"  
-#      ENCRYPT_KEY: ${ENCRYPT_KEY}
   confsvr:
     image: ws-project/confsvr:1
     ports:
