@@ -1,15 +1,14 @@
-package com.wsproject.authenticationsvr;
+package com.wsproject.authsvr;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 
 @SpringBootApplication
-//@EnableResourceServer
 @EnableAuthorizationServer
-public class AuthenticationsvrApplication {
+public class AuthsvrApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AuthenticationsvrApplication.class, args);
+		SpringApplication.run(AuthsvrApplication.class, args);
 	}
 }

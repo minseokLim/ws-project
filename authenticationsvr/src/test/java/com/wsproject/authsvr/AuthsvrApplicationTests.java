@@ -1,10 +1,10 @@
-package com.wsproject.authenticationsvr;
+package com.wsproject.authsvr;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthenticationsvrApplicationTests {
+class AuthsvrApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,4 +1,4 @@
-package com.wsproject.authenticationsvr.controller;
+package com.wsproject.authsvr.controller;
 
 import java.util.HashMap;
 import java.util.Map;

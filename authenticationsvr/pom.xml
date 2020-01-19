@@ -9,14 +9,14 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ws-project</groupId>
-	<artifactId>authenticationsvr</artifactId>
+	<artifactId>authsvr</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>authenticationsvr</name>
-	<description>Authentication Server</description>
+	<name>authsvr</name>
+	<description>Authorization Server</description>
 
 	<properties>
 		<docker.version>1.2.1</docker.version>
-        <docker.image.name>ws-project/authenticationsvr</docker.image.name>
+        <docker.image.name>ws-project/authsvr</docker.image.name>
         <docker.image.tag>1</docker.image.tag>
         <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
 	</properties>
