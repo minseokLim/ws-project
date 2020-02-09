@@ -13,6 +13,6 @@ class AuthsvrApplicationTests {
 	
 	@Test
 	void test() throws Exception {
-		System.out.println("testSecret : " + passwordEncoder.encode("testSecret"));
+		System.out.println("testSecret : " + passwordEncoder.encode("zq8WAZ5V9GVQK6COD2TQSfvOzExRibD4"));
 	}
 }

@@ -14,6 +14,7 @@ import com.wsproject.authsvr.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
+// not used
 @AllArgsConstructor
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {

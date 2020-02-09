@@ -11,6 +11,7 @@ import com.wsproject.authsvr.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
+// not used
 @Service
 @AllArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {

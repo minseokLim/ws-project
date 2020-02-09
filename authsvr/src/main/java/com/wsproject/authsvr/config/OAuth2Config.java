@@ -10,7 +10,6 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import com.wsproject.authsvr.service.CustomUserDetailService;
@@ -39,9 +38,9 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		endpoints.userDetailsService(userDetailsService)
-				 .approvalStore(approvalStore())
+//				 .approvalStore(approvalStore())
 //				 .tokenStore(tokenStore())
-				 .accessTokenConverter(accessTokenConverter());				 
+				 .accessTokenConverter(accessTokenConverter());
 	}
 	
 	@Bean
@@ -51,10 +50,10 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 		return converter;
 	}
 	
-	@Bean
-	public JdbcApprovalStore approvalStore() {
-		return new JdbcApprovalStore(dataSource);
-	}
+//	@Bean
+//	public JdbcApprovalStore approvalStore() {
+//		return new JdbcApprovalStore(dataSource);
+//	}
 	
 //	@Bean
 //	public JwtTokenStore tokenStore() {

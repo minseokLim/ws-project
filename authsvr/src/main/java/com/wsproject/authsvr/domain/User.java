@@ -20,37 +20,42 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wsproject.authsvr.domain.enums.SocialType;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+//TODO need to optimize size of each column
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "TBL_USER")
-public class User implements UserDetails {
-	
-	private static final long serialVersionUID = 8210353695049556516L;
+public class User extends BaseTimeEntity implements UserDetails {
+
+	private static final long serialVersionUID = -1232857864897855049L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long msrl;
+	private Long idx;
 	
-	@Column(nullable = false, unique = true, length = 50)
+	@Column(nullable = false)
+	private String name;
+	
+	private String email;
+	
+	private String principal;
+	
+	private SocialType socialType;
+	
+	private String pictureUrl;
+	
+	@Column(unique = true)
 	private String uid;
 	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Column(length = 100)
 	private String password;
-	
-	@Column(nullable = false, length = 100)
-	private String name;
-	
-	@Column(length = 100)
-	private String provider;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "TBL_USER_ROLES")
@@ -64,7 +69,7 @@ public class User implements UserDetails {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public String getUsername() {
-		return this.uid;
+		return this.email;
 	}
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -90,13 +95,17 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-	
+
 	@Builder
-	public User(String uid, String password, String name, String provider, List<String> roles) {
+	public User(String name, String email, String principal, SocialType socialType, String pictureUrl, String uid,
+			String password, List<String> roles) {
+		this.name = name;
+		this.email = email;
+		this.principal = principal;
+		this.socialType = socialType;
+		this.pictureUrl = pictureUrl;
 		this.uid = uid;
 		this.password = password;
-		this.name = name;
-		this.provider = provider;
 		this.roles = roles;
 	}	
 }

@@ -1,11 +1,25 @@
 package com.wsproject.authsvr.config;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
+import com.wsproject.authsvr.oauth2.CustomOAuth2Provider;
+import com.wsproject.authsvr.oauth2.SocialAuthenticationSuccessHandler;
 import com.wsproject.authsvr.security.CustomAuthenticationProvider;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private CustomAuthenticationProvider authenticationProvider;
 	
+	private SocialAuthenticationSuccessHandler socialAuthenticationSuccessHandler;
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authenticationProvider);
@@ -24,13 +40,59 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http
-			.csrf().disable()
-			.headers().frameOptions().disable()
+		CharacterEncodingFilter filter = new CharacterEncodingFilter("UTF-8");
+		
+		http.authorizeRequests()
+				.antMatchers("/oauth/**", "/oauth2/callback").permitAll()
 			.and()
-			.authorizeRequests().antMatchers("/oauth/**", "/oauth2/callback").permitAll()
+				.oauth2Login()
+				.loginPage("/login")
+				.successHandler(socialAuthenticationSuccessHandler)
 			.and()
-			.formLogin().and()
-			.httpBasic();
+				.headers().frameOptions().disable()		
+			.and()
+				.logout()
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/login")
+				.deleteCookies("JSESSIONID")
+				.invalidateHttpSession(true)
+			.and()
+				.addFilterBefore(filter, CsrfFilter.class)
+				.csrf().disable()
+				.httpBasic();
+	}
+	
+	@Bean
+	public ClientRegistrationRepository clientRegistrationRepository(OAuth2ClientProperties oAuth2ClientProperties) {
+		List<ClientRegistration> registrations = oAuth2ClientProperties.getRegistration().keySet().stream()
+												.map(client -> getRegistration(oAuth2ClientProperties, client))
+												.filter(Objects::nonNull)
+												.collect(Collectors.toList());
+		
+		return new InMemoryClientRegistrationRepository(registrations);
+	}
+	
+	private ClientRegistration getRegistration(OAuth2ClientProperties oAuth2ClientProperties, String client) {
+		OAuth2ClientProperties.Registration registration = oAuth2ClientProperties.getRegistration().get(client);
+
+		if("facebook".equals(client)) {
+			return CommonOAuth2Provider.FACEBOOK.getBuilder(client)
+					.clientId(registration.getClientId())
+					.clientSecret(registration.getClientSecret())
+					// picture을 받아오기 위해 별도로 userInfoUri 설정
+					.userInfoUri("https://graph.facebook.com/me?fields=id,name,email,picture")
+					.build();
+		} else if("google".equals(client)) {
+			return CommonOAuth2Provider.GOOGLE.getBuilder(client)
+					.clientId(registration.getClientId())
+					.clientSecret(registration.getClientSecret())
+					.build();
+		} else if("kakao".equals(client)) {
+			return CustomOAuth2Provider.KAKAO.getBuilder(client)
+					.clientId(registration.getClientId())
+					.build();
+		}
+		
+		return null;
 	}
 }
