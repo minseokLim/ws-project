@@ -1,0 +1,22 @@
+server:
+  port: 8081
+    
+spring:
+  datasource:
+    initialization-mode: always
+    url: "jdbc:mariadb://localhost:3306/authsvr"
+    username: "mslim"
+    password: "mslim8803"
+    dbcp2:
+      test-while-idle: true  
+      validation-query: "SELECT 1"
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true   
+    hibernate:
+      ddl-auto: update
+
+security:  oauth2:    jwt:
+      signkey: 123@#$
