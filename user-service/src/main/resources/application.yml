@@ -5,3 +5,9 @@ logging:
   level:
     com:
       wsproject: debug
+      
+security:
+  oauth2:
+    jwt:
+      signkey: 123@#$
+        

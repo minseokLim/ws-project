@@ -11,7 +11,7 @@ import com.wsproject.authsvr.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
-// not used
+//not used
 @Service
 @AllArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
@@ -24,5 +24,5 @@ public class CustomUserDetailService implements UserDetailsService {
 		User user = userRepository.findByUid(username).orElseThrow(() -> new UsernameNotFoundException("user doesn't exist"));
 		detailsChecker.check(user);
 		return user;
-	}	
+	}
 }

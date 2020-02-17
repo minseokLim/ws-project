@@ -36,6 +36,7 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+		
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		

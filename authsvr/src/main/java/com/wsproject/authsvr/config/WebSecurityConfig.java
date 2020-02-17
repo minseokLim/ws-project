@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,7 +19,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.wsproject.authsvr.oauth2.CustomOAuth2Provider;
 import com.wsproject.authsvr.oauth2.SocialAuthenticationSuccessHandler;
-import com.wsproject.authsvr.security.CustomAuthenticationProvider;
 
 import lombok.AllArgsConstructor;
 
@@ -29,21 +27,22 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	private CustomAuthenticationProvider authenticationProvider;
+//	private CustomAuthenticationProvider authenticationProvider;
 	
 	private SocialAuthenticationSuccessHandler socialAuthenticationSuccessHandler;
 	
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(authenticationProvider);
-	}
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.authenticationProvider(authenticationProvider);
+//	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		CharacterEncodingFilter filter = new CharacterEncodingFilter("UTF-8");
 		
 		http.authorizeRequests()
-				.antMatchers("/oauth/**", "/oauth2/callback").permitAll()
+				.antMatchers("/login/**", "/images/**", "/js/**", "/css/**").permitAll()
+				.anyRequest().authenticated()
 			.and()
 				.oauth2Login()
 				.loginPage("/login")

@@ -12,23 +12,21 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
-import com.wsproject.authsvr.service.CustomUserDetailService;
+import lombok.AllArgsConstructor;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Configuration
 @EnableAuthorizationServer
-public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 	
-	private final DataSource dataSource;
+	private DataSource dataSource;
 	
-	private final PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 	
-	private final CustomUserDetailService userDetailsService;
+//	private final CustomUserDetailService userDetailsService;
 	
 	@Value("${security.oauth2.jwt.signkey}")
-	private String signKey;
+	private static String signKey;
 	
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -37,10 +35,10 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.userDetailsService(userDetailsService)
+		endpoints.accessTokenConverter(accessTokenConverter());
 //				 .approvalStore(approvalStore())
-//				 .tokenStore(tokenStore())
-				 .accessTokenConverter(accessTokenConverter());
+//				 .tokenStore(tokenStore())				 
+//				 .userDetailsService(userDetailsService);
 	}
 	
 	@Bean

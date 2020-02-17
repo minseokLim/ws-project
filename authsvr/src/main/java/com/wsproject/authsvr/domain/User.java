@@ -26,7 +26,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-//TODO need to optimize size of each column
 @Entity
 @Getter
 @NoArgsConstructor
@@ -98,7 +97,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 	@Builder
 	public User(String name, String email, String principal, SocialType socialType, String pictureUrl, String uid,
-			String password, List<String> roles) {
+				String password, List<String> roles) {
 		this.name = name;
 		this.email = email;
 		this.principal = principal;
