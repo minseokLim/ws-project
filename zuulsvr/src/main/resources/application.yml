@@ -1,7 +1,5 @@
 server:
   port: 5555
 
-logging:
-  level:
-    com:
-      wsproject: debug
+zuul:
+  sensitive-headers: Cookie,Set-Cookie

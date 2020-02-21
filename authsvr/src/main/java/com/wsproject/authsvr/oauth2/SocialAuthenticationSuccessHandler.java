@@ -12,8 +12,9 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,10 +22,12 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.wsproject.authsvr.domain.User;
 import com.wsproject.authsvr.domain.enums.RoleType;
-import com.wsproject.authsvr.repository.UserRepository;
+import com.wsproject.authsvr.property.CustomProperties;
 
 import lombok.AllArgsConstructor;
 
@@ -32,28 +35,32 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 	
-	private UserRepository userRepository;
+	private CustomProperties customProperties;
+	
+	private RestTemplate restTemplate;
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-		
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
-		
-		if(user == null) {
-			OAuth2AuthenticationToken oAuth2Authentication = (OAuth2AuthenticationToken) authentication;
-			Map<String, Object> map = oAuth2Authentication.getPrincipal().getAttributes();
-            User convertedUser = convertUser(oAuth2Authentication.getAuthorizedClientRegistrationId(), map);
-            
-            user = userRepository.findByPrincipalAndSocialType(convertedUser.getPrincipal(), convertedUser.getSocialType());
-		
-            if(user == null) {
-            	user = userRepository.save(convertedUser);
-            }
-            
-            setRoles(user, oAuth2Authentication, map);
-            session.setAttribute("user", user);
-		}
+	
+		OAuth2AuthenticationToken oAuth2Authentication = (OAuth2AuthenticationToken) authentication;
+		Map<String, Object> map = oAuth2Authentication.getPrincipal().getAttributes();
+        User convertedUser = convertUser(oAuth2Authentication.getAuthorizedClientRegistrationId(), map);
+        User user;
+        
+    	UriComponentsBuilder builder 
+    		= UriComponentsBuilder.fromHttpUrl(customProperties.getApiGatewayIp() + "/api/user-service/v1.0/users/search/findByPrincipalAndSocialType")
+    							  .queryParam("principal", convertedUser.getPrincipal())
+    							  .queryParam("socialType", convertedUser.getSocialType().getValue().toUpperCase());
+    	
+    	ResponseEntity<User> res = restTemplate.getForEntity(builder.toUriString(), User.class);
+        
+    	if(res.getStatusCode() == HttpStatus.OK) {
+    		user = res.getBody();
+    	} else {
+    		user = restTemplate.postForObject(customProperties.getApiGatewayIp() + "/api/user-service/v1.0/users", convertedUser, User.class);
+    	}
+    	
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getIdx(), "N/A", user.getAuthorities()));
 		
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
@@ -107,10 +114,6 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                 .pictureUrl(propertyMap.get("thumbnail_image"))
                 .roles(Collections.singletonList(RoleType.USER.getValue()))
                 .build();
-    }
-
-    private void setRoles(User user, OAuth2AuthenticationToken authentication, Map<String, Object> map) {
-    	SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(map, "N/A", user.getAuthorities()));
     }
     
     private String convertObjToStr(Object obj) {

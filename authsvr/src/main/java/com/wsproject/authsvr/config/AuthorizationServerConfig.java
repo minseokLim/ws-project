@@ -2,7 +2,6 @@ package com.wsproject.authsvr.config;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +10,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+
+import com.wsproject.authsvr.property.CustomProperties;
 
 import lombok.AllArgsConstructor;
 
@@ -23,11 +24,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	
 	private PasswordEncoder passwordEncoder;
 	
-//	private final CustomUserDetailService userDetailsService;
-	
-	@Value("${security.oauth2.jwt.signkey}")
-	private static String signKey;
-	
+	private CustomProperties customProperties;
+		
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
@@ -35,26 +33,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.accessTokenConverter(accessTokenConverter());
-//				 .approvalStore(approvalStore())
-//				 .tokenStore(tokenStore())				 
-//				 .userDetailsService(userDetailsService);
+		endpoints.accessTokenConverter(accessTokenConverter());			 
 	}
 	
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setSigningKey(signKey);
+		converter.setSigningKey(customProperties.getJwtSignkey());
 		return converter;
 	}
-	
-//	@Bean
-//	public JdbcApprovalStore approvalStore() {
-//		return new JdbcApprovalStore(dataSource);
-//	}
-	
-//	@Bean
-//	public JwtTokenStore tokenStore() {
-//		return new JwtTokenStore(accessTokenConverter());
-//	}
 }

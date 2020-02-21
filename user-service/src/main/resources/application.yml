@@ -1,10 +1,5 @@
 server:
   port: 8082
-
-logging:
-  level:
-    com:
-      wsproject: debug
       
 security:
   oauth2:

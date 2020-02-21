@@ -27,14 +27,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-//	private CustomAuthenticationProvider authenticationProvider;
-	
 	private SocialAuthenticationSuccessHandler socialAuthenticationSuccessHandler;
-	
-//	@Override
-//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//		auth.authenticationProvider(authenticationProvider);
-//	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -48,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/login")
 				.successHandler(socialAuthenticationSuccessHandler)
 			.and()
-				.headers().frameOptions().disable()		
+				.headers().frameOptions().disable()
 			.and()
 				.logout()
 				.logoutUrl("/logout")
