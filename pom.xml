@@ -21,7 +21,7 @@
   		<module>confsvr</module>
   		<module>eurekasvr</module>
   		<module>zuulsvr</module>
-  		<!-- <module>authenticationsvr</module> -->
+  		<module>authsvr</module>
   	</modules>
   	
   	<properties>

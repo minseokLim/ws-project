@@ -57,6 +57,7 @@ class WsServiceApplicationTests {
 		
 		assertTrue("Beatles".equals(saved.getAuthor()));
 		
+		Thread.sleep(1000);
 		Ws newWs = Ws.builder().content("Hey Jude").author("Beatles").type(WsType.ETC).build();
 		saved.update(newWs);
 		

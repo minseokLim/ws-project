@@ -12,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// TODO need to optimize size of each column
 @Entity
 @Getter
 @NoArgsConstructor

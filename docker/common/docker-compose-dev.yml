@@ -1,21 +1,9 @@
 version: "3"
 services:
-  ws-service:
-    image: ws-project/ws-service:1
+  authsvr:
+    image: ws-project/authsvr:1
     ports:
-      - 8080:8080
-    environment:
-      PROFILE: "dev"
-      EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
-      EUREKASERVER_PORT: "8761"
-      CONFIGSERVER_URI: "http://confsvr:8888"
-      CONFIGSERVER_PORT: "8888"
-      DATABASESERVER_PORT: "3306"  
-      ENCRYPT_KEY: ${ENCRYPT_KEY}
-  user-service:
-    image: ws-project/user-service:1
-    ports:
-      - 8082:8082
+      - 8901:8901
     environment:
       PROFILE: "dev"
       EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
@@ -34,6 +22,30 @@ services:
     image: ws-project/eurekasvr:1
     ports:
       - 8761:8761
+  user-service:
+    image: ws-project/user-service:1
+    ports:
+      - 8082:8082
+    environment:
+      PROFILE: "dev"
+      EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
+      EUREKASERVER_PORT: "8761"
+      CONFIGSERVER_URI: "http://confsvr:8888"
+      CONFIGSERVER_PORT: "8888"
+      DATABASESERVER_PORT: "3306"  
+      ENCRYPT_KEY: ${ENCRYPT_KEY}
+  ws-service:
+    image: ws-project/ws-service:1
+    ports:
+      - 8080:8080
+    environment:
+      PROFILE: "dev"
+      EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
+      EUREKASERVER_PORT: "8761"
+      CONFIGSERVER_URI: "http://confsvr:8888"
+      CONFIGSERVER_PORT: "8888"
+      DATABASESERVER_PORT: "3306"  
+      ENCRYPT_KEY: ${ENCRYPT_KEY}
   zuulsvr:
     image: ws-project/zuulsvr:1
     ports:
