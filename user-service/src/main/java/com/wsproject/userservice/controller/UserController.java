@@ -4,35 +4,33 @@ import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.wsproject.userservice.domain.User;
-import com.wsproject.userservice.domain.enums.SocialType;
 import com.wsproject.userservice.repository.UserRepository;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
-@RepositoryRestController
-@RequiredArgsConstructor
+@AllArgsConstructor
+@RequestMapping("/v1.0/users")
 public class UserController {
-	
-	@Value("${security.oauth2.jwt.signkey}")
-	private String signKey;
 	
 	private final UserRepository userRepository;
 	
 	private final Gson gson;
 	
-	@GetMapping("/users/me")
+	@GetMapping("/me")
 	public ResponseEntity<User> getLoginUserInfo(@RequestHeader(value="Authorization") String header) {
 		String accessToken = header.split(" ")[1];
 		String payload = accessToken.split("\\.")[1];
@@ -50,14 +48,22 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping("/users/search/findByPrincipalAndSocialType")
-	public ResponseEntity<User> findSocialUser(@RequestParam("principal") String principal, @RequestParam("socialType") SocialType socialType) {
-		Optional<User> user = userRepository.findByPrincipalAndSocialType(principal, socialType);
+	@PostMapping
+	public ResponseEntity<User> insertUser(@RequestBody User dto) {
+		Optional<User> user = userRepository.findByPrincipalAndSocialType(dto.getPrincipal(), dto.getSocialType());
 		
 		if(user.isPresent()) {
-			return new ResponseEntity<User>(user.get(), HttpStatus.OK);
+			User result = user.get();
+			log.debug("This user's information already exist - SocialType : {}, Principal : {}, Name : {}", 
+					  result.getSocialType().getValue(), result.getPrincipal(), result.getName());
+			
+			return new ResponseEntity<User>(result, HttpStatus.OK);			
 		} else {
-			return ResponseEntity.notFound().build();
+			User result = userRepository.save(dto);
+			log.debug("This user's information is saved - SocialType : {}, Principal : {}, Name : {}",
+					  result.getSocialType().getValue(), result.getPrincipal(), result.getName());
+			
+			return new ResponseEntity<User>(result, HttpStatus.CREATED);
 		}
 	}
 }

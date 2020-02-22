@@ -5,9 +5,6 @@ spring:
     config:
       uri:
       - http://localhost:8888
-  data:
-    rest:
-      base-path: /v1.0
 
 eureka:
   instance:

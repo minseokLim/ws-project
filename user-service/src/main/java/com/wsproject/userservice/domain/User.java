@@ -12,8 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Index;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wsproject.userservice.domain.enums.SocialType;
@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "TBL_USER", indexes = {@Index(columnList = "socialType,principal")})
+@Table(name = "TBL_USER", uniqueConstraints = {@UniqueConstraint(columnNames = {"principal", "socialType"})})
 public class User extends BaseTimeEntity implements Serializable {
 
 	private static final long serialVersionUID = 6510441028359513508L;

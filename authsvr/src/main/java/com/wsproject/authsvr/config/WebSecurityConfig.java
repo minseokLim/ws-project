@@ -17,8 +17,8 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import com.wsproject.authsvr.handler.SocialAuthenticationSuccessHandler;
 import com.wsproject.authsvr.oauth2.CustomOAuth2Provider;
-import com.wsproject.authsvr.oauth2.SocialAuthenticationSuccessHandler;
 
 import lombok.AllArgsConstructor;
 
@@ -42,12 +42,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.successHandler(socialAuthenticationSuccessHandler)
 			.and()
 				.headers().frameOptions().disable()
-			.and()
-				.logout()
-				.logoutUrl("/logout")
-				.logoutSuccessUrl("/login")
-				.deleteCookies("JSESSIONID")
-				.invalidateHttpSession(true)
+//			.and()
+//				.logout()
+//				.logoutUrl("/logout")
+//				.logoutSuccessUrl("/login")
+//				.deleteCookies("JSESSIONID")
+//				.invalidateHttpSession(true)
 			.and()
 				.addFilterBefore(filter, CsrfFilter.class)
 				.csrf().disable()

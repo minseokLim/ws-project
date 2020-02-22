@@ -1,6 +1,5 @@
 package com.wsproject.userservice.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,18 +10,21 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+import com.wsproject.userservice.property.CustomProperties;
+
+import lombok.AllArgsConstructor;
+
 @Configuration
+@AllArgsConstructor
 @EnableResourceServer
 public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
 	
-	@Value("${security.oauth2.jwt.signkey}")
-	private String signKey;
+	private CustomProperties properties;
 	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/v1.0/users/me").access("#oauth2.hasScope('profile')")
-			.antMatchers("/v1.0/users/search/findByPrincipalAndSocialType").permitAll()
 			.antMatchers(HttpMethod.POST, "/v1.0/users").permitAll()
 			.anyRequest().authenticated();
 	}
@@ -35,7 +37,7 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 	    JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-	    converter.setSigningKey(signKey);
+	    converter.setSigningKey(properties.getJwtSignkey());
 	    return converter;
 	}
 }

@@ -34,7 +34,7 @@ public class PostFilter extends ZuulFilter {
 	@Override
 	public Object run() throws ZuulException {
 		RequestContext ctx = RequestContext.getCurrentContext();
-		log.info("Completing outgoing request for {}", ctx.getRequest().getRequestURI());
+		log.info("Outgoing request for {}", ctx.getRequest().getRequestURI());
 		return null;
 	}
 }

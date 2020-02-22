@@ -1,5 +1,9 @@
 package com.wsproject.zuulsvr.filter;
 
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Component;
 
 import com.netflix.zuul.ZuulFilter;
@@ -34,7 +38,24 @@ public class PreFilter extends ZuulFilter {
 	@Override
 	public Object run() throws ZuulException {
 		RequestContext ctx = RequestContext.getCurrentContext();
-		log.info("Processing incoming request for {}", ctx.getRequest().getRequestURI());
+		HttpServletRequest request = ctx.getRequest();
+		
+		log.info("Incoming request for {}", request.getRequestURI());
+		
+		Enumeration<String> keys = request.getParameterNames();
+		
+		// 파라미터가 1개 이상일 때
+		if(keys.hasMoreElements()) {
+			log.debug("===== Parameters start =====");
+			
+			while(keys.hasMoreElements()) {
+				String key = keys.nextElement();
+				log.debug(key + "=" + request.getParameter(key));
+			}
+			
+			log.debug("===== Parameters end =====");
+		}
+		
 		return null;
 	}
 }
