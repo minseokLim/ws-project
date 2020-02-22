@@ -7,11 +7,11 @@ spring:
         encrypt:
           enabled: false
         git:
-          uri: https://github.com/minseokLim/ws-project-config
+          uri: https://github.com/minseokLim-configFile/ws-project.git
           search-paths:
           - ws-service
           - user-service
           - zuulsvr
           - authsvr
-          username: minseokLim
-          password: "{cipher}69ba078a13febf2d86f577ee2588ed6a256ae1356adb3eab475ed71fa690d6e9"
+          username: minseokLim-configFile
+          password: "{cipher}a14168b6dbc600c3885021f20bd7372b9b600681df0e7e9a10f5faf6a4ffa24e4967eaa60c7ad572b7c763db0827865a7c82a6aeab235fb5b62d00aa37faa1bc"
