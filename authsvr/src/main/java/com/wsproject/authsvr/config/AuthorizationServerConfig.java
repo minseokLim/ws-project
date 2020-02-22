@@ -24,7 +24,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	
 	private PasswordEncoder passwordEncoder;
 	
-	private CustomProperties customProperties;
+	private CustomProperties properties;
 		
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -39,7 +39,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setSigningKey(customProperties.getJwtSignkey());
+		converter.setSigningKey(properties.getJwtSignkey());
 		return converter;
 	}
 }

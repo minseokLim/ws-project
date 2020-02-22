@@ -35,7 +35,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 	
-	private CustomProperties customProperties;
+	private CustomProperties properties;
 	
 	private RestTemplate restTemplate;
 	
@@ -48,7 +48,7 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         User user;
         
     	UriComponentsBuilder builder 
-    		= UriComponentsBuilder.fromHttpUrl(customProperties.getApiGatewayIp() + "/api/user-service/v1.0/users/search/findByPrincipalAndSocialType")
+    		= UriComponentsBuilder.fromHttpUrl(properties.getApiBaseUri() + "/user-service/v1.0/users/search/findByPrincipalAndSocialType")
     							  .queryParam("principal", convertedUser.getPrincipal())
     							  .queryParam("socialType", convertedUser.getSocialType().getValue().toUpperCase());
     	
@@ -57,7 +57,7 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     	if(res.getStatusCode() == HttpStatus.OK) {
     		user = res.getBody();
     	} else {
-    		user = restTemplate.postForObject(customProperties.getApiGatewayIp() + "/api/user-service/v1.0/users", convertedUser, User.class);
+    		user = restTemplate.postForObject(properties.getApiBaseUri() + "/user-service/v1.0/users", convertedUser, User.class);
     	}
     	
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getIdx(), "N/A", user.getAuthorities()));
