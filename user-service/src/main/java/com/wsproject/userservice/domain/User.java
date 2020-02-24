@@ -1,6 +1,7 @@
 package com.wsproject.userservice.domain;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -26,12 +25,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "TBL_USER", uniqueConstraints = {@UniqueConstraint(columnNames = {"principal", "socialType"})})
-public class User extends BaseTimeEntity implements Serializable {
+public class User implements Serializable {
 
 	private static final long serialVersionUID = 6510441028359513508L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idx;
 	
 	@Column(nullable = false)
@@ -69,11 +67,16 @@ public class User extends BaseTimeEntity implements Serializable {
 	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	boolean enabled;
+	
+	private LocalDateTime createdDate;
+	
+	private LocalDateTime modifiedDate;
 
 	@Builder
-	public User(String name, String email, String principal, SocialType socialType, String pictureUrl, String uid,
-				String password, List<String> roles, boolean accountNonExpired, boolean accountNonLocked,
-				boolean credentialsNonExpired, boolean enabled) {
+	public User(Long idx, String name, String email, String principal, SocialType socialType, String pictureUrl,
+			String uid, String password, List<String> roles, boolean accountNonExpired, boolean accountNonLocked,
+			boolean credentialsNonExpired, boolean enabled, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+		this.idx = idx;
 		this.name = name;
 		this.email = email;
 		this.principal = principal;
@@ -86,5 +89,7 @@ public class User extends BaseTimeEntity implements Serializable {
 		this.accountNonLocked = accountNonLocked;
 		this.credentialsNonExpired = credentialsNonExpired;
 		this.enabled = enabled;
-	}
+		this.createdDate = createdDate;
+		this.modifiedDate = modifiedDate;
+	}	
 }

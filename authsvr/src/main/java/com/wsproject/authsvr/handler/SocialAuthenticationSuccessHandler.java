@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,13 +25,17 @@ import org.springframework.web.client.RestTemplate;
 
 import com.wsproject.authsvr.domain.User;
 import com.wsproject.authsvr.domain.enums.RoleType;
+import com.wsproject.authsvr.domain.enums.SocialType;
 import com.wsproject.authsvr.property.CustomProperties;
+import com.wsproject.authsvr.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
 public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+	
+	private UserRepository userRepository;
 	
 	private CustomProperties properties;
 	
@@ -42,8 +47,21 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 		OAuth2AuthenticationToken oAuth2Authentication = (OAuth2AuthenticationToken) authentication;
 		Map<String, Object> map = oAuth2Authentication.getPrincipal().getAttributes();
         User convertedUser = convertUser(oAuth2Authentication.getAuthorizedClientRegistrationId(), map);
-        User user = restTemplate.postForObject(properties.getApiBaseUri() + "/user-service/v1.0/users", convertedUser, User.class);
-    	
+        
+        String principal = convertedUser.getPrincipal();
+        SocialType socialType = convertedUser.getSocialType();
+        
+        Optional<User> foundUser = userRepository.findByPrincipalAndSocialType(principal, socialType);
+        
+        User user;
+        
+        if(foundUser.isPresent()) {
+        	user = foundUser.get();
+        } else {
+        	user = userRepository.save(convertedUser);
+            user = restTemplate.postForObject(properties.getApiBaseUri() + "/user-service/v1.0/users", user, User.class);
+        }
+        
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getIdx(), "N/A", user.getAuthorities()));
 		
 		super.onAuthenticationSuccess(request, response, authentication);
@@ -72,6 +90,10 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                 .socialType(FACEBOOK)
                 .pictureUrl(convertObjToStr(pictureUrl))
                 .roles(Collections.singletonList(RoleType.USER.getValue()))
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
+                .enabled(true)
                 .build();
     }
 
@@ -83,6 +105,10 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                 .socialType(GOOGLE)
                 .pictureUrl(convertObjToStr(map.get("picture")))
                 .roles(Collections.singletonList(RoleType.USER.getValue()))
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
+                .enabled(true)
                 .build();
     }
     
@@ -97,6 +123,10 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                 .socialType(KAKAO)
                 .pictureUrl(propertyMap.get("thumbnail_image"))
                 .roles(Collections.singletonList(RoleType.USER.getValue()))
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
+                .enabled(true)
                 .build();
     }
     

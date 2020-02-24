@@ -1,4 +1,4 @@
-package com.wsproject.userservice.domain;
+package com.wsproject.authsvr.domain;
 
 import java.time.LocalDateTime;
 

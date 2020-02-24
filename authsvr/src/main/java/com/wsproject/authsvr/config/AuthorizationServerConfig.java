@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import com.wsproject.authsvr.property.CustomProperties;
+import com.wsproject.authsvr.service.CustomUserDetailsService;
 
 import lombok.AllArgsConstructor;
 
@@ -25,6 +26,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	private PasswordEncoder passwordEncoder;
 	
 	private CustomProperties properties;
+	
+	private CustomUserDetailsService userDetailsService;
 		
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -33,7 +36,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.accessTokenConverter(accessTokenConverter());			 
+		endpoints.accessTokenConverter(accessTokenConverter())
+				.userDetailsService(userDetailsService);			 
 	}
 	
 	@Bean
