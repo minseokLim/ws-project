@@ -21,12 +21,10 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import com.wsproject.authsvr.domain.User;
 import com.wsproject.authsvr.domain.enums.RoleType;
 import com.wsproject.authsvr.domain.enums.SocialType;
-import com.wsproject.authsvr.property.CustomProperties;
 import com.wsproject.authsvr.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -36,10 +34,6 @@ import lombok.AllArgsConstructor;
 public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 	
 	private UserRepository userRepository;
-	
-	private CustomProperties properties;
-	
-	private RestTemplate restTemplate;
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -59,7 +53,6 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         	user = foundUser.get();
         } else {
         	user = userRepository.save(convertedUser);
-            user = restTemplate.postForObject(properties.getApiBaseUri() + "/user-service/v1.0/users", user, User.class);
         }
         
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getIdx(), "N/A", user.getAuthorities()));

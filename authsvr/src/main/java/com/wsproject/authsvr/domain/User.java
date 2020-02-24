@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "TBL_USER_AUTH", uniqueConstraints = {@UniqueConstraint(columnNames = {"principal", "socialType"})})
+@Table(name = "TBL_USER", uniqueConstraints = {@UniqueConstraint(columnNames = {"principal", "socialType"})})
 public class User extends BaseTimeEntity implements UserDetails {
 	
 	private static final long serialVersionUID = 6510441028359513508L;
@@ -60,7 +60,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private String password;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "TBL_USER_ROLES_AUTH")
+	@CollectionTable(name = "TBL_USER_ROLES")
     private List<String> roles = new ArrayList<String>();
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
