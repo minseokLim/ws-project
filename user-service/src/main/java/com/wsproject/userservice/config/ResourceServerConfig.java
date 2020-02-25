@@ -23,7 +23,7 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.antMatchers("/v1.0/users/me").access("#oauth2.hasScope('profile')")
+			.antMatchers("/v1.0/users/me").access("#oauth2.hasScope('mobile')")
 			.anyRequest().authenticated();
 	}
 	 
