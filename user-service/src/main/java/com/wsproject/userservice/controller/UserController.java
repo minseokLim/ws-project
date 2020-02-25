@@ -43,23 +43,4 @@ public class UserController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
-//	@PostMapping
-//	public ResponseEntity<User> insertUser(@RequestBody User dto) {
-//		Optional<User> user = userRepository.findByPrincipalAndSocialType(dto.getPrincipal(), dto.getSocialType());
-//		
-//		if(user.isPresent()) {
-//			User result = user.get();
-//			log.debug("This user's information already exist - SocialType : {}, Principal : {}, Name : {}", 
-//					  result.getSocialType().getValue(), result.getPrincipal(), result.getName());
-//			
-//			return new ResponseEntity<User>(result, HttpStatus.OK);			
-//		} else {
-//			User result = userRepository.save(dto);
-//			log.debug("This user's information is saved - SocialType : {}, Principal : {}, Name : {}",
-//					  result.getSocialType().getValue(), result.getPrincipal(), result.getName());
-//			
-//			return new ResponseEntity<User>(result, HttpStatus.CREATED);
-//		}
-//	}
 }

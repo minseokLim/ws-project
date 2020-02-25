@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
-import com.wsproject.zuulsvr.util.FilterUtil;
+import com.wsproject.zuulsvr.constant.FilterType;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PostFilter extends ZuulFilter {
 	private static final int FILTER_ORDER = 1;
 	private static final boolean SHOULD_FILTER = true;
-	private static final String FILTER_TYPE = FilterUtil.POST_FILTER_TYPE;
+	private static final String FILTER_TYPE = FilterType.POST_FILTER_TYPE;
 	
 	@Override
 	public int filterOrder() {
