@@ -1,5 +1,17 @@
 version: "3"
 services:
+  authsvr:
+    image: ws-project/authsvr:1
+    ports:
+      - 8901:8901
+    environment:
+      PROFILE: "dev"
+      EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
+      EUREKASERVER_PORT: "8761"
+      CONFIGSERVER_URI: "http://confsvr:8888"
+      CONFIGSERVER_PORT: "8888"
+      DATABASESERVER_PORT: "3306"  
+      ENCRYPT_KEY: ${ENCRYPT_KEY}
   confsvr:
     image: ws-project/confsvr:1
     ports:
