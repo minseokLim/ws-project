@@ -65,4 +65,5 @@ services:
        MYSQL_DATABASE: dev_test
        MYSQL_ROOT_PASSWORD: mslim8803
        MYSQL_ROOT_HOST: '%'
-    command: --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    command: --character-set-server=utf8 --collation-server=utf8_unicode_ci --lower_case_table_names=1
+    

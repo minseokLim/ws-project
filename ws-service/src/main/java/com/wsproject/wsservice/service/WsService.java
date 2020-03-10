@@ -3,6 +3,7 @@ package com.wsproject.wsservice.service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 
+import com.wsproject.wsservice.dto.MinMaxInfo;
 import com.wsproject.wsservice.dto.WsDto;
 
 public interface WsService {		
@@ -11,4 +12,6 @@ public interface WsService {
 	public WsDto insertWs(WsDto dto);
 	public WsDto updateWs(Long id, WsDto dto);
 	public boolean deleteWs(Long id);
+	
+	public MinMaxInfo getMinMaxInfo();
 }

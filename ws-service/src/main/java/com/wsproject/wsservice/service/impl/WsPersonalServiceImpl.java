@@ -25,9 +25,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class WsPersonalServiceImpl implements WsPersonalService {
-	
-//	private static final Logger LOGGER = LoggerFactory.getLogger(WsPersonalServiceImpl.class);
-	
+		
 	private WsPersonalRepository repository;
 	
 	private CommonUtil commonUtil;

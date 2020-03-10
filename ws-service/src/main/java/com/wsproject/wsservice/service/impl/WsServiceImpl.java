@@ -11,8 +11,6 @@ import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
@@ -22,20 +20,24 @@ import org.springframework.stereotype.Service;
 import com.wsproject.wsservice.controller.WsController;
 import com.wsproject.wsservice.domain.Ws;
 import com.wsproject.wsservice.domain.enums.WsType;
+import com.wsproject.wsservice.dto.MinMaxInfo;
 import com.wsproject.wsservice.dto.WsDto;
+import com.wsproject.wsservice.repository.WsPersonalRepository;
 import com.wsproject.wsservice.repository.WsRepository;
 import com.wsproject.wsservice.service.WsService;
 import com.wsproject.wsservice.util.CommonUtil;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class WsServiceImpl implements WsService {
+		
+	private WsRepository wsRepository;
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(WsServiceImpl.class);
-	
-	private WsRepository repository;
+	private WsPersonalRepository wsPslRepository;
 	
 	private CommonUtil commonUtil;
 	
@@ -44,7 +46,7 @@ public class WsServiceImpl implements WsService {
 		Page<Ws> page;
 		
 		if(search == null) {
-			page = repository.findAll(pageable);
+			page = wsRepository.findAll(pageable);
 		} else {
 			try {
 				// search 파라미터가 'content=내용'과 같은 형식으로 넘어온다.
@@ -56,19 +58,19 @@ public class WsServiceImpl implements WsService {
 				
 				switch (key) {
 				case "content":
-					page = repository.findByContentLike("%" + value + "%", pageable);
+					page = wsRepository.findByContentLike("%" + value + "%", pageable);
 					break;
 				case "author":
-					page = repository.findByAuthorLike("%" + value + "%", pageable);
+					page = wsRepository.findByAuthorLike("%" + value + "%", pageable);
 					break;
 				case "type":
-					page = repository.findByType(WsType.valueOf(value), pageable);
+					page = wsRepository.findByType(WsType.valueOf(value), pageable);
 					break;
 				default:
 					return null;
 				}
 			} catch (UnsupportedEncodingException | NoSuchElementException e) {
-				LOGGER.error("{} occured, due to invalid parameters.", e.toString());
+				log.error("{} occured, due to invalid parameters.", e.toString());
 				return null;
 			}	
 		}
@@ -88,7 +90,7 @@ public class WsServiceImpl implements WsService {
 
 	@Override
 	public WsDto selectWs(Long id) {
-		Optional<Ws> data = repository.findById(id);
+		Optional<Ws> data = wsRepository.findById(id);
 		
 		if(!data.isPresent()) {
 			return null;
@@ -102,7 +104,7 @@ public class WsServiceImpl implements WsService {
 
 	@Override
 	public WsDto insertWs(WsDto dto) {
-		Ws ws = repository.save(dto.toEntity());
+		Ws ws = wsRepository.save(dto.toEntity());
 		WsDto result = new WsDto(ws);
 		result.add(linkTo(WsController.class).slash(result.getId()).withSelfRel());
 		
@@ -113,7 +115,7 @@ public class WsServiceImpl implements WsService {
 	public WsDto updateWs(Long id, WsDto dto) {
 		// TODO 효율성 관점에서 봤을 때는 좋지 않아보임. 
 		// 현재 이 과정 없이 update를 진행하면, createdDate가 null이 되어버림
-		Optional<Ws> data = repository.findById(id);
+		Optional<Ws> data = wsRepository.findById(id);
 		
 		if(!data.isPresent()) {
 			return null;
@@ -122,7 +124,7 @@ public class WsServiceImpl implements WsService {
 		Ws ws = data.get();
 		ws.update(dto.toEntity());
 		
-		ws = repository.save(ws);
+		ws = wsRepository.save(ws);
 		
 		WsDto result = new WsDto(ws);
 		result.add(linkTo(WsController.class).slash(id).withSelfRel());
@@ -132,13 +134,28 @@ public class WsServiceImpl implements WsService {
 
 	@Override
 	public boolean deleteWs(Long id) {
-		Optional<Ws> data = repository.findById(id);
+		Optional<Ws> data = wsRepository.findById(id);
 		
 		if(!data.isPresent()) {
 			return false;
 		}
 		
-		repository.deleteById(id);
+		wsRepository.deleteById(id);
 		return true;
+	}
+
+	@Override
+	public MinMaxInfo getMinMaxInfo() {
+		Long wsMinId = wsRepository.findMinId();
+		Long wsMaxId = wsRepository.findMaxId();
+		Long wsPslMinId = wsPslRepository.findMinId();
+		Long wsPslMaxId = wsPslRepository.findMaxId();
+		
+		return MinMaxInfo.builder()
+					.wsMinId(wsMinId)
+					.wsMaxId(wsMaxId)
+					.wsPslMinId(wsPslMinId)
+					.wsPslMaxId(wsPslMaxId)
+					.build();
 	}
 }

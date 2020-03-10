@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "TBL_WS_PERSONAL", indexes = {@Index(columnList = "ownerEmail")})
+@Table(name = "TBL_WS_PSL", indexes = {@Index(columnList = "ownerEmail")})
 public class WsPersonal extends BaseTimeEntity {
 	
 	@Id

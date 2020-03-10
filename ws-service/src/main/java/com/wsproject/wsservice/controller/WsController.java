@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wsproject.wsservice.dto.MinMaxInfo;
 import com.wsproject.wsservice.dto.WsDto;
 import com.wsproject.wsservice.service.WsService;
 
@@ -75,5 +76,12 @@ public class WsController {
 		} else {
 			return ResponseEntity.notFound().build();
 		}
+	}
+	
+	@GetMapping("/minMaxInfo")
+	public ResponseEntity<MinMaxInfo> getMinMaxInfo() {
+		MinMaxInfo minMaxInfo = service.getMinMaxInfo();
+		
+		return ResponseEntity.ok(minMaxInfo);
 	}
 }
