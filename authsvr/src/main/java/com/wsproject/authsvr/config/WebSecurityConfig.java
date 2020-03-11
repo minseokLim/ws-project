@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -28,13 +29,13 @@ import lombok.AllArgsConstructor;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private SocialAuthenticationSuccessHandler socialAuthenticationSuccessHandler;
-
+		
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		CharacterEncodingFilter filter = new CharacterEncodingFilter("UTF-8");
 		
 		http.authorizeRequests()
-				.antMatchers("/login/**", "/images/**", "/js/**", "/css/**").permitAll()
+				.antMatchers("/login/**", "/images/**", "/js/**", "/css/**", "/oauth/**").permitAll()
 				.anyRequest().authenticated()
 			.and()
 				.oauth2Login()
@@ -46,6 +47,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.addFilterBefore(filter, CsrfFilter.class)
 				.csrf().disable()
 				.httpBasic();
+	}
+	
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 	
 	@Bean

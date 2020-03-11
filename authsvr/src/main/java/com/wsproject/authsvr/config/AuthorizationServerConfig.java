@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -25,6 +26,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	
 	private PasswordEncoder passwordEncoder;
 	
+	private AuthenticationManager authenticationManager;
+	
 	private CustomProperties properties;
 	
 	private CustomUserDetailsService userDetailsService;
@@ -37,6 +40,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		endpoints.accessTokenConverter(accessTokenConverter())
+				 .authenticationManager(authenticationManager)
 				 .userDetailsService(userDetailsService);			 
 	}
 	
