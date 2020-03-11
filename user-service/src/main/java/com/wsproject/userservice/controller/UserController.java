@@ -43,4 +43,11 @@ public class UserController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+	
+	@GetMapping("/maxIdx")
+	public ResponseEntity<Long> getMaxUserIdx() {
+		Long maxIdx = userRepository.getMaxUserIdx();
+		
+		return ResponseEntity.ok(maxIdx);
+	}
 }

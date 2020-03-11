@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import com.wsproject.wsservice.domain.WsPersonal;
+import com.wsproject.wsservice.domain.WsPsl;
 import com.wsproject.wsservice.domain.enums.WsType;
 
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class WsPersonalDto extends RepresentationModel<WsPersonalDto> {
+public class WsPslDto extends RepresentationModel<WsPslDto> {
 	
 private Long id;
 	
@@ -22,23 +22,23 @@ private Long id;
 	
 	private WsType type;
 	
-	private String ownerEmail;
+	private Long ownerIdx;
 	
 	private LocalDateTime createdDate;
 	
 	private LocalDateTime modifiedDate;
 
-	public WsPersonalDto(WsPersonal wsPersonal) {
+	public WsPslDto(WsPsl wsPersonal) {
 		this.id = wsPersonal.getId();
 		this.content = wsPersonal.getContent();
 		this.author = wsPersonal.getAuthor();
 		this.type = wsPersonal.getType();
-		this.ownerEmail = wsPersonal.getOwnerEmail();
+		this.ownerIdx = wsPersonal.getOwnerIdx();
 		this.createdDate = wsPersonal.getCreatedDate();
 		this.modifiedDate = wsPersonal.getModifiedDate();
 	}
 	
-	public WsPersonal toEntity() {
-		return WsPersonal.builder().content(content).author(author).type(type).ownerEmail(ownerEmail).build();
+	public WsPsl toEntity() {
+		return WsPsl.builder().content(content).author(author).type(type).ownerIdx(ownerIdx).build();
 	}
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wsproject.wsservice.dto.MinMaxInfo;
 import com.wsproject.wsservice.dto.WsDto;
 import com.wsproject.wsservice.service.WsService;
 
@@ -26,11 +25,11 @@ import lombok.AllArgsConstructor;;
 @RequestMapping("/v1.0/wses")
 public class WsController {
 		
-	private WsService service;
-	
+	private WsService wsService;
+		
 	@GetMapping
 	public ResponseEntity<PagedModel<WsDto>> selectWsPage(@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
-		PagedModel<WsDto> result = service.selectWses(search, pageable);
+		PagedModel<WsDto> result = wsService.selectWses(search, pageable);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -41,7 +40,7 @@ public class WsController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<WsDto> selectWs(@PathVariable("id") Long id) {
-		WsDto result = service.selectWs(id);
+		WsDto result = wsService.selectWs(id);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -52,13 +51,13 @@ public class WsController {
 	
 	@PostMapping
 	public ResponseEntity<WsDto> insertWs(@RequestBody WsDto dto) {
-		WsDto result = service.insertWs(dto);
+		WsDto result = wsService.insertWs(dto);
 		return new ResponseEntity<WsDto>(result, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<WsDto> updateWs(@PathVariable("id") Long id, @RequestBody WsDto dto) {
-		WsDto result = service.updateWs(id, dto);
+		WsDto result = wsService.updateWs(id, dto);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -69,7 +68,7 @@ public class WsController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteWs(@PathVariable("id") Long id) {
-		boolean result = service.deleteWs(id);
+		boolean result = wsService.deleteWs(id);
 		
 		if(result) {
 			return ResponseEntity.noContent().build();
@@ -78,10 +77,9 @@ public class WsController {
 		}
 	}
 	
-	@GetMapping("/minMaxInfo")
-	public ResponseEntity<MinMaxInfo> getMinMaxInfo() {
-		MinMaxInfo minMaxInfo = service.getMinMaxInfo();
-		
-		return ResponseEntity.ok(minMaxInfo);
+	@GetMapping("/count")
+	public ResponseEntity<Long> count() {
+		long result = wsService.countWs();
+		return ResponseEntity.ok(result);
 	}
 }

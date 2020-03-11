@@ -1,6 +1,5 @@
 package com.wsproject.wsservice.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "TBL_WS_PSL", indexes = {@Index(columnList = "ownerEmail")})
-public class WsPersonal extends BaseTimeEntity {
+@Table(name = "TBL_WS_PSL", indexes = {@Index(columnList = "ownerIdx")})
+public class WsPsl extends BaseTimeEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,21 +29,20 @@ public class WsPersonal extends BaseTimeEntity {
 	
 	private WsType type;
 	
-	@Column(length = 100)
-	private String ownerEmail;
+	private Long ownerIdx;
 
 	@Builder
-	public WsPersonal(String content, String author, WsType type, String ownerEmail) {
+	public WsPsl(String content, String author, WsType type, Long ownerIdx) {
 		this.content = content;
 		this.author = author;
 		this.type = type;
-		this.ownerEmail = ownerEmail;
+		this.ownerIdx = ownerIdx;
 	}
 	
-	public void update(WsPersonal wsPersonal) {
+	public void update(WsPsl wsPersonal) {
 		this.content = wsPersonal.getContent();
 		this.author = wsPersonal.getAuthor();
 		this.type = wsPersonal.getType();
-		this.ownerEmail = wsPersonal.getOwnerEmail();
+		this.ownerIdx = wsPersonal.getOwnerIdx();
 	}
 }

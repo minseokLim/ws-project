@@ -13,5 +13,6 @@ spring:
           - user-service
           - zuulsvr
           - authsvr
+          - batch-service
           username: minseokLim-configFile
           password: "{cipher}a14168b6dbc600c3885021f20bd7372b9b600681df0e7e9a10f5faf6a4ffa24e4967eaa60c7ad572b7c763db0827865a7c82a6aeab235fb5b62d00aa37faa1bc"

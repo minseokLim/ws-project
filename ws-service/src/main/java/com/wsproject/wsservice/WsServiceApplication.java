@@ -30,7 +30,7 @@ public class WsServiceApplication {
 //				wsPersonalRepository.save(WsPersonal.builder()
 //						.author("개인작가" + i)
 //						.content("너무 완벽하게 하려고 하지 말자" + i)
-//						.ownerEmail("mslim8803@naver.com")
+//						.ownerIdx(1L)
 //						.type(WsType.YOLO)
 //						.build()
 //				);

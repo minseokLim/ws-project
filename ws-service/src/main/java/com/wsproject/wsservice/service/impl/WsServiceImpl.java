@@ -20,9 +20,7 @@ import org.springframework.stereotype.Service;
 import com.wsproject.wsservice.controller.WsController;
 import com.wsproject.wsservice.domain.Ws;
 import com.wsproject.wsservice.domain.enums.WsType;
-import com.wsproject.wsservice.dto.MinMaxInfo;
 import com.wsproject.wsservice.dto.WsDto;
-import com.wsproject.wsservice.repository.WsPersonalRepository;
 import com.wsproject.wsservice.repository.WsRepository;
 import com.wsproject.wsservice.service.WsService;
 import com.wsproject.wsservice.util.CommonUtil;
@@ -36,9 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 public class WsServiceImpl implements WsService {
 		
 	private WsRepository wsRepository;
-	
-	private WsPersonalRepository wsPslRepository;
-	
+		
 	private CommonUtil commonUtil;
 	
 	@Override
@@ -145,17 +141,7 @@ public class WsServiceImpl implements WsService {
 	}
 
 	@Override
-	public MinMaxInfo getMinMaxInfo() {
-		Long wsMinId = wsRepository.findMinId();
-		Long wsMaxId = wsRepository.findMaxId();
-		Long wsPslMinId = wsPslRepository.findMinId();
-		Long wsPslMaxId = wsPslRepository.findMaxId();
-		
-		return MinMaxInfo.builder()
-					.wsMinId(wsMinId)
-					.wsMaxId(wsMaxId)
-					.wsPslMinId(wsPslMinId)
-					.wsPslMaxId(wsPslMaxId)
-					.build();
+	public long countWs() {
+		return wsRepository.count();
 	}
 }
