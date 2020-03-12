@@ -23,8 +23,6 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()	
-			.antMatchers("/v1.0/wses/minMaxInfo", "/v1.0/wses/count").permitAll()
-			.regexMatchers("/v1.0/users/\\d+/wses/count").permitAll()
 			.anyRequest().authenticated();
 	}
 	 

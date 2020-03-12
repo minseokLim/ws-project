@@ -24,7 +24,6 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/v1.0/users/me").access("#oauth2.hasScope('mobile')")
-			.antMatchers("/maxIdx").permitAll()
 			.anyRequest().authenticated();
 	}
 	 

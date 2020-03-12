@@ -4,6 +4,7 @@ import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class UserController {
 	private final Gson gson;
 	
 	@GetMapping("/me")
-	public ResponseEntity<User> getLoginUserInfo(@RequestHeader(value="Authorization") String header) {
+	public ResponseEntity<User> getLoginUserInfo(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String header) {
 		String accessToken = header.split(" ")[1];
 		String payload = accessToken.split("\\.")[1];
 		@SuppressWarnings("unchecked")
