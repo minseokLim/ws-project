@@ -18,9 +18,11 @@ import com.wsproject.batchservice.property.CustomProperties;
 import com.wsproject.batchservice.service.RestService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @Configuration
+@Slf4j
 public class TodaysWsJob {
 
 	private JobBuilderFactory jobBuilderFactory;
@@ -30,7 +32,7 @@ public class TodaysWsJob {
 	private CustomProperties properties;
 	
 	private RestService restService;
-	
+		
 	@Bean
 	public Job todayWsJob() {
 		return jobBuilderFactory.get("todayWsJob").start(todayWsStep()).build();
@@ -42,19 +44,19 @@ public class TodaysWsJob {
 			TokenInfo tokenInfo = restService.getTokenInfo();
 			long maxUserIdx = Long.parseLong(restService.getForEntity(properties.getApiBaseUri() + "/user-service/v1.0/users/maxIdx", tokenInfo).getBody());
 			long wsCount = Long.parseLong(restService.getForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/wses/count", tokenInfo).getBody());
-			
+						
 			for(long i = 1; i <= maxUserIdx; i++) {
 				long wsPslCount = Long.parseLong(restService.getForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/users/" + i + "/wses/count", tokenInfo).getBody());
 				long randomNo = (long) (Math.random() * (wsCount + wsPslCount) + 1);
 				ResponseEntity<String> entity;
 				
-				if(randomNo <= wsCount) {
-					entity = restService.getForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/wses/" + randomNo, tokenInfo);
-				} else {
-					entity = restService.getForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/users/" + i + "/wses/" + (randomNo - wsCount), tokenInfo);
-				}
-				
-				if(entity.getStatusCode().is2xxSuccessful()) {
+				try {
+					if(randomNo <= wsCount) {
+						entity = restService.getForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/wses/" + randomNo, tokenInfo);
+					} else {
+						entity = restService.getForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/users/" + i + "/wses/" + (randomNo - wsCount), tokenInfo);
+					}
+					
 					String result = entity.getBody();
 					JsonObject object = JsonParser.parseString(result).getAsJsonObject();
 					TodaysWsDto todaysWs = TodaysWsDto.builder()
@@ -63,14 +65,12 @@ public class TodaysWsJob {
 												.author(object.get("author").getAsString())
 												.type(WsType.valueOf(object.get("type").getAsString()))
 												.build();
-										
+					
 					entity = restService.postForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/users/" + i + "/todaysWs", tokenInfo, todaysWs);
-										
-					if(entity.getStatusCode().isError()) {
-						throw new Exception("todayWsStep failed");
-					}
-				} else {
-					throw new Exception("todayWsStep failed");
+					
+				} catch (Exception e) {
+					log.info("todayWsStep failed at userIdx [{}]", i);
+					throw e;
 				}
 			}
 			
