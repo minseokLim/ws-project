@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
@@ -32,10 +33,8 @@ public class WsPslServiceImpl implements WsPslService {
 	
 	@Override
 	public PagedModel<WsPslDto> selectWsPersonals(Long ownerIdx, String search, Pageable pageable) {
-		Page<WsPsl> page;
-		
 		// 일단 search에 대한 부분은 미구현
-		page = repository.findByOwnerIdx(ownerIdx, pageable);
+		Page<WsPsl> page = repository.findByOwnerIdx(ownerIdx, pageable);
 
 		List<WsPslDto> content = page.stream().map(elem -> {
 			WsPslDto dto = new WsPslDto(elem);
@@ -107,5 +106,19 @@ public class WsPslServiceImpl implements WsPslService {
 	@Override
 	public long countWsPersonal(Long ownerIdx) {
 		return repository.countByOwnerIdx(ownerIdx);
+	}
+
+	@Override
+	public WsPslDto selectNthWsPsl(Long ownerIdx, int n) {
+		Pageable pageable = PageRequest.of(n - 1, 1);
+		Page<WsPsl> page  = repository.findByOwnerIdx(ownerIdx, pageable);
+		
+		if(page.getSize() > 0) {
+			WsPslDto result = new WsPslDto(page.getContent().get(0));
+			result.add(linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
+			return result;
+		} else {
+			return null;
+		}
 	}
 }

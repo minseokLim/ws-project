@@ -12,4 +12,5 @@ public interface WsPslService {
 	public WsPslDto updateWsPersonal(Long ownerIdx, Long id, WsPslDto dto);
 	public boolean deleteWsPersonal(Long ownerIdx, Long id);
 	public long countWsPersonal(Long ownerIdx);
+	public WsPslDto selectNthWsPsl(Long ownerIdx, int n);
 }

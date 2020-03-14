@@ -34,16 +34,18 @@ services:
       CONFIGSERVER_PORT: "8888"
       DATABASESERVER_PORT: "3306"  
       ENCRYPT_KEY: ${ENCRYPT_KEY}
-#  batch-service:
-#    image: ws-project/batch-service:1
-#    ports:
-#      - 8083:8083
-#    environment:
-#      PROFILE: "dev"
-#      CONFIGSERVER_URI: "http://confsvr:8888"
-#      CONFIGSERVER_PORT: "8888"
-#      DATABASESERVER_PORT: "3306"  
-#      ENCRYPT_KEY: ${ENCRYPT_KEY}
+  batch-service:
+    image: ws-project/batch-service:1
+    ports:
+      - 8083:8083
+    environment:
+      PROFILE: "dev"
+      CONFIGSERVER_URI: "http://confsvr:8888"
+      CONFIGSERVER_PORT: "8888"
+      DATABASESERVER_PORT: "3306"
+      WS_SERVICE_PORT: "8080"
+      USER_SERVICE_PORT: "8082"
+      ENCRYPT_KEY: ${ENCRYPT_KEY}
   ws-service:
     image: ws-project/ws-service:1
     ports:

@@ -1,5 +1,9 @@
 package com.wsproject.batchservice.quartz;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.batch.core.Job;
@@ -27,7 +31,13 @@ public class CustomQuartzJob extends QuartzJobBean {
 		
 		try {
 			Job job = jobLocator.getJob(jobName);
-			JobParameters params = new JobParametersBuilder().addString("JobID", String.valueOf(System.currentTimeMillis())).toJobParameters();
+			
+			Date today = new Date();
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			String jobID = df.format(today);
+			
+			JobParameters params = new JobParametersBuilder().addString("JobID", jobID).toJobParameters();
+			
 			jobLauncher.run(job, params);
 		} catch (Exception e) {
 			throw new JobExecutionException(e);

@@ -13,6 +13,18 @@ while ! `nc -z database $DATABASESERVER_PORT`; do sleep 3; done
 echo "Database Server has started"
 
 echo "********************************************************"
+echo "Waiting for the WS Service to start on port $WS_SERVICE_PORT"
+echo "********************************************************"
+while ! `nc -z ws-service $WS_SERVICE_PORT`; do sleep 3; done
+echo "WS Service has started"
+
+echo "********************************************************"
+echo "Waiting for the User Service to start on port $USER_SERVICE_PORT"
+echo "********************************************************"
+while ! `nc -z user-service $USER_SERVICE_PORT`; do sleep 3; done
+echo "User Service has started"
+
+echo "********************************************************"
 echo "Starting Batch Service"
 echo "********************************************************"
 java -Djava.security.egd=file:/dev/./urandom \

@@ -5,3 +5,18 @@ spring:
   batch:
     job:
       enabled: false
+# confsvr에서 fetch해오는 속성들과 중복된 값들이 있다. mvn package 시 실행되는 Test를 통과하기 위함
+  datasource:
+    url: "jdbc:mariadb://localhost:3306/batch_service"
+    username: "mslim"
+    password: "{cipher}b782b7d252d96a69b616427af9d0e9d689318d28d1ac6cbea4fb26e40233dee4"
+    dbcp2:
+      test-while-idle: true  
+      validation-query: "SELECT 1"
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true   
+    hibernate:
+      ddl-auto: update

@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 @ConfigurationProperties(prefix = "custom")
 public class CustomProperties {
+	
 	String apiBaseUri;
 	
 	String clientId;

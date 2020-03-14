@@ -89,4 +89,15 @@ public class WsPslController {
 		long result = service.countWsPersonal(ownerIdx);
 		return ResponseEntity.ok(result);
 	}
+	
+	@GetMapping("/order/{n}")
+	public ResponseEntity<WsPslDto> selectNthWsPsl(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("n") int n) {
+		WsPslDto result = service.selectNthWsPsl(ownerIdx, n);
+		
+		if(result != null) {
+			return ResponseEntity.ok(result);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 }

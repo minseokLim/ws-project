@@ -9,5 +9,4 @@ class BatchServiceApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
