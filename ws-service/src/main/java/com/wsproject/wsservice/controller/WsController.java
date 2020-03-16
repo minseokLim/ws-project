@@ -76,10 +76,4 @@ public class WsController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
-	@GetMapping("/count")
-	public ResponseEntity<Long> count() {
-		long result = wsService.countWs();
-		return ResponseEntity.ok(result);
-	}
 }

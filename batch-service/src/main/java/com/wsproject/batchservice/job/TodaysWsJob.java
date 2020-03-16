@@ -9,16 +9,10 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.wsproject.batchservice.domain.enums.WsType;
-import com.wsproject.batchservice.dto.TodaysWsDto;
 import com.wsproject.batchservice.dto.TokenInfo;
 import com.wsproject.batchservice.job.reader.QueueItemReader;
 import com.wsproject.batchservice.property.CustomProperties;
@@ -41,9 +35,7 @@ public class TodaysWsJob {
 	private final RestService restService;
 	
 	private TokenInfo tokenInfo;
-	
-	private long wsCount;
-	
+		
 	@Bean
 	public Job todayWsJob() throws Exception {
 		return jobBuilderFactory.get("todayWsJob")
@@ -54,20 +46,18 @@ public class TodaysWsJob {
 	@Bean
 	public Step todayWsStep() throws Exception {
 		return stepBuilderFactory.get("todayWsStep")
-					.<Long, TodaysWsDto> chunk(1)
+					.<Long, Long> chunk(1)
 					.faultTolerant().retryLimit(10).retry(Exception.class)
-					.reader(commonValueReader())
-					.processor(todaysWsProcessor())
+					.reader(todayWsReader())
 					.writer(todaysWsWriter())
 					.build();
 	}
 	
 	@Bean
 	@StepScope
-	public QueueItemReader<Long> commonValueReader() throws Exception {
+	public QueueItemReader<Long> todayWsReader() throws Exception {
 		try {
 			tokenInfo = restService.getTokenInfo();
-			wsCount = Long.parseLong(restService.getForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/wses/count", tokenInfo).getBody());
 			long maxUserIdx = Long.parseLong(restService.getForEntity(properties.getApiBaseUri() + "/user-service/v1.0/users/maxIdx", tokenInfo).getBody());
 			List<Long> userIdxList = LongStream.rangeClosed(1, maxUserIdx).mapToObj(Long::new).collect(Collectors.toList());
 			
@@ -78,54 +68,17 @@ public class TodaysWsJob {
 		}
 	}
 	
-	public ItemProcessor<Long, TodaysWsDto> todaysWsProcessor() {
+	public ItemWriter<Long> todaysWsWriter() {
 		
-		return new ItemProcessor<Long, TodaysWsDto>() {
+		return new ItemWriter<Long>() {
 
 			@Override
-			public TodaysWsDto process(Long userIdx) throws Exception {
-				long wsPslCount = Long.parseLong(restService.getForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/users/" + userIdx + "/wses/count", tokenInfo).getBody());
-				long randomNo = (long) (Math.random() * (wsCount + wsPslCount) + 1);
-				ResponseEntity<String> entity;
-				
-				try {
-					if(randomNo <= wsCount) {
-						entity = restService.getForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/wses/" + randomNo, tokenInfo);
-					} else {
-						entity = restService.getForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/users/" + userIdx + "/wses/order/" + (randomNo - wsCount), tokenInfo);
-					}
-					
-					String result = entity.getBody();
-					JsonObject object = JsonParser.parseString(result).getAsJsonObject();
-					TodaysWsDto todaysWs = TodaysWsDto.builder()
-												.userIdx(userIdx)
-												.content(object.get("content").getAsString())
-												.author(object.get("author").getAsString())
-												.type(WsType.valueOf(object.get("type").getAsString()))
-												.build();
-					
-					return todaysWs;
-					
-				} catch (Exception e) {
-					log.info("todaysWsProcessor failed at userIdx [{}]", userIdx);
-					throw e;
-				}
-			}
-		};
-	}
-	
-	public ItemWriter<TodaysWsDto> todaysWsWriter() {
-		
-		return new ItemWriter<TodaysWsDto>() {
-
-			@Override
-			public void write(List<? extends TodaysWsDto> items) throws Exception {
-				
-				items.forEach(item -> {
+			public void write(List<? extends Long> items) throws Exception {
+				items.forEach(userIdx -> {
 					try {
-						restService.postForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/users/" + item.getUserIdx() + "/todaysWs", tokenInfo, item);
+						restService.postForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/users/" + userIdx + "/todaysWs", tokenInfo, null);
 					} catch (Exception e) {
-						log.info("todaysWsWriter failed at userIdx [{}]", item.getUserIdx());
+						log.info("todaysWsWriter failed at userIdx [{}]", userIdx);
 						throw e;
 					}
 				});

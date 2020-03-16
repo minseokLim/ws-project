@@ -4,5 +4,5 @@ import com.wsproject.wsservice.dto.TodaysWsDto;
 
 public interface TodaysWsService {
 	public TodaysWsDto selectTodaysWs(Long ownerIdx);
-	public TodaysWsDto insertTodaysWs(TodaysWsDto dto);
+	public TodaysWsDto insertTodaysWs(Long ownerIdx);
 }

@@ -30,7 +30,7 @@ public class WsPslController {
 	@GetMapping
 	public ResponseEntity<PagedModel<WsPslDto>> selectWsPersonalPage(@PathVariable("ownerIdx") Long ownerIdx, 
 			@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
-		PagedModel<WsPslDto> result = service.selectWsPersonals(ownerIdx, search, pageable);
+		PagedModel<WsPslDto> result = service.selectWsPsls(ownerIdx, search, pageable);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -41,7 +41,7 @@ public class WsPslController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<WsPslDto> selectWsPersonal(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
-		WsPslDto result = service.selectWsPersonal(ownerIdx, id);
+		WsPslDto result = service.selectWsPsl(ownerIdx, id);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -57,13 +57,13 @@ public class WsPslController {
 			return ResponseEntity.badRequest().build();
 		}
 		
-		WsPslDto result = service.insertWsPersonal(dto);
+		WsPslDto result = service.insertWsPsl(dto);
 		return new ResponseEntity<WsPslDto>(result, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<WsPslDto> updateWsPersonal(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id, @RequestBody WsPslDto dto) {
-		WsPslDto result = service.updateWsPersonal(ownerIdx, id, dto);
+		WsPslDto result = service.updateWsPsl(ownerIdx, id, dto);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -75,27 +75,10 @@ public class WsPslController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteWsPersonal(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
 		
-		boolean result = service.deleteWsPersonal(ownerIdx, id);
+		boolean result = service.deleteWsPsl(ownerIdx, id);
 		
 		if(result) {
 			return ResponseEntity.noContent().build();
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
-	
-	@GetMapping("/count")
-	public ResponseEntity<Long> count(@PathVariable("ownerIdx") Long ownerIdx) {
-		long result = service.countWsPersonal(ownerIdx);
-		return ResponseEntity.ok(result);
-	}
-	
-	@GetMapping("/order/{n}")
-	public ResponseEntity<WsPslDto> selectNthWsPsl(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("n") int n) {
-		WsPslDto result = service.selectNthWsPsl(ownerIdx, n);
-		
-		if(result != null) {
-			return ResponseEntity.ok(result);
 		} else {
 			return ResponseEntity.notFound().build();
 		}

@@ -139,9 +139,4 @@ public class WsServiceImpl implements WsService {
 		wsRepository.deleteById(id);
 		return true;
 	}
-
-	@Override
-	public long countWs() {
-		return wsRepository.count();
-	}
 }

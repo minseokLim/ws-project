@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
@@ -32,7 +31,7 @@ public class WsPslServiceImpl implements WsPslService {
 	private CommonUtil commonUtil;
 	
 	@Override
-	public PagedModel<WsPslDto> selectWsPersonals(Long ownerIdx, String search, Pageable pageable) {
+	public PagedModel<WsPslDto> selectWsPsls(Long ownerIdx, String search, Pageable pageable) {
 		// 일단 search에 대한 부분은 미구현
 		Page<WsPsl> page = repository.findByOwnerIdx(ownerIdx, pageable);
 
@@ -50,7 +49,7 @@ public class WsPslServiceImpl implements WsPslService {
 	}
 
 	@Override
-	public WsPslDto selectWsPersonal(Long ownerIdx, Long id) {
+	public WsPslDto selectWsPsl(Long ownerIdx, Long id) {
 		Optional<WsPsl> data = repository.findByIdAndOwnerIdx(id, ownerIdx);
 		
 		if(!data.isPresent()) {
@@ -64,7 +63,7 @@ public class WsPslServiceImpl implements WsPslService {
 	}
 
 	@Override
-	public WsPslDto insertWsPersonal(WsPslDto dto) {
+	public WsPslDto insertWsPsl(WsPslDto dto) {
 		WsPsl wsPersonal = repository.save(dto.toEntity());
 		WsPslDto result = new WsPslDto(wsPersonal);
 		result.add(linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
@@ -73,7 +72,7 @@ public class WsPslServiceImpl implements WsPslService {
 	}
 
 	@Override
-	public WsPslDto updateWsPersonal(Long ownerIdx, Long id, WsPslDto dto) {
+	public WsPslDto updateWsPsl(Long ownerIdx, Long id, WsPslDto dto) {
 		Optional<WsPsl> data = repository.findByIdAndOwnerIdx(id, ownerIdx);
 		
 		if(!data.isPresent()) {
@@ -92,7 +91,7 @@ public class WsPslServiceImpl implements WsPslService {
 	}
 
 	@Override
-	public boolean deleteWsPersonal(Long ownerIdx, Long id) {
+	public boolean deleteWsPsl(Long ownerIdx, Long id) {
 		Optional<WsPsl> data = repository.findByIdAndOwnerIdx(id, ownerIdx);
 		
 		if(!data.isPresent()) {
@@ -101,24 +100,5 @@ public class WsPslServiceImpl implements WsPslService {
 		
 		repository.deleteById(id);
 		return true;
-	}
-
-	@Override
-	public long countWsPersonal(Long ownerIdx) {
-		return repository.countByOwnerIdx(ownerIdx);
-	}
-
-	@Override
-	public WsPslDto selectNthWsPsl(Long ownerIdx, int n) {
-		Pageable pageable = PageRequest.of(n - 1, 1);
-		Page<WsPsl> page  = repository.findByOwnerIdx(ownerIdx, pageable);
-		
-		if(page.getSize() > 0) {
-			WsPslDto result = new WsPslDto(page.getContent().get(0));
-			result.add(linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
-			return result;
-		} else {
-			return null;
-		}
 	}
 }

@@ -11,5 +11,4 @@ public interface WsService {
 	public WsDto insertWs(WsDto dto);
 	public WsDto updateWs(Long id, WsDto dto);
 	public boolean deleteWs(Long id);
-	public long countWs();
 }

@@ -35,6 +35,7 @@ public class CustomQuartzJob extends QuartzJobBean {
 			Date today = new Date();
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			String jobID = df.format(today);
+//			String jobID = String.valueOf(System.currentTimeMillis());
 			
 			JobParameters params = new JobParametersBuilder().addString("JobID", jobID).toJobParameters();
 			
