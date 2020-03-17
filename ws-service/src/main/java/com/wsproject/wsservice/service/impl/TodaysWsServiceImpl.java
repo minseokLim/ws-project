@@ -3,6 +3,7 @@ package com.wsproject.wsservice.service.impl;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -36,7 +37,10 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		Optional<TodaysWs> data = todaysWsRepository.findById(ownerIdx);
 		TodaysWsDto result;
 		
-		if(!data.isPresent()) {
+		LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+		
+		// 처음 로그인하는 사용자이거나 배치가 돌지 않았을 때(이 로직이 있으면 사실 배치는 필요 없구나...)
+		if(!data.isPresent() || data.get().getModifiedDate().isBefore(today)) {
 			result = insertTodaysWs(ownerIdx);
 		} else {
 			result = new TodaysWsDto(data.get());
