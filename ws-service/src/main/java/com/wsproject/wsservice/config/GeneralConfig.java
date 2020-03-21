@@ -14,9 +14,18 @@ import org.springframework.web.client.RestTemplate;
 
 import com.wsproject.wsservice.util.AccessTokenInterceptor;
 
+/**
+ * @author mslim
+ * Bean 생성을 한 곳에서 관리하기 위한 Configuration
+ */
 @Configuration
 public class GeneralConfig {
 	
+	
+	/**
+	 * 토큰 전파를 위한 인터셉터가 추가된 RestTemplate
+	 * @return RestTemplate
+	 */
 	@Bean
 	public RestTemplate restTemplate() {
 		RestTemplate template = new RestTemplate();

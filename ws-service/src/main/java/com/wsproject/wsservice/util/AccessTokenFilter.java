@@ -12,6 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
+/**
+ * header에 있는 토큰 정보를 저장하기 위한 필터
+ * @author mslim
+ *
+ */
 @Component
 public class AccessTokenFilter implements Filter {
 

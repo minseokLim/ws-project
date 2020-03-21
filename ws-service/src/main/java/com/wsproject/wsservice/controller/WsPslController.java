@@ -20,6 +20,11 @@ import com.wsproject.wsservice.service.WsPslService;
 
 import lombok.AllArgsConstructor;
 
+/**
+ * 명언(사용자 등록) Controller
+ * @author mslim
+ *
+ */
 @AllArgsConstructor
 @RestController
 @RequestMapping("/v1.0/users/{ownerIdx}/wses")

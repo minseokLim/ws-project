@@ -15,6 +15,10 @@ import com.wsproject.wsservice.util.RestUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @author mslim
+ * 오늘의 명언 Controller
+ */
 @AllArgsConstructor
 @RestController
 @RequestMapping("/v1.0/users/{ownerIdx}/todaysWs")
@@ -23,6 +27,11 @@ public class TodaysWsController {
 
 	private TodaysWsService todaysWsService;
 	
+	/**
+	 * 유저별 오늘의 명언 조회
+	 * @param ownerIdx
+	 * @return 오늘의 명언
+	 */
 	@GetMapping
 	public ResponseEntity<TodaysWsDto> selectTodaysWs(@PathVariable("ownerIdx") Long ownerIdx) {
 		
@@ -40,6 +49,11 @@ public class TodaysWsController {
 		}
 	}
 	
+	/**
+	 * 오늘의 명언 생성/업데이트
+	 * @param ownerIdx
+	 * @return
+	 */
 	@PostMapping
 	public ResponseEntity<TodaysWsDto> insertTodaysWs(@PathVariable("ownerIdx") Long ownerIdx) {
 		

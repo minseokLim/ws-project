@@ -10,6 +10,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 오늘의 명언
+ * @author mslim
+ *
+ */
 @Entity
 @Getter
 @NoArgsConstructor

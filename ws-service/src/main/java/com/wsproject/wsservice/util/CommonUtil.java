@@ -19,6 +19,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 public class CommonUtil {
 	
+	/**
+	 * hateoas 준수를 위한 함수
+	 * @param model
+	 * @param page
+	 */
 	public void setPageLinksAdvice(PagedModel<?> model, Page<?> page) {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		UriComponentsBuilder original = ServletUriComponentsBuilder.fromServletMapping(request).path(request.getRequestURI());
@@ -46,6 +51,12 @@ public class CommonUtil {
 		model.add(new Link(lastBuilder.toUriString()).withRel("last"));	
 	}
 
+	/**
+	 * original에 있는 uri에서 page, size 파라미터를 pageable에 있는 값들도 대체
+	 * @param original
+	 * @param pageable
+	 * @return
+	 */
 	private UriComponentsBuilder replacePageParams(UriComponentsBuilder original, Pageable pageable) {
 		UriComponentsBuilder builder = original.cloneBuilder();
 		builder.replaceQueryParam("page", pageable.getPageNumber());

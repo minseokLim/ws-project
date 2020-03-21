@@ -13,6 +13,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 명언(사용자 등록)
+ * @author mslim
+ *
+ */
 @Entity
 @Getter
 @NoArgsConstructor

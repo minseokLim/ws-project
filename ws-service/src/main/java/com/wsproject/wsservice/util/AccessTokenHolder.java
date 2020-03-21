@@ -1,5 +1,10 @@
 package com.wsproject.wsservice.util;
 
+/**
+ * 토큰정보를 ThreadLocal에 저장해놓음
+ * @author mslim
+ *
+ */
 public class AccessTokenHolder {
 	private static final ThreadLocal<String> accessToken = new ThreadLocal<String>();
 	
