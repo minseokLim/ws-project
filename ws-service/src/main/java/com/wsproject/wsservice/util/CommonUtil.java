@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -50,5 +51,16 @@ public class CommonUtil {
 		builder.replaceQueryParam("page", pageable.getPageNumber());
 		builder.replaceQueryParam("size", pageable.getPageSize());
 		return builder;
+	}
+	
+	/** Bean객체를 얻는다
+	 * @param <T>
+	 * @param classType
+	 * @return Bean 객체
+	 */
+	public static <T> T getBean(Class<T> classType) {
+		ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
+		
+		return applicationContext.getBean(classType);
 	}
 }
