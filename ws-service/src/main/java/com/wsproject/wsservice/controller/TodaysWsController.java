@@ -50,14 +50,14 @@ public class TodaysWsController {
 	}
 	
 	/**
-	 * 오늘의 명언 생성/업데이트
+	 * 오늘의 명언 생성/업데이트 혹은 조회
 	 * @param ownerIdx
 	 * @return
 	 */
 	@PostMapping
 	public ResponseEntity<TodaysWsDto> insertTodaysWs(@PathVariable("ownerIdx") Long ownerIdx) {
 		
-		TodaysWsDto result = todaysWsService.insertTodaysWs(ownerIdx);
+		TodaysWsDto result = todaysWsService.selectTodaysWs(ownerIdx);
 		
 		return new ResponseEntity<TodaysWsDto>(result, HttpStatus.CREATED);
 	}

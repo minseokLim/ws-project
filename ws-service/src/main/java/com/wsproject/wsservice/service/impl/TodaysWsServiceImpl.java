@@ -41,7 +41,7 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		
 		// 처음 로그인하는 사용자이거나 배치가 돌지 않았을 때(이 로직이 있으면 사실 배치는 필요 없구나...)
 		if(!data.isPresent() || data.get().getModifiedDate().isBefore(today)) {
-			result = insertTodaysWs(ownerIdx);
+			result = new TodaysWsDto(insertTodaysWs(ownerIdx));
 		} else {
 			result = new TodaysWsDto(data.get());
 		}
@@ -53,8 +53,7 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		return result;
 	}
 	
-	@Override
-	public TodaysWsDto insertTodaysWs(Long ownerIdx) {
+	private TodaysWs insertTodaysWs(Long ownerIdx) {
 		
 		long wsCount = wsRepository.count();
 		long wsPslCount = wsPslRepository.countByOwnerIdx(ownerIdx);
@@ -80,12 +79,6 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 			} 
 		}
 		
-		todaysWs = todaysWsRepository.save(todaysWs);
-		
-		TodaysWsDto result = new TodaysWsDto(todaysWs);
-		
-		result.add(linkTo(methodOn(TodaysWsController.class).selectTodaysWs(result.getUserIdx())).withSelfRel());
-		
-		return result;
+		return todaysWsRepository.save(todaysWs);
 	}
 }

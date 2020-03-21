@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class CommonUtil {
 	
 	/**
-	 * hateoas 준수를 위한 함수
+	 * hateoas를 위해 next, prev, first, last 등의 url을 자동 입력해주는 함수
 	 * @param model
 	 * @param page
 	 */
