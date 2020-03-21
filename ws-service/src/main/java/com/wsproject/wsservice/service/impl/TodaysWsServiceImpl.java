@@ -61,32 +61,26 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		long totalWsCount = wsCount + wsPslCount;
 		
 		TodaysWs todaysWs = null;
+			
+		int randomNo = (int) (Math.random() * totalWsCount);
 		
-		while(todaysWs == null) {
+		if(randomNo < wsCount) {
+			Page<Ws> page = wsRepository.findAll(PageRequest.of((int) randomNo, 1));
 			
-			long randomNo = (long) (Math.random() * totalWsCount + 1);
+			if(page.getSize() != 0) {
+				Ws ws = page.getContent().get(0);
+				todaysWs = TodaysWs.builder().userIdx(ownerIdx).content(ws.getContent()).author(ws.getAuthor()).type(ws.getType()).build();
+			} 
+		} else {
+			Page<WsPsl> page  = wsPslRepository.findByOwnerIdx(ownerIdx, PageRequest.of((int) (randomNo - wsCount), 1));
 			
-			if(randomNo <= wsCount) {
-				Optional<Ws> ws = wsRepository.findById(randomNo);
-				
-				if(!ws.isPresent()) {
-					continue;
-				}
-				
-				todaysWs = TodaysWs.builder().userIdx(ownerIdx).content(ws.get().getContent()).author(ws.get().getAuthor()).type(ws.get().getType()).build();
-			} else {
-				Page<WsPsl> page  = wsPslRepository.findByOwnerIdx(ownerIdx, PageRequest.of((int) (randomNo - wsCount - 1), 1));
-				
-				if(page.getSize() == 0) {
-					continue;
-				} 
-				
+			if(page.getSize() != 0) {
 				WsPsl wsPsl = page.getContent().get(0);
 				todaysWs = TodaysWs.builder().userIdx(ownerIdx).content(wsPsl.getContent()).author(wsPsl.getAuthor()).type(wsPsl.getType()).build();
-			}
-			
-			todaysWs = todaysWsRepository.save(todaysWs);
+			} 
 		}
+		
+		todaysWs = todaysWsRepository.save(todaysWs);
 		
 		TodaysWsDto result = new TodaysWsDto(todaysWs);
 		
