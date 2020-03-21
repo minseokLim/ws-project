@@ -3,3 +3,7 @@ server:
 
 zuul:
   sensitive-headers: Cookie,Set-Cookie
+  
+ribbon:
+  ReadTimeout: 5000
+  SocketTimeout: 5000
