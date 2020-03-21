@@ -55,7 +55,8 @@ public class QuartzConfig {
 	public Trigger todaysWsJobTrigger() throws ParseException {		
 		CronTriggerFactoryBean trigger = new CronTriggerFactoryBean();
 		trigger.setJobDetail(todaysWsJobDetail());
-		trigger.setCronExpression("0 0 0 * * ?");
+		trigger.setCronExpression("10 0 0 * * ?");
+//		trigger.setCronExpression("0/5 * * * * ?");
 		trigger.setDescription("todaysWsJobTrigger");
 		trigger.afterPropertiesSet();
 		

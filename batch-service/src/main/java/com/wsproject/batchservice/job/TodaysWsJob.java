@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 
 import com.wsproject.batchservice.dto.TokenInfo;
 import com.wsproject.batchservice.job.reader.QueueItemReader;
-import com.wsproject.batchservice.property.CustomProperties;
-import com.wsproject.batchservice.service.RestService;
+import com.wsproject.batchservice.util.RestUtil;
+import com.wsproject.batchservice.util.TokenUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +30,7 @@ public class TodaysWsJob {
 	
 	private final StepBuilderFactory stepBuilderFactory;
 		
-	private final CustomProperties properties;
-	
-	private final RestService restService;
+	private final TokenUtil tokenUtil;
 	
 	private TokenInfo tokenInfo;
 		
@@ -57,8 +55,9 @@ public class TodaysWsJob {
 	@StepScope
 	public QueueItemReader<Long> todayWsReader() throws Exception {
 		try {
-			tokenInfo = restService.getTokenInfo();
-			long maxUserIdx = Long.parseLong(restService.getForEntity(properties.getApiBaseUri() + "/user-service/v1.0/users/maxIdx", tokenInfo).getBody());
+			tokenInfo = tokenUtil.getTokenInfo();
+			RestUtil restUtil = RestUtil.builder().url("/user-service/v1.0/users/maxIdx").get().tokenInfo(tokenInfo).build();
+			long maxUserIdx = Long.parseLong(restUtil.exchange().getBody());
 			List<Long> userIdxList = LongStream.rangeClosed(1, maxUserIdx).mapToObj(Long::new).collect(Collectors.toList());
 			
 			return new QueueItemReader<Long>(userIdxList);
@@ -76,7 +75,8 @@ public class TodaysWsJob {
 			public void write(List<? extends Long> items) throws Exception {
 				items.forEach(userIdx -> {
 					try {
-						restService.postForEntity(properties.getApiBaseUri() + "/ws-service/v1.0/users/" + userIdx + "/todaysWs", tokenInfo, null);
+						RestUtil restUtil = RestUtil.builder().url("/ws-service/v1.0/users/" + userIdx + "/todaysWs").post().tokenInfo(tokenInfo).build();
+						restUtil.exchange();
 					} catch (Exception e) {
 						log.info("todaysWsWriter failed at userIdx [{}]", userIdx);
 						throw e;

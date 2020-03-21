@@ -1,9 +1,8 @@
-package com.wsproject.batchservice.service;
+package com.wsproject.batchservice.util;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,38 +14,26 @@ import com.google.gson.Gson;
 import com.wsproject.batchservice.dto.TokenInfo;
 import com.wsproject.batchservice.property.CustomProperties;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+/** 토큰 발급/재발급을 관리하는 유틸
+ * @author mslim
+ *
+ */
 @Component
-public class RestService {
-
-	private RestTemplate restTemplate;
+@RequiredArgsConstructor
+public class TokenUtil {
 	
-	private CustomProperties properties;
+	private final Gson gson;
 	
-	private Gson gson;
+	private final CustomProperties properties;
 	
-	public ResponseEntity<String> getForEntity(String url, TokenInfo tokenInfo) throws Exception {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccess_token());
-		HttpEntity<Void> entity = new HttpEntity<>(headers);
-		ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-		
-		return responseEntity;
-	}
+	private final RestTemplate restTemplate;
 	
-	public ResponseEntity<String> postForEntity(String url, TokenInfo tokenInfo, Object object) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccess_token());
-		HttpEntity<Object> entity = new HttpEntity<Object>(object, headers);
-		
-		ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-		
-		return responseEntity;
-	}
-	
-	public TokenInfo getTokenInfo() {
+	/** 인증서버에 토큰 정보 요청
+	 * @return 토큰정보
+	 */
+	public TokenInfo getTokenInfo() {		
 		String credentials = properties.getClientId() + ":" + properties.getClientSecret();
 		String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
 		
