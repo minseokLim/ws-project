@@ -13,8 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LogAspect {
 	
-	@Around("execution(* com.wsproject.batchservice.job.*.*(..)) or "
-		  + "execution(* com.wsproject.batchservice.service.*.*(..))")
+	@Around("execution(* com.wsproject.batchservice.job.*.*(..))")
 	public Object startEndLog(ProceedingJoinPoint point) throws Throwable {
 		Signature signature = point.getSignature();
 		
