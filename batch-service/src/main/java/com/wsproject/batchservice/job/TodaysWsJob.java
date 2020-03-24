@@ -62,7 +62,7 @@ public class TodaysWsJob {
 			
 			return new QueueItemReader<Long>(userIdxList);
 		} catch (Exception e) {
-			log.info("commonValueReader failed");
+			log.info("todayWsReader failed");
 			throw e;
 		}
 	}

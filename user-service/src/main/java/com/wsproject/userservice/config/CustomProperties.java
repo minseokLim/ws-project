@@ -1,4 +1,4 @@
-package com.wsproject.wsservice.property;
+package com.wsproject.userservice.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,5 @@ import lombok.Setter;
 @Setter
 @ConfigurationProperties(prefix = "custom")
 public class CustomProperties {
-	String apiBaseUri;
-	
 	String jwtSignkey;
 }

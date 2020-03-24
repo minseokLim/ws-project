@@ -11,15 +11,17 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
+import com.wsproject.batchservice.config.CustomProperties;
 import com.wsproject.batchservice.dto.TokenInfo;
-import com.wsproject.batchservice.property.CustomProperties;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /** 토큰 발급/재발급을 관리하는 유틸
  * @author mslim
  *
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TokenUtil {
@@ -33,7 +35,9 @@ public class TokenUtil {
 	/** 인증서버에 토큰 정보 요청
 	 * @return 토큰정보
 	 */
-	public TokenInfo getTokenInfo() {		
+	public TokenInfo getTokenInfo() {
+		log.info("getTokenInfo started");
+		
 		String credentials = properties.getClientId() + ":" + properties.getClientSecret();
 		String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
 		
@@ -53,6 +57,9 @@ public class TokenUtil {
 		
 		ResponseEntity<String> responseEntity = restTemplate.postForEntity(properties.getApiBaseUri() + "/authsvr/oauth/token", entity, String.class);
 		
-		return gson.fromJson(responseEntity.getBody(), TokenInfo.class);
+		TokenInfo tokenInfo = gson.fromJson(responseEntity.getBody(), TokenInfo.class);
+		
+		log.info("getTokenInfo ended");
+		return tokenInfo;
 	}
 }

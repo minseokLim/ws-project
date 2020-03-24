@@ -1,4 +1,4 @@
-package com.wsproject.batchservice.property;
+package com.wsproject.wsservice.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -11,12 +11,7 @@ import lombok.Setter;
 @Setter
 @ConfigurationProperties(prefix = "custom")
 public class CustomProperties {
-	
 	String apiBaseUri;
 	
-	String clientId;
-	
-	String clientSecret;
-	
-	String adminPassword;
+	String jwtSignkey;
 }

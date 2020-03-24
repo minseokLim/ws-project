@@ -1,4 +1,4 @@
-package com.wsproject.authsvr.handler;
+package com.wsproject.authsvr.util;
 
 import static com.wsproject.authsvr.domain.enums.SocialType.FACEBOOK;
 import static com.wsproject.authsvr.domain.enums.SocialType.GOOGLE;
@@ -28,7 +28,9 @@ import com.wsproject.authsvr.domain.enums.SocialType;
 import com.wsproject.authsvr.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @AllArgsConstructor
 public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -37,7 +39,8 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-	
+		log.info("onAuthenticationSuccess started");
+		
 		OAuth2AuthenticationToken oAuth2Authentication = (OAuth2AuthenticationToken) authentication;
 		Map<String, Object> map = oAuth2Authentication.getPrincipal().getAttributes();
         User convertedUser = convertUser(oAuth2Authentication.getAuthorizedClientRegistrationId(), map);
@@ -58,6 +61,8 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getIdx(), "N/A", user.getAuthorities()));
 		
 		super.onAuthenticationSuccess(request, response, authentication);
+		
+		log.info("onAuthenticationSuccess ended");
 	}
 	
 	private User convertUser(String registrationId, Map<String, Object> map) {

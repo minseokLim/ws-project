@@ -19,7 +19,7 @@ public class AccessTokenInterceptor implements ClientHttpRequestInterceptor {
 	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
 			throws IOException {
 		HttpHeaders headers = request.getHeaders();
-		headers.add(HttpHeaders.AUTHORIZATION, AccessTokenHolder.getAccessToken());
+		headers.add(HttpHeaders.AUTHORIZATION, AccessTokenHolder.getAuthorization());
 				
 		return execution.execute(request, body);
 	}

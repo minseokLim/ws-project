@@ -13,7 +13,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wsproject.wsservice.property.CustomProperties;
+import com.wsproject.wsservice.config.CustomProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,6 +43,7 @@ public class RestUtil {
 	 * @return 리스판스
 	 */
 	public ResponseEntity<String> exchange() {
+		log.info("exchange started");
 		CustomProperties properties = CommonUtil.getBean(CustomProperties.class);
 		
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(properties.getApiBaseUri() + url);
@@ -54,7 +55,10 @@ public class RestUtil {
 		
 		RestTemplate restTemplate = CommonUtil.getBean(RestTemplate.class);
 		
-		return restTemplate.exchange(builder.toUriString(), method, entity, String.class);
+		ResponseEntity<String> result = restTemplate.exchange(builder.toUriString(), method, entity, String.class);
+		
+		log.info("exchange ended");
+		return result;
 	}
 	
 	public static RestUtilBuilder builder() {

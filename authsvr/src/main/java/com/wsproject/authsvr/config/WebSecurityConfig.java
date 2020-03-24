@@ -18,8 +18,8 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import com.wsproject.authsvr.handler.SocialAuthenticationSuccessHandler;
-import com.wsproject.authsvr.oauth2.CustomOAuth2Provider;
+import com.wsproject.authsvr.util.CustomOAuth2Provider;
+import com.wsproject.authsvr.util.SocialAuthenticationSuccessHandler;
 
 import lombok.AllArgsConstructor;
 

@@ -24,7 +24,7 @@ public class AccessTokenFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-		AccessTokenHolder.setAccessToken(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION));
+		AccessTokenHolder.setAuthorization(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION));
 		
 		chain.doFilter(httpServletRequest, response);
 	}

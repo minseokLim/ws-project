@@ -6,13 +6,13 @@ package com.wsproject.wsservice.util;
  *
  */
 public class AccessTokenHolder {
-	private static final ThreadLocal<String> accessToken = new ThreadLocal<String>();
+	private static final ThreadLocal<String> authorization = new ThreadLocal<String>();
 	
-	public static final String getAccessToken() {
-		return accessToken.get();
+	public static final String getAuthorization() {
+		return authorization.get();
 	}
 	
-	public static final void setAccessToken(String value) {
-		accessToken.set(value);
+	public static final void setAuthorization(String value) {
+		authorization.set(value);
 	}
 }

@@ -3,8 +3,6 @@ package com.wsproject.batchservice.util;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import com.wsproject.batchservice.provider.ApplicationContextProvider;
-
 import lombok.AllArgsConstructor;
 
 @Component
