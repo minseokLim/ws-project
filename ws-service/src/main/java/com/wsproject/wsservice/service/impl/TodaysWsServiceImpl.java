@@ -20,6 +20,9 @@ import com.wsproject.wsservice.repository.WsPslRepository;
 import com.wsproject.wsservice.repository.WsRepository;
 import com.wsproject.wsservice.service.TodaysWsService;
 
+import brave.Span;
+import brave.Tracer;
+import brave.Tracer.SpanInScope;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -32,9 +35,24 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 	
 	private WsPslRepository wsPslRepository;
 	
+	private Tracer tracer;
+	
 	@Override
 	public TodaysWsDto selectTodaysWs(Long ownerIdx) {
-		Optional<TodaysWs> data = todaysWsRepository.findById(ownerIdx);
+		
+		Optional<TodaysWs> data = null; 
+		
+		// TODO 불필요한 로직. 슬루스 및 집킨에서 사용자 정의 스팬을 테스트해보기 위해 추가
+		Span newSpan = tracer.nextSpan().name("findTodaysWsByOwnerIdx");
+		
+		try(SpanInScope spanInScope = tracer.withSpanInScope(newSpan.start())) {
+			data = todaysWsRepository.findById(ownerIdx);
+		} finally {
+			newSpan.tag("peer.service", "mariaDB");
+			newSpan.annotate("test");
+			newSpan.finish();
+		}
+		
 		TodaysWsDto result;
 		
 		LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
