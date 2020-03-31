@@ -1,90 +1,109 @@
-version: "3"
+version: "2"
 services:
   authsvr:
     image: mslim8803/authsvr:1
+    mem_limit: 459276288
     ports:
       - 8901:8901
+    links:
+      - "eurekasvr:eurekasvr"
+      - "confsvr:confsvr"
+      - "zuulsvr:zuulsvr"
+      - "zipkin:zipkin"
     environment:
-      PROFILE: "dev"
+      PROFILE: "aws-dev"
       EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
       EUREKASERVER_PORT: "8761"
       CONFIGSERVER_URI: "http://confsvr:8888"
       CONFIGSERVER_PORT: "8888"
-      DATABASESERVER_PORT: "3306"  
+      ENCRYPT_KEY: ${ENCRYPT_KEY}
+  batch-service:
+    image: mslim8803/batch-service:1
+    mem_limit: 459276288
+    ports:
+      - 8083:8083
+    links:
+      - "confsvr:confsvr"
+      - "ws-service:ws-service"
+      - "user-service:user-service"
+      - "zuulsvr:zuulsvr"
+      - "zipkin:zipkin"
+    environment:
+      PROFILE: "aws-dev"
+      CONFIGSERVER_URI: "http://confsvr:8888"
+      CONFIGSERVER_PORT: "8888"
+      WS_SERVICE_PORT: "8080"
+      USER_SERVICE_PORT: "8082"
       ENCRYPT_KEY: ${ENCRYPT_KEY}
   confsvr:
     image: mslim8803/confsvr:1
+    mem_limit: 459276288
     ports:
       - 8888:8888
     environment:
       ENCRYPT_KEY: ${ENCRYPT_KEY}
   eurekasvr:
     image: mslim8803/eurekasvr:1
+    mem_limit: 459276288
     ports:
       - 8761:8761
   user-service:
     image: mslim8803/user-service:1
+    mem_limit: 459276288
     ports:
       - 8082:8082
+    links:
+      - "eurekasvr:eurekasvr"
+      - "confsvr:confsvr"
+      - "zuulsvr:zuulsvr"
+      - "zipkin:zipkin"
     environment:
-      PROFILE: "dev"
+      PROFILE: "aws-dev"
       EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
       EUREKASERVER_PORT: "8761"
       CONFIGSERVER_URI: "http://confsvr:8888"
       CONFIGSERVER_PORT: "8888"
-      DATABASESERVER_PORT: "3306"  
-      ENCRYPT_KEY: ${ENCRYPT_KEY}
-  batch-service:
-    image: mslim8803/batch-service:1
-    ports:
-      - 8083:8083
-    environment:
-      PROFILE: "dev"
-      CONFIGSERVER_URI: "http://confsvr:8888"
-      CONFIGSERVER_PORT: "8888"
-      DATABASESERVER_PORT: "3306"
-      WS_SERVICE_PORT: "8080"
-      USER_SERVICE_PORT: "8082"
       ENCRYPT_KEY: ${ENCRYPT_KEY}
   ws-service:
     image: mslim8803/ws-service:1
+    mem_limit: 459276288
     ports:
       - 8080:8080
+    links:
+      - "eurekasvr:eurekasvr"
+      - "confsvr:confsvr"
+      - "zuulsvr:zuulsvr"
+      - "zipkin:zipkin"
     environment:
-      PROFILE: "dev"
+      PROFILE: "aws-dev"
       EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
       EUREKASERVER_PORT: "8761"
       CONFIGSERVER_URI: "http://confsvr:8888"
       CONFIGSERVER_PORT: "8888"
-      DATABASESERVER_PORT: "3306"  
       ENCRYPT_KEY: ${ENCRYPT_KEY}
   zuulsvr:
     image: mslim8803/zuulsvr:1
+    mem_limit: 459276288
     ports:
       - 5555:5555
+    links:
+      - "eurekasvr:eurekasvr"
+      - "confsvr:confsvr"
+      - "zipkin:zipkin"
     environment:
-      PROFILE: "dev"
+      PROFILE: "aws-dev"
       EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
       EUREKASERVER_PORT: "8761"
       CONFIGSERVER_URI: "http://confsvr:8888"
       CONFIGSERVER_PORT: "8888"
-#  database:
-#    image: mariadb:10.1
-#    ports:
-#      - 3307:3306
-#    restart: always
-#    environment:
-#       MYSQL_DATABASE: dev_test
-#       MYSQL_ROOT_PASSWORD: mslim8803
-#       MYSQL_ROOT_HOST: '%'
-#    command: --character-set-server=utf8 --collation-server=utf8_unicode_ci --lower_case_table_names=1
   logspout:
     image: gliderlabs/logspout
+    mem_limit: 459276288
     command: syslog://logs.papertrailapp.com:46660
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   zipkin:
     image: openzipkin/zipkin
+    mem_limit: 459276288
     ports:
       - 9411:9411
-    
