@@ -2,14 +2,14 @@ version: "2"
 services:
   authsvr:
     image: mslim8803/authsvr:1
-    mem_limit: 459276288
+#    mem_limit: 459276288
     ports:
       - 8901:8901
     links:
       - "eurekasvr:eurekasvr"
       - "confsvr:confsvr"
       - "zuulsvr:zuulsvr"
-      - "zipkin:zipkin"
+#      - "zipkin:zipkin"
     environment:
       PROFILE: "aws-dev"
       EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
@@ -17,46 +17,46 @@ services:
       CONFIGSERVER_URI: "http://confsvr:8888"
       CONFIGSERVER_PORT: "8888"
       ENCRYPT_KEY: ${ENCRYPT_KEY}
-  batch-service:
-    image: mslim8803/batch-service:1
-    mem_limit: 459276288
-    ports:
-      - 8083:8083
-    links:
-      - "confsvr:confsvr"
-      - "ws-service:ws-service"
-      - "user-service:user-service"
-      - "zuulsvr:zuulsvr"
-      - "zipkin:zipkin"
-    environment:
-      PROFILE: "aws-dev"
-      CONFIGSERVER_URI: "http://confsvr:8888"
-      CONFIGSERVER_PORT: "8888"
-      WS_SERVICE_PORT: "8080"
-      USER_SERVICE_PORT: "8082"
-      ENCRYPT_KEY: ${ENCRYPT_KEY}
+#  batch-service:
+#    image: mslim8803/batch-service:1
+#    mem_limit: 459276288
+#    ports:
+#      - 8083:8083
+#    links:
+#      - "confsvr:confsvr"
+#      - "ws-service:ws-service"
+#      - "user-service:user-service"
+#      - "zuulsvr:zuulsvr"
+#      - "zipkin:zipkin"
+#    environment:
+#      PROFILE: "aws-dev"
+#      CONFIGSERVER_URI: "http://confsvr:8888"
+#      CONFIGSERVER_PORT: "8888"
+#      WS_SERVICE_PORT: "8080"
+#      USER_SERVICE_PORT: "8082"
+#      ENCRYPT_KEY: ${ENCRYPT_KEY}
   confsvr:
     image: mslim8803/confsvr:1
-    mem_limit: 459276288
+#    mem_limit: 459276288
     ports:
       - 8888:8888
     environment:
       ENCRYPT_KEY: ${ENCRYPT_KEY}
   eurekasvr:
     image: mslim8803/eurekasvr:1
-    mem_limit: 459276288
+#    mem_limit: 459276288
     ports:
       - 8761:8761
   user-service:
     image: mslim8803/user-service:1
-    mem_limit: 459276288
+#    mem_limit: 459276288
     ports:
       - 8082:8082
     links:
       - "eurekasvr:eurekasvr"
       - "confsvr:confsvr"
       - "zuulsvr:zuulsvr"
-      - "zipkin:zipkin"
+#      - "zipkin:zipkin"
     environment:
       PROFILE: "aws-dev"
       EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
@@ -66,14 +66,14 @@ services:
       ENCRYPT_KEY: ${ENCRYPT_KEY}
   ws-service:
     image: mslim8803/ws-service:1
-    mem_limit: 459276288
+#    mem_limit: 459276288
     ports:
       - 8080:8080
     links:
       - "eurekasvr:eurekasvr"
       - "confsvr:confsvr"
       - "zuulsvr:zuulsvr"
-      - "zipkin:zipkin"
+#      - "zipkin:zipkin"
     environment:
       PROFILE: "aws-dev"
       EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
@@ -83,13 +83,13 @@ services:
       ENCRYPT_KEY: ${ENCRYPT_KEY}
   zuulsvr:
     image: mslim8803/zuulsvr:1
-    mem_limit: 459276288
+#    mem_limit: 459276288
     ports:
       - 5555:5555
     links:
       - "eurekasvr:eurekasvr"
       - "confsvr:confsvr"
-      - "zipkin:zipkin"
+#      - "zipkin:zipkin"
     environment:
       PROFILE: "aws-dev"
       EUREKASERVER_URI: "http://eurekasvr:8761/eureka/"
@@ -98,12 +98,12 @@ services:
       CONFIGSERVER_PORT: "8888"
   logspout:
     image: gliderlabs/logspout
-    mem_limit: 459276288
+#    mem_limit: 459276288
     command: syslog://logs.papertrailapp.com:46660
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  zipkin:
-    image: openzipkin/zipkin
-    mem_limit: 459276288
-    ports:
-      - 9411:9411
+#  zipkin:
+#    image: openzipkin/zipkin
+#    mem_limit: 459276288
+#    ports:
+#      - 9411:9411

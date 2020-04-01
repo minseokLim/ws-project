@@ -35,12 +35,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		CharacterEncodingFilter filter = new CharacterEncodingFilter("UTF-8");
 		
 		http.authorizeRequests()
-				.antMatchers("/login/**", "/images/**", "/js/**", "/css/**", "/oauth/**").permitAll()
+				.antMatchers("/login/**", "/images/**", "/js/**", "/css/**", "/oauth/**", "/logout").permitAll()
 				.anyRequest().authenticated()
 			.and()
 				.oauth2Login()
 				.loginPage("/login")
 				.successHandler(socialAuthenticationSuccessHandler)
+			.and()
+				.logout()
+				.logoutUrl("/logout")
+				.deleteCookies("JSESSIONID")
+				.invalidateHttpSession(true)
 			.and()
 				.headers().frameOptions().disable()
 			.and()
