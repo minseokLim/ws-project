@@ -96,12 +96,12 @@ services:
       EUREKASERVER_PORT: "8761"
       CONFIGSERVER_URI: "http://confsvr:8888"
       CONFIGSERVER_PORT: "8888"
-  logspout:
-    image: gliderlabs/logspout
-#    mem_limit: 459276288
-    command: syslog://logs.papertrailapp.com:46660
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+#  logspout:
+#    image: gliderlabs/logspout
+##    mem_limit: 459276288
+#    command: syslog://logs.papertrailapp.com:46660
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
 #  zipkin:
 #    image: openzipkin/zipkin
 #    mem_limit: 459276288
