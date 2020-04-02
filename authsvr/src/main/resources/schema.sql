@@ -1,4 +1,4 @@
-create table IF NOT EXISTS oauth_client_details (
+/* create table IF NOT EXISTS oauth_client_details (
   client_id VARCHAR(255) PRIMARY KEY,
   resource_ids VARCHAR(255),
   client_secret VARCHAR(255),
@@ -47,4 +47,4 @@ create table IF NOT EXISTS oauth_approvals (
     status VARCHAR(10),
     expiresAt TIMESTAMP,
     lastModifiedAt TIMESTAMP
-);
+); */
