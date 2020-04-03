@@ -1,7 +1,7 @@
 version: "3"
 services:
   authsvr:
-    image: mslim8803/authsvr:1
+    image: mslim8803/authsvr:$BUILD_NAME
     ports:
       - 8901:8901
     environment:
@@ -13,17 +13,17 @@ services:
       DATABASESERVER_PORT: "3306"  
       ENCRYPT_KEY: ${ENCRYPT_KEY}
   confsvr:
-    image: mslim8803/confsvr:1
+    image: mslim8803/confsvr:$BUILD_NAME
     ports:
       - 8888:8888
     environment:
       ENCRYPT_KEY: ${ENCRYPT_KEY}
   eurekasvr:
-    image: mslim8803/eurekasvr:1
+    image: mslim8803/eurekasvr:$BUILD_NAME
     ports:
       - 8761:8761
   zuulsvr:
-    image: mslim8803/zuulsvr:1
+    image: mslim8803/zuulsvr:$BUILD_NAME
     ports:
       - 5555:5555
     environment:
