@@ -22,7 +22,7 @@ public enum CustomOAuth2Provider {
 		}		 
 	};
 
-	private static final String DEFAULT_REDIRECT_URL = "{baseUrl}/{action}/oauth2/code/{registrationId}";
+	private static final String DEFAULT_REDIRECT_URL = "https://auth.mslim8803.shop/{action}/oauth2/code/{registrationId}";
 
 	protected final ClientRegistration.Builder getBuilder(String registrationId, ClientAuthenticationMethod method, String redirectUri) {
 		ClientRegistration.Builder builder = ClientRegistration.withRegistrationId(registrationId);
