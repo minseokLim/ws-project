@@ -1,8 +1,10 @@
 server:
   port: 8901
-  forward-headers-strategy: native
+#  forward-headers-strategy: native
+#  tomcat:
+#    internal-proxies: .*
   tomcat:
-    internal-proxies: .*
+    use-relative-redirects: true
 # confsvr에서 fetch해오는 속성들과 중복된 값들이 있다. mvn package 시 실행되는 Test를 통과하기 위함
 spring:
   security:
