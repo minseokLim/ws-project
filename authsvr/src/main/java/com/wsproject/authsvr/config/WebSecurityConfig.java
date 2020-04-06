@@ -79,7 +79,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.clientSecret(registration.getClientSecret())
 					// picture을 받아오기 위해 별도로 userInfoUri 설정
 					.userInfoUri("https://graph.facebook.com/me?fields=id,name,email,picture")
-					.redirectUriTemplate("https://auth.mslim8803.shop/{action}/oauth2/code/{registrationId}")
 					.build();
 		} else if("google".equals(client)) {
 			return CommonOAuth2Provider.GOOGLE.getBuilder(client)
