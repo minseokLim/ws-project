@@ -89,6 +89,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			return CustomOAuth2Provider.KAKAO.getBuilder(client)
 					.clientId(registration.getClientId())
 					.build();
+		} else if("github".equals(client)) {
+			return CommonOAuth2Provider.GITHUB.getBuilder(client)
+					.clientId(registration.getClientId())
+					.clientSecret(registration.getClientSecret())
+					.build();
 		}
 		
 		return null;

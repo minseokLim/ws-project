@@ -3,6 +3,7 @@ package com.wsproject.authsvr.util;
 import static com.wsproject.authsvr.domain.enums.SocialType.FACEBOOK;
 import static com.wsproject.authsvr.domain.enums.SocialType.GOOGLE;
 import static com.wsproject.authsvr.domain.enums.SocialType.KAKAO;
+import static com.wsproject.authsvr.domain.enums.SocialType.GITHUB;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -71,7 +72,9 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         } else if(GOOGLE.getValue().equals(registrationId)) {
         	return getGoogleUser(map);
         } else if(KAKAO.getValue().equals(registrationId)) {
-        	return getKaKaoUser(map);
+        	return getKakaoUser(map);
+        } else if(GITHUB.getValue().equals(registrationId)) {
+        	return getGithubUser(map);
         }
         
         return null;
@@ -110,7 +113,7 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                 .build();
     }
     
-    private User getKaKaoUser(Map<String, Object> map) {
+    private User getKakaoUser(Map<String, Object> map) {
         @SuppressWarnings("unchecked")
 		Map<String, String> propertyMap = (HashMap<String, String>) map.get("properties");
         
@@ -128,6 +131,21 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                 .build();
     }
     
+	private User getGithubUser(Map<String, Object> map) {
+		return User.builder()
+                .name(convertObjToStr(map.get("name")))
+                .email(convertObjToStr(map.get("email")))
+                .principal(convertObjToStr(map.get("id")))
+                .socialType(GITHUB)
+                .pictureUrl(convertObjToStr(map.get("avatar_url")))
+                .roles(Collections.singletonList(RoleType.USER.getValue()))
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
+                .enabled(true)
+                .build();
+	}
+	
     private String convertObjToStr(Object obj) {
     	return obj != null ? String.valueOf(obj) : null;
     }

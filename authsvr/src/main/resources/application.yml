@@ -2,9 +2,9 @@ server:
   port: 8901
   forward-headers-strategy: native
   tomcat:
-#    internal-proxies: .*
     use-relative-redirects: true
-# confsvr에서 fetch해오는 속성들과 중복된 값들이 있다. mvn package 시 실행되는 Test를 통과하기 위함
+#    internal-proxies: .*
+
 spring:
   security:
     oauth2:
@@ -18,7 +18,9 @@ spring:
             client-secret: "{cipher}ff3f6a17b0cf2ea04cf7831dae0c1218cb5d79084fd1b52e3f307730a8a2681632481626551f528b01a3fe363ac93333"
           kakao:
             client-id: "{cipher}7d82b57035536bf4949b09c02e0bd1a16d7b0addaf6055e7f85b7249363a54b48c5ac21c36def9a721398e091f1f25ef0495846ceb762b64c0a9095f4a9f46d5"
-    
+          github:
+            client-id: "{cipher}92acbb49cc6115fad6fd4d87df951ce162165174b91b80d977ce1377e911956a62a252c2c2658f9cb9d7484f31b80b24"
+            client-secret: "{cipher}689c2a37db0ae94a1e9265937f9a0fdced6208fcbc418f48ce01ef9f9ab57a5fd2da288d180632af20fcb2612a632b9adb0c0d63ff618b0d9f1dbee107eb4260"
 custom:
   api-base-uri: http://localhost:5555/api
   jwt-signkey: "{cipher}73e168f04e3f17ce08518b76f28cbf303a18b6b8700cfb0fcfa1f338f7fc56b6"
