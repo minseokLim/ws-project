@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		CharacterEncodingFilter filter = new CharacterEncodingFilter("UTF-8");
 		
 		http.authorizeRequests()
-				.antMatchers("/login/**", "/images/**", "/js/**", "/css/**", "/oauth/**", "/logout").permitAll()
+				.antMatchers("/login/**", "/images/**", "/js/**", "/css/**", "/oauth/**", "/logout", "/invalidApproach").permitAll()
 				.anyRequest().authenticated()
 			.and()
 				.oauth2Login()
