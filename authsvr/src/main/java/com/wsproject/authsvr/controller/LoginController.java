@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +29,11 @@ public class LoginController {
 			return "redirect:/invalidApproach";
 		}
 		
+		Cookie[] cookies = request.getCookies();
+		
+		for(Cookie cookie : cookies) {
+			log.debug("name : {}, value: {}, path: {}, domain: {}, maxAge: {}", cookie.getName(), cookie.getValue(), cookie.getPath(), cookie.getDomain(), cookie.getMaxAge());
+		}
 		return "login";
 	}
 	
