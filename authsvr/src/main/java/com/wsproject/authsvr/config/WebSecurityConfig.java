@@ -15,10 +15,12 @@ import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.wsproject.authsvr.util.CustomOAuth2Provider;
+import com.wsproject.authsvr.util.SessionInvalidateFilter;
 import com.wsproject.authsvr.util.SocialAuthenticationSuccessHandler;
 
 import lombok.AllArgsConstructor;
@@ -29,7 +31,9 @@ import lombok.AllArgsConstructor;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private SocialAuthenticationSuccessHandler socialAuthenticationSuccessHandler;
-		
+	
+	private SessionInvalidateFilter sessionInvalidateFilter;
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		CharacterEncodingFilter filter = new CharacterEncodingFilter("UTF-8");
@@ -50,6 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.headers().frameOptions().disable()
 			.and()
 				.addFilterBefore(filter, CsrfFilter.class)
+				.addFilterBefore(sessionInvalidateFilter, SecurityContextPersistenceFilter.class)
 				.csrf().disable()
 				.httpBasic();
 	}
