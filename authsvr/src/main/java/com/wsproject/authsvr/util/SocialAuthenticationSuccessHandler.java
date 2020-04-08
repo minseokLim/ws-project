@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -61,92 +62,82 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getIdx(), "N/A", user.getAuthorities()));
 		
+        deleteCookies(request, response);
+        
 		super.onAuthenticationSuccess(request, response, authentication);
 		
 		log.info("onAuthenticationSuccess ended");
 	}
-	
+
 	private User convertUser(String registrationId, Map<String, Object> map) {
-        if(FACEBOOK.getValue().equals(registrationId)) {
-        	return getFacebookUser(map);
+		User.UserBuilder userBuilder = null;
+		
+		if(FACEBOOK.getValue().equals(registrationId)) {
+        	@SuppressWarnings("unchecked")
+    		Object pictureUrl = ((HashMap<String, Object>) ((HashMap<String, Object>) map.get("picture")).get("data")).get("url");
+        	
+        	userBuilder = User.builder()
+		                    .name(convertObjToStr(map.get("name")))
+		                    .email(convertObjToStr(map.get("email")))
+		                    .principal(convertObjToStr(map.get("id")))
+		                    .socialType(FACEBOOK)
+		                    .pictureUrl(convertObjToStr(pictureUrl));
+        	
         } else if(GOOGLE.getValue().equals(registrationId)) {
-        	return getGoogleUser(map);
+        	
+        	userBuilder = User.builder()
+		                    .name(convertObjToStr(map.get("name")))
+		                    .email(convertObjToStr(map.get("email")))
+		                    .principal(convertObjToStr(map.get(IdTokenClaimNames.SUB)))
+		                    .socialType(GOOGLE)
+		                    .pictureUrl(convertObjToStr(map.get("picture")));
+        	
         } else if(KAKAO.getValue().equals(registrationId)) {
-        	return getKakaoUser(map);
+        	@SuppressWarnings("unchecked")
+    		Map<String, String> propertyMap = (HashMap<String, String>) map.get("properties");
+        	
+        	userBuilder = User.builder()
+		                    .name(propertyMap.get("nickname"))
+		                    .email(convertObjToStr(map.get("kaccount_email")))
+		                    .principal(convertObjToStr(map.get("id")))
+		                    .socialType(KAKAO)
+		                    .pictureUrl(propertyMap.get("thumbnail_image"));
+        	
         } else if(GITHUB.getValue().equals(registrationId)) {
-        	return getGithubUser(map);
+        	
+        	userBuilder = User.builder()
+		                    .name(convertObjToStr(map.get("name")))
+		                    .email(convertObjToStr(map.get("email")))
+		                    .principal(convertObjToStr(map.get("id")))
+		                    .socialType(GITHUB)
+		                    .pictureUrl(convertObjToStr(map.get("avatar_url")));
+        } else {
+        	return null;
         }
         
-        return null;
+        return userBuilder.roles(Collections.singletonList(RoleType.USER.getValue()))
+			        	  .accountNonExpired(true)
+			              .accountNonLocked(true)
+			              .credentialsNonExpired(true)
+			              .enabled(true)
+			              .build();
     }
-	
-	private User getFacebookUser(Map<String, Object> map) {
-    	@SuppressWarnings("unchecked")
-		Object pictureUrl = ((HashMap<String, Object>) ((HashMap<String, Object>) map.get("picture")).get("data")).get("url");
-    	
-    	return User.builder()
-                .name(convertObjToStr(map.get("name")))
-                .email(convertObjToStr(map.get("email")))
-                .principal(convertObjToStr(map.get("id")))
-                .socialType(FACEBOOK)
-                .pictureUrl(convertObjToStr(pictureUrl))
-                .roles(Collections.singletonList(RoleType.USER.getValue()))
-                .accountNonExpired(true)
-                .accountNonLocked(true)
-                .credentialsNonExpired(true)
-                .enabled(true)
-                .build();
-    }
-
-    private User getGoogleUser(Map<String, Object> map) {
-    	return User.builder()
-                .name(convertObjToStr(map.get("name")))
-                .email(convertObjToStr(map.get("email")))
-                .principal(convertObjToStr(map.get(IdTokenClaimNames.SUB)))
-                .socialType(GOOGLE)
-                .pictureUrl(convertObjToStr(map.get("picture")))
-                .roles(Collections.singletonList(RoleType.USER.getValue()))
-                .accountNonExpired(true)
-                .accountNonLocked(true)
-                .credentialsNonExpired(true)
-                .enabled(true)
-                .build();
-    }
-    
-    private User getKakaoUser(Map<String, Object> map) {
-        @SuppressWarnings("unchecked")
-		Map<String, String> propertyMap = (HashMap<String, String>) map.get("properties");
-        
-        return User.builder()
-                .name(propertyMap.get("nickname"))
-                .email(convertObjToStr(map.get("kaccount_email")))
-                .principal(convertObjToStr(map.get("id")))
-                .socialType(KAKAO)
-                .pictureUrl(propertyMap.get("thumbnail_image"))
-                .roles(Collections.singletonList(RoleType.USER.getValue()))
-                .accountNonExpired(true)
-                .accountNonLocked(true)
-                .credentialsNonExpired(true)
-                .enabled(true)
-                .build();
-    }
-    
-	private User getGithubUser(Map<String, Object> map) {
-		return User.builder()
-                .name(convertObjToStr(map.get("name")))
-                .email(convertObjToStr(map.get("email")))
-                .principal(convertObjToStr(map.get("id")))
-                .socialType(GITHUB)
-                .pictureUrl(convertObjToStr(map.get("avatar_url")))
-                .roles(Collections.singletonList(RoleType.USER.getValue()))
-                .accountNonExpired(true)
-                .accountNonLocked(true)
-                .credentialsNonExpired(true)
-                .enabled(true)
-                .build();
-	}
 	
     private String convertObjToStr(Object obj) {
     	return obj != null ? String.valueOf(obj) : null;
     }
+    
+	private void deleteCookies(HttpServletRequest request, HttpServletResponse response) {
+		Cookie[] cookies = request.getCookies();
+		
+		if(cookies != null) {
+			for(Cookie cookie : cookies) {
+				log.debug("name : {}, value: {}, path: {}, domain: {}, maxAge: {}", cookie.getName(), cookie.getValue(), cookie.getPath(), cookie.getDomain(), cookie.getMaxAge());
+				
+				cookie.setMaxAge(0);
+				
+				response.addCookie(cookie);
+			}
+		}
+	}
 }
