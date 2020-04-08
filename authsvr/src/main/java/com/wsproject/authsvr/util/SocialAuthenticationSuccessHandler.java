@@ -14,7 +14,6 @@ import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -63,9 +62,6 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getIdx(), "N/A", user.getAuthorities()));
         
 		super.onAuthenticationSuccess(request, response, authentication);
-		
-		HttpSession session = request.getSession();
-		session.invalidate();
 		
 		log.info("onAuthenticationSuccess ended");
 	}
