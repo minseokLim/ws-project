@@ -9,6 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +26,12 @@ public class SessionInvalidateFilter implements Filter {
 		String uri = req.getRequestURI();
 		
 		if(uri.contains("/oauth/authorize")) {
-			SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-			log.debug("authenticatioin is invalidated");
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			
+			if(authentication != null) {
+				authentication.setAuthenticated(false);
+				log.debug("authenticatioin is invalidated");
+			}
 		} 
 		
 		chain.doFilter(request, response);
