@@ -61,9 +61,6 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         }
         
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getIdx(), "N/A", user.getAuthorities()));
-		
-        // JSESSIONID cookie를 삭제. 로그아웃 시 다시 로그인을 할 수 있게 하기 위함
-        deleteCookies(request, response);
         
 		super.onAuthenticationSuccess(request, response, authentication);
 		
@@ -127,18 +124,4 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     private String convertObjToStr(Object obj) {
     	return obj != null ? String.valueOf(obj) : null;
     }
-    
-	private void deleteCookies(HttpServletRequest request, HttpServletResponse response) {
-		Cookie[] cookies = request.getCookies();
-		
-		if(cookies != null) {
-			for(Cookie cookie : cookies) {
-				log.debug("name : {}, value: {}, path: {}, domain: {}, maxAge: {}", cookie.getName(), cookie.getValue(), cookie.getPath(), cookie.getDomain(), cookie.getMaxAge());
-				
-				cookie.setMaxAge(0);
-				
-				response.addCookie(cookie);
-			}
-		}
-	}
 }
