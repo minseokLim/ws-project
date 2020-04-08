@@ -62,6 +62,7 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getIdx(), "N/A", user.getAuthorities()));
 		
+        // JSESSIONID cookie를 삭제. 로그아웃 시 다시 로그인을 할 수 있게 하기 위함
         deleteCookies(request, response);
         
 		super.onAuthenticationSuccess(request, response, authentication);
