@@ -29,14 +29,6 @@ public class LoginController {
 			return "redirect:/invalidApproach";
 		}
 		
-		Cookie[] cookies = request.getCookies();
-		
-		if(cookies != null) {
-			for(Cookie cookie : cookies) {
-				log.debug("name : {}, value: {}, path: {}, domain: {}, maxAge: {}", cookie.getName(), cookie.getValue(), cookie.getPath(), cookie.getDomain(), cookie.getMaxAge());
-			}
-		}
-		
 		return "login";
 	}
 	
