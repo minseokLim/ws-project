@@ -7,11 +7,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,24 +22,11 @@ public class SessionInvalidateFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		
 		HttpServletRequest req = (HttpServletRequest) request;
-		HttpServletResponse res = (HttpServletResponse) response;
-		
 		String uri = req.getRequestURI();
 		
 		if(uri.contains("/oauth/authorize")) {
-			HttpSession session = req.getSession();
-			session.invalidate();
-			
-			Cookie[] cookies = req.getCookies();
-			
-			if(cookies != null) {
-				for(Cookie cookie : cookies) {
-					cookie.setMaxAge(0);
-					res.addCookie(cookie);
-					
-					log.debug("Cookie : {}={}", cookie.getName(), cookie.getValue());
-				}
-			}
+			SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+			log.debug("authenticatioin is invalidated");
 		} 
 		
 		chain.doFilter(request, response);
