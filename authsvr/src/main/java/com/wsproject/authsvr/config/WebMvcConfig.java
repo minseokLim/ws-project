@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 	
-	private static final long MAX_AGE_SECONDS = 0;
+	private static final long MAX_AGE_SECONDS = 3600;
 	
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
