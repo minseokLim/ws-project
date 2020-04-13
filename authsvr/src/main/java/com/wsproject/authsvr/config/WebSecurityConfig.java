@@ -1,5 +1,9 @@
 package com.wsproject.authsvr.config;
 
+import static com.wsproject.authsvr.domain.enums.SocialType.FACEBOOK;
+import static com.wsproject.authsvr.domain.enums.SocialType.GITHUB;
+import static com.wsproject.authsvr.domain.enums.SocialType.KAKAO;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -72,24 +76,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private ClientRegistration getRegistration(OAuth2ClientProperties oAuth2ClientProperties, String client) {
 		OAuth2ClientProperties.Registration registration = oAuth2ClientProperties.getRegistration().get(client);
-
-		if("facebook".equals(client)) {
+		
+		if(FACEBOOK.getValue().equals(client)) {
 			return CommonOAuth2Provider.FACEBOOK.getBuilder(client)
 					.clientId(registration.getClientId())
 					.clientSecret(registration.getClientSecret())
 					// picture을 받아오기 위해 별도로 userInfoUri 설정
 					.userInfoUri("https://graph.facebook.com/me?fields=id,name,email,picture")
 					.build();
-		} else if("google".equals(client)) {
+		} else if(FACEBOOK.getValue().equals(client)) {
 			return CommonOAuth2Provider.GOOGLE.getBuilder(client)
 					.clientId(registration.getClientId())
 					.clientSecret(registration.getClientSecret())
 					.build();
-		} else if("kakao".equals(client)) {
+		} else if(KAKAO.getValue().equals(client)) {
 			return CustomOAuth2Provider.KAKAO.getBuilder(client)
 					.clientId(registration.getClientId())
 					.build();
-		} else if("github".equals(client)) {
+		} else if(GITHUB.getValue().equals(client)) {
 			return CommonOAuth2Provider.GITHUB.getBuilder(client)
 					.clientId(registration.getClientId())
 					.clientSecret(registration.getClientSecret())
