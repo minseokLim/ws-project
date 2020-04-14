@@ -13,7 +13,7 @@ public class AccessLogService {
 
 	private AccessLogRepository accessLogRepository;
 	
-	public void save(AccessLog accessLog) {
-		accessLogRepository.save(accessLog.setNowOnAccessDate());
+	public AccessLog save(AccessLog accessLog) {
+		return accessLogRepository.save(accessLog.setNowOnAccessDate());
 	}
 }

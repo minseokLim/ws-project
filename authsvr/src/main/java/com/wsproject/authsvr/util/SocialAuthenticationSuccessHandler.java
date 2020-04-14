@@ -27,8 +27,8 @@ import com.wsproject.authsvr.domain.AccessLog;
 import com.wsproject.authsvr.domain.User;
 import com.wsproject.authsvr.domain.enums.RoleType;
 import com.wsproject.authsvr.domain.enums.SocialType;
-import com.wsproject.authsvr.repository.UserRepository;
 import com.wsproject.authsvr.service.AccessLogService;
+import com.wsproject.authsvr.service.UserService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 	
-	private UserRepository userRepository;
+	private UserService userService;
 	
 	private AccessLogService accessLogService;
 	
@@ -53,14 +53,14 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         String principal = convertedUser.getPrincipal();
         SocialType socialType = convertedUser.getSocialType();
         
-        Optional<User> foundUser = userRepository.findByPrincipalAndSocialType(principal, socialType);
+        Optional<User> foundUser = userService.findByPrincipalAndSocialType(principal, socialType);
         
         User user;
         
         if(foundUser.isPresent()) {
         	user = foundUser.get();
         } else {
-        	user = userRepository.save(convertedUser);
+        	user = userService.save(convertedUser);
         }
         
         Long userIdx = user.getIdx();
