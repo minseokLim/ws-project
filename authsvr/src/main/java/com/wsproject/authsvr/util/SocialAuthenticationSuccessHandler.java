@@ -23,10 +23,12 @@ import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.wsproject.authsvr.domain.AccessLog;
 import com.wsproject.authsvr.domain.User;
 import com.wsproject.authsvr.domain.enums.RoleType;
 import com.wsproject.authsvr.domain.enums.SocialType;
 import com.wsproject.authsvr.repository.UserRepository;
+import com.wsproject.authsvr.service.AccessLogService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,8 @@ import lombok.extern.slf4j.Slf4j;
 public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 	
 	private UserRepository userRepository;
+	
+	private AccessLogService accessLogService;
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -59,10 +63,15 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         	user = userRepository.save(convertedUser);
         }
         
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getIdx(), "N/A", user.getAuthorities()));
+        Long userIdx = user.getIdx();
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userIdx, "N/A", user.getAuthorities()));
         
-		super.onAuthenticationSuccess(request, response, authentication);
+        super.onAuthenticationSuccess(request, response, authentication);
 		
+        AccessLog accessLog = AccessLog.builder().userIdx(userIdx).ip(CommonUtil.getClientIP(request)).build();
+        
+        accessLogService.save(accessLog);
+        
 		log.info("onAuthenticationSuccess ended");
 	}
 
