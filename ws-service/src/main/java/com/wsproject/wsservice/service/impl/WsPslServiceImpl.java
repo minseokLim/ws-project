@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import com.wsproject.wsservice.controller.WsPslController;
 import com.wsproject.wsservice.domain.WsPsl;
 import com.wsproject.wsservice.dto.WsPslDto;
-import com.wsproject.wsservice.repository.TodaysWsRepository;
 import com.wsproject.wsservice.repository.WsPslRepository;
 import com.wsproject.wsservice.service.WsPslService;
 import com.wsproject.wsservice.util.CommonUtil;
@@ -29,7 +28,7 @@ public class WsPslServiceImpl implements WsPslService {
 		
 	private WsPslRepository wsPslRepository;
 	
-	private TodaysWsRepository todaysWsRepository;
+//	private TodaysWsRepository todaysWsRepository;
 	
 	private CommonUtil commonUtil;
 	
@@ -70,7 +69,8 @@ public class WsPslServiceImpl implements WsPslService {
 		WsPsl wsPersonal = wsPslRepository.save(dto.toEntity());
 		
 		// 사용자가 명언을 추가할 경우, 해당 명언이 사용자의 오늘의 명언으로 대체 됨
-		todaysWsRepository.save(wsPersonal.toTodaysWs());
+		// 좀 이상한거 같아서 일단 주석처리
+//		todaysWsRepository.save(wsPersonal.toTodaysWs());
 				
 		WsPslDto result = new WsPslDto(wsPersonal);
 		result.add(linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
