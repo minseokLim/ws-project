@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WsPslDto extends RepresentationModel<WsPslDto> {
 	
-private Long id;
+	private Long id;
 	
 	private String content;
 	

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.wsproject.wsservice.controller.WsPslController;
 import com.wsproject.wsservice.domain.WsPsl;
 import com.wsproject.wsservice.dto.WsPslDto;
+import com.wsproject.wsservice.repository.TodaysWsRepository;
 import com.wsproject.wsservice.repository.WsPslRepository;
 import com.wsproject.wsservice.service.WsPslService;
 import com.wsproject.wsservice.util.CommonUtil;
@@ -26,14 +27,16 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class WsPslServiceImpl implements WsPslService {
 		
-	private WsPslRepository repository;
+	private WsPslRepository wsPslRepository;
+	
+	private TodaysWsRepository todaysWsRepository;
 	
 	private CommonUtil commonUtil;
 	
 	@Override
 	public PagedModel<WsPslDto> selectWsPsls(Long ownerIdx, String search, Pageable pageable) {
 		// 일단 search에 대한 부분은 미구현
-		Page<WsPsl> page = repository.findByOwnerIdx(ownerIdx, pageable);
+		Page<WsPsl> page = wsPslRepository.findByOwnerIdx(ownerIdx, pageable);
 
 		List<WsPslDto> content = page.stream().map(elem -> {
 			WsPslDto dto = new WsPslDto(elem);
@@ -50,7 +53,7 @@ public class WsPslServiceImpl implements WsPslService {
 
 	@Override
 	public WsPslDto selectWsPsl(Long ownerIdx, Long id) {
-		Optional<WsPsl> data = repository.findByIdAndOwnerIdx(id, ownerIdx);
+		Optional<WsPsl> data = wsPslRepository.findByIdAndOwnerIdx(id, ownerIdx);
 		
 		if(!data.isPresent()) {
 			return null;
@@ -64,7 +67,11 @@ public class WsPslServiceImpl implements WsPslService {
 
 	@Override
 	public WsPslDto insertWsPsl(WsPslDto dto) {
-		WsPsl wsPersonal = repository.save(dto.toEntity());
+		WsPsl wsPersonal = wsPslRepository.save(dto.toEntity());
+		
+		// 사용자가 명언을 추가할 경우, 해당 명언이 사용자의 오늘의 명언으로 대체 됨
+		todaysWsRepository.save(wsPersonal.toTodaysWs());
+				
 		WsPslDto result = new WsPslDto(wsPersonal);
 		result.add(linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
 		
@@ -73,7 +80,7 @@ public class WsPslServiceImpl implements WsPslService {
 
 	@Override
 	public WsPslDto updateWsPsl(Long ownerIdx, Long id, WsPslDto dto) {
-		Optional<WsPsl> data = repository.findByIdAndOwnerIdx(id, ownerIdx);
+		Optional<WsPsl> data = wsPslRepository.findByIdAndOwnerIdx(id, ownerIdx);
 		
 		if(!data.isPresent()) {
 			return null;
@@ -82,7 +89,7 @@ public class WsPslServiceImpl implements WsPslService {
 		WsPsl wsPersonal = data.get();
 		wsPersonal.update(dto.toEntity());
 		
-		wsPersonal = repository.save(wsPersonal);
+		wsPersonal = wsPslRepository.save(wsPersonal);
 		
 		WsPslDto result = new WsPslDto(wsPersonal);
 		result.add(linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
@@ -92,13 +99,13 @@ public class WsPslServiceImpl implements WsPslService {
 
 	@Override
 	public boolean deleteWsPsl(Long ownerIdx, Long id) {
-		Optional<WsPsl> data = repository.findByIdAndOwnerIdx(id, ownerIdx);
+		Optional<WsPsl> data = wsPslRepository.findByIdAndOwnerIdx(id, ownerIdx);
 		
 		if(!data.isPresent()) {
 			return false;
 		}
 		
-		repository.deleteById(id);
+		wsPslRepository.deleteById(id);
 		return true;
 	}
 }

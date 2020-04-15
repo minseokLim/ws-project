@@ -50,4 +50,8 @@ public class WsPsl extends BaseTimeEntity {
 		this.type = wsPersonal.getType();
 		this.ownerIdx = wsPersonal.getOwnerIdx();
 	}
+	
+	public TodaysWs toTodaysWs() {
+		return TodaysWs.builder().userIdx(ownerIdx).content(content).author(author).type(type).build();
+	}
 }
