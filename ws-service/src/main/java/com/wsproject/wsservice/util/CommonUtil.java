@@ -1,67 +1,82 @@
 package com.wsproject.wsservice.util;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.wsproject.wsservice.config.CustomProperties;
 
 @Component
 public class CommonUtil {
 	
+	private static String applicationName;
+	
+	@Value("${spring.application.name}")
+	public void setApplicationName(String value) {
+		applicationName = value;
+	}
+
 	/**
 	 * hateoas를 위해 next, prev, first, last 등의 url을 자동 입력해주는 함수
 	 * @param model
 	 * @param page
 	 */
-	public void setPageLinksAdvice(PagedModel<?> model, Page<?> page) {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-		UriComponentsBuilder original = ServletUriComponentsBuilder.fromServletMapping(request).path(request.getRequestURI());
-		
-		for(Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
-			for(String value : entry.getValue()) {
-				original.queryParam(entry.getKey(), value);
-			}
-		}
+	public static void setPageLinksAdvice(PagedModel<?> model, Page<?> page) {
+		UriComponentsBuilder original = ServletUriComponentsBuilder.fromCurrentRequest();
 		
 		if(page.hasNext()) {
-			UriComponentsBuilder nextBuilder = replacePageParams(original, page.nextPageable());
-			model.add(new Link(nextBuilder.toUriString()).withRel("next"));
+			String nextUri = getPageParamReplacedUri(original, page.nextPageable());
+			setLinkAdvice(model, new Link(nextUri).withRel("next"));
 		}
 		
 		if(page.hasPrevious()) {
-			UriComponentsBuilder prevBuilder = replacePageParams(original, page.previousPageable());
-			model.add(new Link(prevBuilder.toUriString()).withRel("prev"));
+			String prevUri = getPageParamReplacedUri(original, page.previousPageable());
+			setLinkAdvice(model, new Link(prevUri).withRel("prev"));
 		}
 		
-		UriComponentsBuilder firstBuilder = replacePageParams(original, PageRequest.of(0, page.getSize(), page.getSort()));
-		model.add(new Link(firstBuilder.toUriString()).withRel("first"));
+		String firstUri = getPageParamReplacedUri(original, PageRequest.of(0, page.getSize(), page.getSort()));
+		setLinkAdvice(model, new Link(firstUri).withRel("first"));
 		
-		UriComponentsBuilder lastBuilder = replacePageParams(original, PageRequest.of(page.getTotalPages() - 1 >= 0 ? page.getTotalPages() - 1 : 0, page.getSize(), page.getSort()));
-		model.add(new Link(lastBuilder.toUriString()).withRel("last"));	
+		String lastUri = getPageParamReplacedUri(original, PageRequest.of(page.getTotalPages() - 1 >= 0 ? page.getTotalPages() - 1 : 0, page.getSize(), page.getSort()));
+		setLinkAdvice(model, new Link(lastUri).withRel("last"));
 	}
 
-	/**
-	 * original에 있는 uri에서 page, size 파라미터를 pageable에 있는 값들도 대체
+	/** original에 있는 page 관련 파라미터들을 replace
 	 * @param original
 	 * @param pageable
-	 * @return
+	 * @return page 관련 파라미터들이 replace된 uri string
 	 */
-	private UriComponentsBuilder replacePageParams(UriComponentsBuilder original, Pageable pageable) {
+	private static String getPageParamReplacedUri(UriComponentsBuilder original, Pageable pageable) {
 		UriComponentsBuilder builder = original.cloneBuilder();
 		builder.replaceQueryParam("page", pageable.getPageNumber());
 		builder.replaceQueryParam("size", pageable.getPageSize());
-		return builder;
+		return builder.toUriString();
+	}
+	
+	public static void setLinkAdvice(RepresentationModel<?> dto, Link link) {
+		String linkStr = link.getHref();
+		dto.add(new Link(replaceBaseUri(linkStr), link.getRel()));
+	}
+	
+	/**
+	 * uri에서 baseuri를 zuulsvr의 uri로 변경하는 함수
+	 * @param uri
+	 * @return
+	 */
+	private static String replaceBaseUri(String uri) {
+		String currentBaseUri = ServletUriComponentsBuilder.fromCurrentContextPath().toUriString();
+		CustomProperties properties = getBean(CustomProperties.class);
+		String apiPublicBaseUri = properties.getApiPublicBaseUri();
+		
+		return uri.replace(currentBaseUri, apiPublicBaseUri + "/" + applicationName);
 	}
 	
 	/** Bean객체를 얻는다
@@ -73,5 +88,9 @@ public class CommonUtil {
 		ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
 		
 		return applicationContext.getBean(classType);
+	}
+	
+	public static String getLikeStr(String value) {
+		return "%" + value + "%";
 	}
 }

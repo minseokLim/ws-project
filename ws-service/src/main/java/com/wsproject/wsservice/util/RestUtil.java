@@ -8,8 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -28,15 +26,15 @@ public class RestUtil {
 	private HttpMethod method;
 	private HttpHeaders headers;
 	private Map<String, Object[]> queryParams;
-	private MultiValueMap<String, Object> bodyParams;
+	private Object bodyParam;
 	
 	public RestUtil(String url, HttpMethod method, HttpHeaders headers, Map<String, Object[]> queryParams, 
-					MultiValueMap<String, Object> bodyParams) {
+			 		Object bodyParam) {
 		this.url = url;
 		this.method = method;
 		this.headers = headers;
 		this.queryParams = queryParams;
-		this.bodyParams = bodyParams;
+		this.bodyParam = bodyParam;
 	}
 	
 	/** 객체에 있는 정보를 기반으로 Rest요청을 한다.
@@ -46,12 +44,12 @@ public class RestUtil {
 		log.info("exchange started - url : {}", url);
 		CustomProperties properties = CommonUtil.getBean(CustomProperties.class);
 		
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(properties.getApiBaseUri() + url);
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(properties.getApiPrivateBaseUri() + url);
 		queryParams.entrySet().forEach(entry -> builder.queryParam(entry.getKey(), entry.getValue()));
 		
 		log.debug("url : " + builder.toUriString());
 		
-		HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String,Object>>(bodyParams, headers);
+		HttpEntity<Object> entity = new HttpEntity<Object>(bodyParam, headers);
 		
 		RestTemplate restTemplate = CommonUtil.getBean(RestTemplate.class);
 		
@@ -71,7 +69,7 @@ public class RestUtil {
 		private HttpMethod method;
 		private HttpHeaders headers = new HttpHeaders();
 		private Map<String, Object[]> queryParams = new HashMap<>();
-		private MultiValueMap<String, Object> bodyParams = new LinkedMultiValueMap<String, Object>();
+		private Object bodyParam;
 		
 		public RestUtilBuilder url(String url) {
 			this.url = url;
@@ -144,13 +142,13 @@ public class RestUtil {
 		 * @param value
 		 * @return
 		 */
-		public RestUtilBuilder bodyParams(String key, Object value) {
-			bodyParams.add(key, value);
+		public RestUtilBuilder bodyParam(Object bodyParam) {
+			this.bodyParam = bodyParam;
 			return this;
 		}
 		
 		public RestUtil build() {
-			return new RestUtil(url, method, headers, queryParams, bodyParams);
+			return new RestUtil(url, method, headers, queryParams, bodyParam);
 		}
 	}
 }

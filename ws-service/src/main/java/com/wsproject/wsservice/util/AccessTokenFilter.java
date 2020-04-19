@@ -21,8 +21,7 @@ import org.springframework.stereotype.Component;
 public class AccessTokenFilter implements Filter {
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		AccessTokenHolder.setAuthorization(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION));
 		

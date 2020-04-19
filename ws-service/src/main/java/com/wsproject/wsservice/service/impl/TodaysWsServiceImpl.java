@@ -19,6 +19,7 @@ import com.wsproject.wsservice.repository.TodaysWsRepository;
 import com.wsproject.wsservice.repository.WsPslRepository;
 import com.wsproject.wsservice.repository.WsRepository;
 import com.wsproject.wsservice.service.TodaysWsService;
+import com.wsproject.wsservice.util.CommonUtil;
 
 import brave.Span;
 import brave.Tracer;
@@ -59,26 +60,26 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		
 		// 처음 로그인하는 사용자이거나 배치가 돌지 않았을 때(이 로직이 있으면 사실 배치는 필요 없구나...)
 		if(!data.isPresent() || data.get().getModifiedDate().isBefore(today)) {
-			result = new TodaysWsDto(insertTodaysWs(ownerIdx));
+			TodaysWs todaysWs = data.orElse(new TodaysWs());
+			todaysWs.update(getRandomTodaysWs(ownerIdx));
+			
+			result = new TodaysWsDto(todaysWsRepository.save(todaysWs));
 		} else {
 			result = new TodaysWsDto(data.get());
 		}
 		
-		if(result != null) {
-			result.add(linkTo(methodOn(TodaysWsController.class).selectTodaysWs(ownerIdx)).withSelfRel());
-		}
+		CommonUtil.setLinkAdvice(result, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(ownerIdx)).withSelfRel());
 
 		return result;
 	}
-	
-	private TodaysWs insertTodaysWs(Long ownerIdx) {
+
+	private TodaysWs getRandomTodaysWs(Long ownerIdx) {
+		TodaysWs todaysWs = null;
 		
 		long wsCount = wsRepository.count();
 		long wsPslCount = wsPslRepository.countByOwnerIdx(ownerIdx);
 		long totalWsCount = wsCount + wsPslCount;
 		
-		TodaysWs todaysWs = null;
-			
 		int randomNo = (int) (Math.random() * totalWsCount);
 		
 		if(randomNo < wsCount) {
@@ -97,6 +98,6 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 			} 
 		}
 		
-		return todaysWsRepository.save(todaysWs);
+		return todaysWs;
 	}
 }

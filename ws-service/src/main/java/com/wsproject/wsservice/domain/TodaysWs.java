@@ -37,4 +37,11 @@ public class TodaysWs extends BaseTimeEntity {
 		this.author = author;
 		this.type = type;
 	}
+	
+	public void update(TodaysWs todaysWs) {
+		this.userIdx = todaysWs.getUserIdx();
+		this.content = todaysWs.getContent();
+		this.author = todaysWs.getAuthor();
+		this.type = todaysWs.getType();
+	}
 }

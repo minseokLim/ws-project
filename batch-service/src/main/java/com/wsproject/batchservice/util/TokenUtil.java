@@ -55,7 +55,7 @@ public class TokenUtil {
 		
 		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
 		
-		ResponseEntity<String> responseEntity = restTemplate.postForEntity(properties.getApiBaseUri() + "/authsvr/oauth/token", entity, String.class);
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(properties.getApiPrivateBaseUri() + "/authsvr/oauth/token", entity, String.class);
 		
 		TokenInfo tokenInfo = gson.fromJson(responseEntity.getBody(), TokenInfo.class);
 		
