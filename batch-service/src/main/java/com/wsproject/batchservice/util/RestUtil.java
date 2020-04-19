@@ -49,7 +49,7 @@ public class RestUtil {
 		log.info("exchange started - url : {}", url);
 		CustomProperties properties = CommonUtil.getBean(CustomProperties.class);
 		
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(properties.getApiBaseUri() + url);
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(properties.getApiPrivateBaseUri() + url);
 		queryParams.entrySet().forEach(entry -> builder.queryParam(entry.getKey(), entry.getValue()));
 		
 		headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + tokenInfo.getAccess_token());

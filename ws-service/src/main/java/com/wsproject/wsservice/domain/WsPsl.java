@@ -44,11 +44,11 @@ public class WsPsl extends BaseTimeEntity {
 		this.ownerIdx = ownerIdx;
 	}
 	
-	public void update(WsPsl wsPersonal) {
-		this.content = wsPersonal.getContent();
-		this.author = wsPersonal.getAuthor();
-		this.type = wsPersonal.getType();
-		this.ownerIdx = wsPersonal.getOwnerIdx();
+	public void update(WsPsl wsPsl) {
+		this.content = wsPsl.getContent();
+		this.author = wsPsl.getAuthor();
+		this.type = wsPsl.getType();
+		this.ownerIdx = wsPsl.getOwnerIdx();
 	}
 	
 	public TodaysWs toTodaysWs() {

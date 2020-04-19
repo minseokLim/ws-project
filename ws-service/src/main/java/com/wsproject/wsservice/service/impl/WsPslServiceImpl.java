@@ -28,10 +28,6 @@ public class WsPslServiceImpl implements WsPslService {
 		
 	private WsPslRepository wsPslRepository;
 	
-//	private TodaysWsRepository todaysWsRepository;
-	
-	private CommonUtil commonUtil;
-	
 	@Override
 	public PagedModel<WsPslDto> selectWsPsls(Long ownerIdx, String search, Pageable pageable) {
 		// 일단 search에 대한 부분은 미구현
@@ -39,13 +35,14 @@ public class WsPslServiceImpl implements WsPslService {
 
 		List<WsPslDto> content = page.stream().map(elem -> {
 			WsPslDto dto = new WsPslDto(elem);
-			dto.add(linkTo(methodOn(WsPslController.class).selectWsPersonal(ownerIdx, dto.getId())).withSelfRel());
+			CommonUtil.setLinkAdvice(dto, linkTo(methodOn(WsPslController.class).selectWsPersonal(ownerIdx, dto.getId())).withSelfRel());
 			return dto;
 		}).collect(Collectors.toList());
 		
 		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
-		PagedModel<WsPslDto> result = new PagedModel<>(content, pageMetadata, linkTo(methodOn(WsPslController.class).selectWsPersonalPage(ownerIdx, search, pageable)).withSelfRel());
-		commonUtil.setPageLinksAdvice(result, page);
+		PagedModel<WsPslDto> result = new PagedModel<>(content, pageMetadata);
+		CommonUtil.setLinkAdvice(result, linkTo(methodOn(WsPslController.class).selectWsPersonalPage(ownerIdx, search, pageable)).withSelfRel());
+		CommonUtil.setPageLinksAdvice(result, page);
 		
 		return result;
 	}
@@ -59,7 +56,7 @@ public class WsPslServiceImpl implements WsPslService {
 		}
 		
 		WsPslDto result = new WsPslDto(data.get());
-		result.add(linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
+		CommonUtil.setLinkAdvice(result, linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
 		
 		return result;
 	}
@@ -67,13 +64,9 @@ public class WsPslServiceImpl implements WsPslService {
 	@Override
 	public WsPslDto insertWsPsl(WsPslDto dto) {
 		WsPsl wsPersonal = wsPslRepository.save(dto.toEntity());
-		
-		// 사용자가 명언을 추가할 경우, 해당 명언이 사용자의 오늘의 명언으로 대체 됨
-		// 좀 이상한거 같아서 일단 주석처리
-//		todaysWsRepository.save(wsPersonal.toTodaysWs());
 				
 		WsPslDto result = new WsPslDto(wsPersonal);
-		result.add(linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
+		CommonUtil.setLinkAdvice(result, linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
 		
 		return result;
 	}
@@ -92,7 +85,7 @@ public class WsPslServiceImpl implements WsPslService {
 		wsPersonal = wsPslRepository.save(wsPersonal);
 		
 		WsPslDto result = new WsPslDto(wsPersonal);
-		result.add(linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
+		CommonUtil.setLinkAdvice(result, linkTo(methodOn(WsPslController.class).selectWsPersonal(result.getOwnerIdx(), result.getId())).withSelfRel());
 		
 		return result;
 	}

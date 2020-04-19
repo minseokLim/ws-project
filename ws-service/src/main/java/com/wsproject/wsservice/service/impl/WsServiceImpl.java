@@ -35,8 +35,6 @@ public class WsServiceImpl implements WsService {
 		
 	private WsRepository wsRepository;
 		
-	private CommonUtil commonUtil;
-	
 	@Override
 	public PagedModel<WsDto> selectWses(String search, Pageable pageable) {
 		Page<Ws> page;
@@ -54,10 +52,10 @@ public class WsServiceImpl implements WsService {
 				
 				switch (key) {
 				case "content":
-					page = wsRepository.findByContentLike("%" + value + "%", pageable);
+					page = wsRepository.findByContentLike(CommonUtil.getLikeStr(value), pageable);
 					break;
 				case "author":
-					page = wsRepository.findByAuthorLike("%" + value + "%", pageable);
+					page = wsRepository.findByAuthorLike(CommonUtil.getLikeStr(value), pageable);
 					break;
 				case "type":
 					page = wsRepository.findByType(WsType.valueOf(value), pageable);
@@ -73,17 +71,18 @@ public class WsServiceImpl implements WsService {
 		
 		List<WsDto> content = page.stream().map(elem -> {
 			WsDto dto = new WsDto(elem);
-			dto.add(linkTo(WsController.class).slash(dto.getId()).withSelfRel());
+			CommonUtil.setLinkAdvice(dto, linkTo(WsController.class).slash(dto.getId()).withSelfRel());
 			return dto;
 		}).collect(Collectors.toList());
 		
 		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
-		PagedModel<WsDto> result = new PagedModel<>(content, pageMetadata, linkTo(methodOn(WsController.class).selectWsPage(search, pageable)).withSelfRel());
-		commonUtil.setPageLinksAdvice(result, page);
+		PagedModel<WsDto> result = new PagedModel<>(content, pageMetadata);
+		CommonUtil.setLinkAdvice(result, linkTo(methodOn(WsController.class).selectWsPage(search, pageable)).withSelfRel());
+		CommonUtil.setPageLinksAdvice(result, page);
 		
 		return result;
 	}
-
+	
 	@Override
 	public WsDto selectWs(Long id) {
 		Optional<Ws> data = wsRepository.findById(id);
@@ -93,7 +92,7 @@ public class WsServiceImpl implements WsService {
 		}
 		
 		WsDto result = new WsDto(data.get());
-		result.add(linkTo(WsController.class).slash(id).withSelfRel());
+		CommonUtil.setLinkAdvice(result, linkTo(WsController.class).slash(id).withSelfRel());
 		
 		return result;
 	}
@@ -102,15 +101,13 @@ public class WsServiceImpl implements WsService {
 	public WsDto insertWs(WsDto dto) {
 		Ws ws = wsRepository.save(dto.toEntity());
 		WsDto result = new WsDto(ws);
-		result.add(linkTo(WsController.class).slash(result.getId()).withSelfRel());
+		CommonUtil.setLinkAdvice(result, linkTo(WsController.class).slash(result.getId()).withSelfRel());
 		
 		return result;
 	}
 
 	@Override
 	public WsDto updateWs(Long id, WsDto dto) {
-		// TODO 효율성 관점에서 봤을 때는 좋지 않아보임. 
-		// 현재 이 과정 없이 update를 진행하면, createdDate가 null이 되어버림
 		Optional<Ws> data = wsRepository.findById(id);
 		
 		if(!data.isPresent()) {
@@ -123,7 +120,7 @@ public class WsServiceImpl implements WsService {
 		ws = wsRepository.save(ws);
 		
 		WsDto result = new WsDto(ws);
-		result.add(linkTo(WsController.class).slash(id).withSelfRel());
+		CommonUtil.setLinkAdvice(result, linkTo(WsController.class).slash(id).withSelfRel());
 		
 		return result;
 	}
