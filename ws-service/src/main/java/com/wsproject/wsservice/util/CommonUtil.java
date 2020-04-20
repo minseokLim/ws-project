@@ -1,5 +1,8 @@
 package com.wsproject.wsservice.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
@@ -14,6 +17,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.wsproject.wsservice.config.CustomProperties;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class CommonUtil {
 	
@@ -28,6 +34,7 @@ public class CommonUtil {
 	 * hateoas를 위해 next, prev, first, last 등의 url을 자동 입력해주는 함수
 	 * @param model
 	 * @param page
+	 * @throws UnsupportedEncodingException 
 	 */
 	public static void setPageLinksAdvice(PagedModel<?> model, Page<?> page) {
 		UriComponentsBuilder original = ServletUriComponentsBuilder.fromCurrentRequest();
@@ -53,16 +60,27 @@ public class CommonUtil {
 	 * @param original
 	 * @param pageable
 	 * @return page 관련 파라미터들이 replace된 uri string
+	 * @throws UnsupportedEncodingException 
 	 */
 	private static String getPageParamReplacedUri(UriComponentsBuilder original, Pageable pageable) {
+		
 		UriComponentsBuilder builder = original.cloneBuilder();
 		builder.replaceQueryParam("page", pageable.getPageNumber());
 		builder.replaceQueryParam("size", pageable.getPageSize());
-		return builder.toUriString();
+		
+		try {
+			String result = URLDecoder.decode(builder.build().toUriString(), "UTF-8");
+			log.debug("result : {}", result);
+			return result;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public static void setLinkAdvice(RepresentationModel<?> dto, Link link) {
 		String linkStr = link.getHref();
+		log.debug("link : {}", linkStr);
 		dto.add(new Link(replaceBaseUri(linkStr), link.getRel()));
 	}
 	
