@@ -1,10 +1,8 @@
 package com.wsproject.wsservice.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +26,7 @@ public class TodaysWsController {
 	private TodaysWsService todaysWsService;
 	
 	/**
-	 * 유저별 오늘의 명언 조회
+	 * 유저별 오늘의 명언 생성/업데이트 혹은 조회
 	 * @param ownerIdx
 	 * @return 오늘의 명언
 	 */
@@ -47,18 +45,5 @@ public class TodaysWsController {
 		} else {
 			return ResponseEntity.notFound().build();
 		}
-	}
-	
-	/**
-	 * 오늘의 명언 생성/업데이트 혹은 조회
-	 * @param ownerIdx
-	 * @return
-	 */
-	@PostMapping
-	public ResponseEntity<TodaysWsDto> insertTodaysWs(@PathVariable("ownerIdx") Long ownerIdx) {
-		
-		TodaysWsDto result = todaysWsService.selectTodaysWs(ownerIdx);
-		
-		return new ResponseEntity<TodaysWsDto>(result, HttpStatus.CREATED);
 	}
 }

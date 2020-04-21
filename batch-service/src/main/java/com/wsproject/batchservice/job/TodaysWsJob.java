@@ -75,7 +75,7 @@ public class TodaysWsJob {
 			public void write(List<? extends Long> items) throws Exception {
 				items.forEach(userIdx -> {
 					try {
-						RestUtil restUtil = RestUtil.builder().url("/ws-service/v1.0/users/" + userIdx + "/todaysWs").post().tokenInfo(tokenInfo).build();
+						RestUtil restUtil = RestUtil.builder().url("/ws-service/v1.0/users/" + userIdx + "/todaysWs").get().tokenInfo(tokenInfo).build();
 						restUtil.exchange();
 					} catch (Exception e) {
 						log.info("todaysWsWriter failed at userIdx [{}]", userIdx);
