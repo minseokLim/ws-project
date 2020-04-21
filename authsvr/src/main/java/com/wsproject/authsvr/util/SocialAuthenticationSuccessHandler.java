@@ -66,12 +66,11 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         Long userIdx = user.getIdx();
 		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userIdx, "N/A", user.getAuthorities()));
         
-        super.onAuthenticationSuccess(request, response, authentication);
-		
-        AccessLog accessLog = AccessLog.builder().userIdx(userIdx).ip(CommonUtil.getClientIP(request)).build();
-        
+		AccessLog accessLog = AccessLog.builder().userIdx(userIdx).ip(CommonUtil.getClientIP(request)).build();
         accessLogService.save(accessLog);
         
+        super.onAuthenticationSuccess(request, response, authentication);
+		
 		log.info("onAuthenticationSuccess ended");
 	}
 
