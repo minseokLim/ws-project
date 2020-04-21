@@ -12,4 +12,6 @@ public interface TodaysWsService {
 	 * @return 오늘의 명언
 	 */
 	public TodaysWsDto selectTodaysWs(Long ownerIdx);
+	
+	public TodaysWsDto refreshTodaysWs(Long ownerIdx);
 }
