@@ -73,6 +73,20 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		return result;
 	}
 
+
+	@Override
+	public TodaysWsDto refreshTodaysWs(Long ownerIdx) {
+		Optional<TodaysWs> data = todaysWsRepository.findById(ownerIdx);
+		TodaysWs todaysWs = data.orElse(new TodaysWs());
+		todaysWs.update(getRandomTodaysWs(ownerIdx));
+		
+		TodaysWsDto result = new TodaysWsDto(todaysWsRepository.save(todaysWs));
+		
+		CommonUtil.setLinkAdvice(result, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(ownerIdx)).withSelfRel());
+		
+		return result;
+	}
+	
 	private TodaysWs getRandomTodaysWs(Long ownerIdx) {
 		TodaysWs todaysWs = null;
 		
