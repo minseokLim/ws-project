@@ -56,7 +56,8 @@ public class CommonUtil {
 		setLinkAdvice(model, new Link(lastUri).withRel("last"));
 	}
 
-	/** original에 있는 page 관련 파라미터들을 replace
+	/** 
+	 * original에 있는 page 관련 파라미터들을 replace
 	 * @param original
 	 * @param pageable
 	 * @return page 관련 파라미터들이 replace된 uri string
@@ -69,7 +70,7 @@ public class CommonUtil {
 		builder.replaceQueryParam("size", pageable.getPageSize());
 		
 		try {
-			String result = URLDecoder.decode(builder.build().toUriString(), "UTF-8");
+			String result = URLDecoder.decode(builder.build().toUriString(), "UTF-8"); // 여기서 디코딩을 하지 않으면 인코딩된 url이 반환됨
 			log.debug("result : {}", result);
 			return result;
 		} catch (UnsupportedEncodingException e) {
@@ -78,6 +79,11 @@ public class CommonUtil {
 		}
 	}
 	
+	/**
+	 * DTO 클래스에 링크정보를 주입한다.
+	 * @param dto
+	 * @param link
+	 */
 	public static void setLinkAdvice(RepresentationModel<?> dto, Link link) {
 		String linkStr = link.getHref();
 		log.debug("link : {}", linkStr);
@@ -85,7 +91,8 @@ public class CommonUtil {
 	}
 	
 	/**
-	 * uri에서 baseuri를 zuulsvr의 uri로 변경하는 함수
+	 * uri에서 baseuri를 Zuul server의 uri로 변경하는 함수 <br>
+	 * HATEOAS Link 정보를 받는 클라이언트에서는 Zuul server를 통해서 이 서버에 접근하기 때문에 base uri를 바꿔서 반환할 필요가 있음.
 	 * @param uri
 	 * @return
 	 */
@@ -97,7 +104,8 @@ public class CommonUtil {
 		return uri.replace(currentBaseUri, apiPublicBaseUri + "/" + applicationName);
 	}
 	
-	/** Bean객체를 얻는다
+	/** 
+	 * Bean객체를 얻는다
 	 * @param <T>
 	 * @param classType
 	 * @return Bean 객체
@@ -108,6 +116,12 @@ public class CommonUtil {
 		return applicationContext.getBean(classType);
 	}
 	
+	/**
+	 * SQL query LIKE 조회에 적합하도록 value를 변경 <br>
+	 * 예) "사과" -> "%사과%"
+	 * @param value
+	 * @return
+	 */
 	public static String getLikeStr(String value) {
 		return "%" + value + "%";
 	}

@@ -32,10 +32,17 @@ public class WsPslController {
 	
 	private WsPslService service;
 	
+	/**
+	 * 사용자 명언 리스트 조회
+	 * @param ownerIdx
+	 * @param search
+	 * @param pageable
+	 * @return
+	 */
 	@GetMapping
-	public ResponseEntity<PagedModel<WsPslDto>> selectWsPersonalPage(@PathVariable("ownerIdx") Long ownerIdx, 
+	public ResponseEntity<PagedModel<WsPslDto>> selectWsPslList(@PathVariable("ownerIdx") Long ownerIdx, 
 			@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
-		PagedModel<WsPslDto> result = service.selectWsPsls(ownerIdx, search, pageable);
+		PagedModel<WsPslDto> result = service.selectWsPslList(ownerIdx, search, pageable);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -44,8 +51,14 @@ public class WsPslController {
 		}	
 	}
 	
+	/**
+	 * 사용자 명언 조회
+	 * @param ownerIdx
+	 * @param id
+	 * @return
+	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<WsPslDto> selectWsPersonal(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
+	public ResponseEntity<WsPslDto> selectWsPsl(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
 		WsPslDto result = service.selectWsPsl(ownerIdx, id);
 		
 		if(result != null) {
@@ -55,8 +68,14 @@ public class WsPslController {
 		}
 	}
 	
+	/**
+	 * 사용자 명언 저장
+	 * @param ownerIdx
+	 * @param dto
+	 * @return
+	 */
 	@PostMapping
-	public ResponseEntity<WsPslDto> insertWsPersonal(@PathVariable("ownerIdx") Long ownerIdx, @RequestBody WsPslDto dto) {
+	public ResponseEntity<WsPslDto> insertWsPsl(@PathVariable("ownerIdx") Long ownerIdx, @RequestBody WsPslDto dto) {
 		
 		if(ownerIdx != dto.getOwnerIdx()) {
 			return ResponseEntity.badRequest().build();
@@ -66,8 +85,15 @@ public class WsPslController {
 		return new ResponseEntity<WsPslDto>(result, HttpStatus.CREATED);
 	}
 	
+	/**
+	 * 사용자 명언 수정
+	 * @param ownerIdx
+	 * @param id
+	 * @param dto
+	 * @return
+	 */
 	@PutMapping("/{id}")
-	public ResponseEntity<WsPslDto> updateWsPersonal(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id, @RequestBody WsPslDto dto) {
+	public ResponseEntity<WsPslDto> updateWsPsl(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id, @RequestBody WsPslDto dto) {
 		WsPslDto result = service.updateWsPsl(ownerIdx, id, dto);
 		
 		if(result != null) {
@@ -77,8 +103,14 @@ public class WsPslController {
 		}
 	}
 	
+	/**
+	 * 사용자 명언 삭제
+	 * @param ownerIdx
+	 * @param id
+	 * @return
+	 */
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteWsPersonal(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
+	public ResponseEntity<Void> deleteWsPsl(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
 		
 		boolean result = service.deleteWsPsl(ownerIdx, id);
 		

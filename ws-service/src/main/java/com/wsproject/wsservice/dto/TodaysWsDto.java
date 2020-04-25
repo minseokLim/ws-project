@@ -10,6 +10,11 @@ import com.wsproject.wsservice.domain.enums.WsType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 오늘의 명언 DTO class
+ * @author mslim
+ *
+ */
 @Getter
 @NoArgsConstructor
 public class TodaysWsDto extends RepresentationModel<TodaysWsDto> {

@@ -21,6 +21,11 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import lombok.AllArgsConstructor;
 
+/**
+ * Quartz 속성
+ * @author mslim
+ *
+ */
 @AllArgsConstructor
 @Configuration
 public class QuartzConfig {
@@ -55,7 +60,7 @@ public class QuartzConfig {
 	public Trigger todaysWsJobTrigger() throws ParseException {		
 		CronTriggerFactoryBean trigger = new CronTriggerFactoryBean();
 		trigger.setJobDetail(todaysWsJobDetail());
-		trigger.setCronExpression("10 0 0 * * ?");
+		trigger.setCronExpression("10 0 0 * * ?"); // 매일 0시 10분으로 설정. TODO customProperties로 cron 속성을 뺄 예정
 //		trigger.setCronExpression("0/5 * * * * ?");
 		trigger.setDescription("todaysWsJobTrigger");
 		trigger.afterPropertiesSet();

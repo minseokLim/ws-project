@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Configuration
 @Slf4j
-public class TodaysWsJob {
+public class BatchJob {
 
 	private final JobBuilderFactory jobBuilderFactory;
 	
@@ -35,34 +35,34 @@ public class TodaysWsJob {
 	private TokenInfo tokenInfo;
 		
 	@Bean
-	public Job todayWsJob() throws Exception {
-		return jobBuilderFactory.get("todayWsJob")
-					.start(todayWsStep())
+	public Job todaysWsJob() throws Exception {
+		return jobBuilderFactory.get("todaysWsJob")
+					.start(todaysWsStep())
 					.build();
 	}
 	
 	@Bean
-	public Step todayWsStep() throws Exception {
-		return stepBuilderFactory.get("todayWsStep")
-					.<Long, Long> chunk(1)
-					.faultTolerant().retryLimit(10).retry(Exception.class)
-					.reader(todayWsReader())
+	public Step todaysWsStep() throws Exception {
+		return stepBuilderFactory.get("todaysWsStep")
+					.<Long, Long> chunk(1) // DB를 통해 배치 실행을 하는 것이 아니기 때문에 chunk사이즈는 의미가 없다.
+					.faultTolerant().retryLimit(10).retry(Exception.class) // 배치 실패 시에도 10번까지는 재시도를 한다.
+					.reader(todaysWsReader())
 					.writer(todaysWsWriter())
 					.build();
 	}
 	
 	@Bean
 	@StepScope
-	public QueueItemReader<Long> todayWsReader() throws Exception {
+	public QueueItemReader<Long> todaysWsReader() throws Exception {
 		try {
 			tokenInfo = tokenUtil.getTokenInfo();
-			RestUtil restUtil = RestUtil.builder().url("/user-service/v1.0/users/maxIdx").get().tokenInfo(tokenInfo).build();
-			long maxUserIdx = Long.parseLong(restUtil.exchange().getBody());
+			RestUtil restUtil = RestUtil.builder().url("/user-service/v1.0/users/maxIdx").tokenInfo(tokenInfo).build();
+			long maxUserIdx = Long.parseLong(restUtil.exchange().getBody()); // auto increment로 설정되어있는 userIdx의 최대값을 구한다.
 			List<Long> userIdxList = LongStream.rangeClosed(1, maxUserIdx).mapToObj(Long::new).collect(Collectors.toList());
 			
 			return new QueueItemReader<Long>(userIdxList);
 		} catch (Exception e) {
-			log.info("todayWsReader failed");
+			log.info("todaysWsReader failed");
 			throw e;
 		}
 	}
@@ -75,7 +75,8 @@ public class TodaysWsJob {
 			public void write(List<? extends Long> items) throws Exception {
 				items.forEach(userIdx -> {
 					try {
-						RestUtil restUtil = RestUtil.builder().url("/ws-service/v1.0/users/" + userIdx + "/todaysWs").get().tokenInfo(tokenInfo).build();
+						// 사용자의 오늘의 명언을 리프레쉬한다.
+						RestUtil restUtil = RestUtil.builder().url("/ws-service/v1.0/users/" + userIdx + "/todaysWs").tokenInfo(tokenInfo).build();
 						restUtil.exchange();
 					} catch (Exception e) {
 						log.info("todaysWsWriter failed at userIdx [{}]", userIdx);

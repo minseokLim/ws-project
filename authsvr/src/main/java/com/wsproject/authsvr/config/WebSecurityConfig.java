@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties.Registration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,19 +34,20 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	private SocialAuthenticationSuccessHandler socialAuthenticationSuccessHandler;
+	private SocialAuthenticationSuccessHandler authenticationSuccessHandler;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		CharacterEncodingFilter filter = new CharacterEncodingFilter("UTF-8");
 		
 		http.authorizeRequests()
+							// 인증 없이 접근할 수 있는 url목록
 				.antMatchers("/login/**", "/images/**", "/js/**", "/css/**", "/oauth/**", "/invalidApproach").permitAll()
 				.anyRequest().authenticated()
 			.and()
 				.oauth2Login()
 				.loginPage("/login")
-				.successHandler(socialAuthenticationSuccessHandler)
+				.successHandler(authenticationSuccessHandler)
 			.and()
 				.logout()
 				.logoutUrl("/logout")
@@ -65,6 +67,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 	
+	/**
+	 * OAuth2를 이용하여 로그인할 Social 서비스들의 정보를 인메모리에 저장한다.
+	 * @param oAuth2ClientProperties
+	 * @return
+	 */
 	@Bean
 	public ClientRegistrationRepository clientRegistrationRepository(OAuth2ClientProperties oAuth2ClientProperties) {
 		List<ClientRegistration> registrations = oAuth2ClientProperties.getRegistration().keySet().stream()
@@ -75,8 +82,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new InMemoryClientRegistrationRepository(registrations);
 	}
 	
+	
+	/**
+	 * OAuth2 로그인에 필요한 정보를 Social서비스별로 가져온다.
+	 * @param oAuth2ClientProperties
+	 * @param client
+	 * @return
+	 */
 	private ClientRegistration getRegistration(OAuth2ClientProperties oAuth2ClientProperties, String client) {
-		OAuth2ClientProperties.Registration registration = oAuth2ClientProperties.getRegistration().get(client);
+		Registration registration = oAuth2ClientProperties.getRegistration().get(client);
 		
 		if(FACEBOOK.getValue().equals(client)) {
 			return CommonOAuth2Provider.FACEBOOK.getBuilder(client)

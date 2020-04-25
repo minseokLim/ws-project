@@ -13,6 +13,12 @@ import brave.Tracer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 사후 필터 <br>
+ * 클라이언트로 response를 반환할 때 실행될 필터
+ * @author mslim
+ *
+ */
 @Component
 @AllArgsConstructor
 @Slf4j
@@ -42,7 +48,10 @@ public class PostFilter extends ZuulFilter {
 	public Object run() throws ZuulException {
 		RequestContext ctx = RequestContext.getCurrentContext();
 
+		
 		HttpServletResponse response = ctx.getResponse();
+		
+		// 스프링 클라우드 슬루스에서 사용되는 상관관계 아이디를 전파한다.
 		String traceId = tracer.currentSpan().context().traceIdString();
 		response.addHeader("x-b3-traceid", traceId);
 		

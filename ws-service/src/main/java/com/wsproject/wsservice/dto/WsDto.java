@@ -10,6 +10,11 @@ import com.wsproject.wsservice.domain.enums.WsType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 명언(관리자등록) DTO Class
+ * @author mslim
+ *
+ */
 @Getter
 @NoArgsConstructor
 public class WsDto extends RepresentationModel<WsDto> {

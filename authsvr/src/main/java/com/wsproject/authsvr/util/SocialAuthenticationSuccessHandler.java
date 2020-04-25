@@ -33,6 +33,11 @@ import com.wsproject.authsvr.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * OAuth2로그인이 성공했을 때 실행되는 메소드를 관리하는 class
+ * @author mslim
+ *
+ */
 @Slf4j
 @Component
 @AllArgsConstructor
@@ -42,6 +47,12 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 	
 	private AccessLogService accessLogService;
 	
+	/**
+	 * OAuth2로그인이 성공했을 때 실행되는 메소드 <br>
+	 * 처음 로그인을 하는 경우, 사용자 정보를 DB에 저장한다. <br>
+	 * 각기 다른 Social service로부터 로그인한 사용자들에 대해 <br>
+	 * 인증서버에서 관리하는 key값을 바탕으로 생성된 토큰을 세션에 저장한다.
+	 */
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 		log.info("onAuthenticationSuccess started");
@@ -53,27 +64,35 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         String principal = convertedUser.getPrincipal();
         SocialType socialType = convertedUser.getSocialType();
         
-        Optional<User> foundUser = userService.findByPrincipalAndSocialType(principal, socialType);
+        Optional<User> foundUser = userService.selectUserByPrincipalAndSocialType(principal, socialType);
         
         User user;
         
         if(foundUser.isPresent()) {
         	user = foundUser.get();
         } else {
-        	user = userService.save(convertedUser);
+        	user = userService.insertUser(convertedUser);
         }
         
         Long userIdx = user.getIdx();
+        // 인증서버에서 관리하는 key값(userIdx)을 기반으로 Token을 생성하여 저장
 		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userIdx, "N/A", user.getAuthorities()));
         
+		// 액세스 로그 저장
 		AccessLog accessLog = AccessLog.builder().userIdx(userIdx).ip(CommonUtil.getClientIP(request)).build();
-        accessLogService.save(accessLog);
+        accessLogService.insertAccessLog(accessLog);
         
         super.onAuthenticationSuccess(request, response, authentication);
 		
 		log.info("onAuthenticationSuccess ended");
 	}
 
+	/**
+	 * OAuth2로그인 이후 각기다른 Social 서비스로부터 넘어온 정보를 바탕으로 User 객체를 생성
+	 * @param registrationId
+	 * @param map
+	 * @return
+	 */
 	private User convertUser(String registrationId, Map<String, Object> map) {
 		User.UserBuilder userBuilder = null;
 		
@@ -82,20 +101,20 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     		Object pictureUrl = ((HashMap<String, Object>) ((HashMap<String, Object>) map.get("picture")).get("data")).get("url");
         	
         	userBuilder = User.builder()
-		                    .name(convertObjToStr(map.get("name")))
-		                    .email(convertObjToStr(map.get("email")))
-		                    .principal(convertObjToStr(map.get("id")))
+		                    .name(CommonUtil.convertObjToStr(map.get("name")))
+		                    .email(CommonUtil.convertObjToStr(map.get("email")))
+		                    .principal(CommonUtil.convertObjToStr(map.get("id")))
 		                    .socialType(FACEBOOK)
-		                    .pictureUrl(convertObjToStr(pictureUrl));
+		                    .pictureUrl(CommonUtil.convertObjToStr(pictureUrl));
         	
         } else if(GOOGLE.getValue().equals(registrationId)) {
         	
         	userBuilder = User.builder()
-		                    .name(convertObjToStr(map.get("name")))
-		                    .email(convertObjToStr(map.get("email")))
-		                    .principal(convertObjToStr(map.get(IdTokenClaimNames.SUB)))
+		                    .name(CommonUtil.convertObjToStr(map.get("name")))
+		                    .email(CommonUtil.convertObjToStr(map.get("email")))
+		                    .principal(CommonUtil.convertObjToStr(map.get(IdTokenClaimNames.SUB)))
 		                    .socialType(GOOGLE)
-		                    .pictureUrl(convertObjToStr(map.get("picture")));
+		                    .pictureUrl(CommonUtil.convertObjToStr(map.get("picture")));
         	
         } else if(KAKAO.getValue().equals(registrationId)) {
         	@SuppressWarnings("unchecked")
@@ -103,19 +122,19 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         	
         	userBuilder = User.builder()
 		                    .name(propertyMap.get("nickname"))
-		                    .email(convertObjToStr(map.get("kaccount_email")))
-		                    .principal(convertObjToStr(map.get("id")))
+		                    .email(CommonUtil.convertObjToStr(map.get("kaccount_email")))
+		                    .principal(CommonUtil.convertObjToStr(map.get("id")))
 		                    .socialType(KAKAO)
 		                    .pictureUrl(propertyMap.get("thumbnail_image"));
         	
         } else if(GITHUB.getValue().equals(registrationId)) {
         	
         	userBuilder = User.builder()
-		                    .name(convertObjToStr(map.get("name")))
-		                    .email(convertObjToStr(map.get("email")))
-		                    .principal(convertObjToStr(map.get("id")))
+		                    .name(CommonUtil.convertObjToStr(map.get("name")))
+		                    .email(CommonUtil.convertObjToStr(map.get("email")))
+		                    .principal(CommonUtil.convertObjToStr(map.get("id")))
 		                    .socialType(GITHUB)
-		                    .pictureUrl(convertObjToStr(map.get("avatar_url")));
+		                    .pictureUrl(CommonUtil.convertObjToStr(map.get("avatar_url")));
         } else {
         	return null;
         }
@@ -126,9 +145,5 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 			              .credentialsNonExpired(true)
 			              .enabled(true)
 			              .build();
-    }
-	
-    private String convertObjToStr(Object obj) {
-    	return obj != null ? String.valueOf(obj) : null;
     }
 }

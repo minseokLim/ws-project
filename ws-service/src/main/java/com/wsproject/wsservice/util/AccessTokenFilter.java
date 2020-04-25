@@ -27,5 +27,4 @@ public class AccessTokenFilter implements Filter {
 		
 		chain.doFilter(httpServletRequest, response);
 	}
-
 }

@@ -3,6 +3,11 @@ package com.wsproject.batchservice.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 토큰 정보를 담는 class
+ * @author mslim
+ *
+ */
 @Getter
 @Setter
 public class TokenInfo {
