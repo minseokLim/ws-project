@@ -1,4 +1,4 @@
-package com.wsproject.authsvr.service;
+package com.wsproject.authsvr.service.impl;
 
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,9 +11,9 @@ import com.wsproject.authsvr.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+@AllArgsConstructor
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private UserRepository userRepository;
 	

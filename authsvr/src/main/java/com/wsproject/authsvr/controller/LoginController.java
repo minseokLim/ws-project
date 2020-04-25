@@ -21,6 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class LoginController {
 		
+	/**
+	 * 로그인 페이지로 이동
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@GetMapping(value = "/login")
 	public String login(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -31,13 +37,19 @@ public class LoginController {
 		return "login";
 	}
 	
+	/**
+	 * 유효하지 않은 접근일 때 이동하는 페이지
+	 * @return
+	 */
 	@GetMapping(value = "/invalidApproach")
 	public String invalidApproach() {
 		return "invalidApproach";
 	}
+	
 	/**
 	 * 유효한 접근인지를 판단. <br>
-	 * 클라이언트에서의 호출이 아닌, 인증서버 url을 직접 호출하거나 필요한 파라미터들이 없는 상태로 호출이 될 경우 false를 반환
+	 * 클라이언트에서의 호출이 아닌, 인증서버 url을 직접 호출하거나 <br>
+	 * 필요한 파라미터들이 없는 상태로 호출이 될 경우 false를 반환
 	 * @param request
 	 * @param response
 	 * @return 유효한 접근인지의 여부

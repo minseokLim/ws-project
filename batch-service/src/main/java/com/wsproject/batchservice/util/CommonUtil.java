@@ -9,7 +9,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CommonUtil {
 	
-	/** Bean객체를 얻는다
+	/** 
+	 * Bean객체를 얻는다
 	 * @param <T>
 	 * @param classType
 	 * @return Bean 객체

@@ -12,6 +12,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Access Log 정보를 담는 class
+ * @author mslim
+ *
+ */
 @Entity
 @Getter
 @NoArgsConstructor

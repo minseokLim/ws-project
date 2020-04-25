@@ -34,7 +34,7 @@ public class CustomQuartzJob extends QuartzJobBean {
 			
 			Date today = new Date();
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			String jobID = df.format(today);
+			String jobID = df.format(today); // jobID를 오늘의 날짜로 설정함으로써, 하루에 한 번만 실행이 가능하도록 한다.
 //			String jobID = String.valueOf(System.currentTimeMillis());
 			
 			JobParameters params = new JobParametersBuilder().addString("JobID", jobID).toJobParameters();

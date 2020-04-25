@@ -9,6 +9,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	
 	private static final long MAX_AGE_SECONDS = 3600;
 	
+	/**
+	 * CORS설정을 모두 오픈
+	 */
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")

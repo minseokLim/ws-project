@@ -21,7 +21,6 @@ import com.wsproject.wsservice.util.AccessTokenInterceptor;
 @Configuration
 public class GeneralConfig {
 	
-	
 	/**
 	 * 토큰 전파를 위한 인터셉터가 추가된 RestTemplate
 	 * @return RestTemplate
@@ -42,7 +41,7 @@ public class GeneralConfig {
 	}
 
 //	@Bean
-//	public CommandLineRunner runner(WsRepository wsRepository, WsPslRepository wsPersonalRepository) {
+//	public CommandLineRunner runner(WsRepository wsRepository, WsPslRepository wsPslRepository) {
 //		return args -> {		
 //			for(int i = 1; i <= 200; i++) {
 //				wsRepository.save(Ws.builder()
@@ -52,7 +51,7 @@ public class GeneralConfig {
 //						.build()
 //				);
 //				
-//				wsPersonalRepository.save(WsPsl.builder()
+//				wsPslRepository.save(WsPsl.builder()
 //						.author("개인작가" + i)
 //						.content("너무 완벽하게 하려고 하지 말자" + i)
 //						.ownerIdx((long) (i % 5 + 1))

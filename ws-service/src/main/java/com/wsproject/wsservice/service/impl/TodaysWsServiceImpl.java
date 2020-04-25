@@ -58,7 +58,8 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		
 		LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
 		
-		// 처음 로그인하는 사용자이거나 배치가 돌지 않았을 때(이 로직이 있으면 사실 배치는 필요 없구나...)
+		// 처음 로그인하는 사용자이거나 조회된 데이터가 어제 것일 때
+		// TODO 현재 배치(오늘의 명언 업데이트 배치)는 필요없음. 향후 다른 배치를 추가할 예정
 		if(!data.isPresent() || data.get().getModifiedDate().isBefore(today)) {
 			TodaysWs todaysWs = data.orElse(new TodaysWs());
 			todaysWs.update(getRandomTodaysWs(ownerIdx));
@@ -68,11 +69,11 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 			result = new TodaysWsDto(data.get());
 		}
 		
+		// HATEOAS Link 정보 추가
 		CommonUtil.setLinkAdvice(result, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(ownerIdx)).withSelfRel());
 
 		return result;
 	}
-
 
 	@Override
 	public TodaysWsDto refreshTodaysWs(Long ownerIdx) {
@@ -82,11 +83,17 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		
 		TodaysWsDto result = new TodaysWsDto(todaysWsRepository.save(todaysWs));
 		
+		// HATEOAS Link 정보 추가
 		CommonUtil.setLinkAdvice(result, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(ownerIdx)).withSelfRel());
 		
 		return result;
 	}
 	
+	/**
+	 * 관리자가 추가한 명언 + 사용자가 추가한 명언 중 랜덤으로 오늘의 명언이 선택되어 반환된다.
+	 * @param ownerIdx
+	 * @return
+	 */
 	private TodaysWs getRandomTodaysWs(Long ownerIdx) {
 		TodaysWs todaysWs = null;
 		

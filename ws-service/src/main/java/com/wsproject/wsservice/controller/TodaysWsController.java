@@ -15,8 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author mslim
  * 오늘의 명언 Controller
+ * @author mslim
  */
 @AllArgsConstructor
 @RestController
@@ -37,7 +37,7 @@ public class TodaysWsController {
 		TodaysWsDto result = todaysWsService.selectTodaysWs(ownerIdx);
 		
 		// TODO 불필요한 로직. 토큰 및 상관관계 ID 전파 테스트를 위해 추가
-		RestUtil restUtil = RestUtil.builder().url("/user-service/v1.0/users/maxIdx").get().build();
+		RestUtil restUtil = RestUtil.builder().url("/user-service/v1.0/users/maxIdx").build();
 		ResponseEntity<String> entity = restUtil.exchange();
 		log.debug("작동 잘 됩니끄아. body : " + entity.getBody());
 		
@@ -48,6 +48,11 @@ public class TodaysWsController {
 		}
 	}
 	
+	/**
+	 * 오늘의 명언을 새로고침
+	 * @param ownerIdx
+	 * @return
+	 */
 	@PostMapping
 	public ResponseEntity<TodaysWsDto> refreshTodaysWs(@PathVariable("ownerIdx") Long ownerIdx) {
 		TodaysWsDto result = todaysWsService.refreshTodaysWs(ownerIdx);

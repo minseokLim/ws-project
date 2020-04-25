@@ -21,8 +21,8 @@ import com.wsproject.wsservice.service.WsService;
 import lombok.AllArgsConstructor;;
 
 /**
- * @author mslim
  * 명언(관리자 등록) Controller
+ * @author mslim
  */
 @AllArgsConstructor
 @RestController
@@ -31,9 +31,15 @@ public class WsController {
 		
 	private WsService wsService;
 		
+	/**
+	 * 명언 리스트 조회
+	 * @param search
+	 * @param pageable
+	 * @return
+	 */
 	@GetMapping
-	public ResponseEntity<PagedModel<WsDto>> selectWsPage(@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
-		PagedModel<WsDto> result = wsService.selectWses(search, pageable);
+	public ResponseEntity<PagedModel<WsDto>> selectWsList(@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
+		PagedModel<WsDto> result = wsService.selectWsList(search, pageable);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -42,6 +48,11 @@ public class WsController {
 		}	
 	}
 	
+	/**
+	 * 명언 조회
+	 * @param id
+	 * @return
+	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<WsDto> selectWs(@PathVariable("id") Long id) {
 		WsDto result = wsService.selectWs(id);
@@ -53,12 +64,23 @@ public class WsController {
 		}
 	}
 	
+	/**
+	 * 명언 저장
+	 * @param dto
+	 * @return
+	 */
 	@PostMapping
 	public ResponseEntity<WsDto> insertWs(@RequestBody WsDto dto) {
 		WsDto result = wsService.insertWs(dto);
 		return new ResponseEntity<WsDto>(result, HttpStatus.CREATED);
 	}
 	
+	/**
+	 * 명언 수정
+	 * @param id
+	 * @param dto
+	 * @return
+	 */
 	@PutMapping("/{id}")
 	public ResponseEntity<WsDto> updateWs(@PathVariable("id") Long id, @RequestBody WsDto dto) {
 		WsDto result = wsService.updateWs(id, dto);
@@ -70,6 +92,11 @@ public class WsController {
 		}
 	}
 	
+	/**
+	 * 명언 삭제
+	 * @param id
+	 * @return
+	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteWs(@PathVariable("id") Long id) {
 		boolean result = wsService.deleteWs(id);

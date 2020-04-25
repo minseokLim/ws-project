@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 @Configuration
 @AllArgsConstructor
 @EnableResourceServer
-public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	
 	private CustomProperties properties;
 	
@@ -24,12 +24,12 @@ public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
 			.antMatchers("/v1.0/users/me").access("#oauth2.hasScope('mobile')")
 			.anyRequest().authenticated();
 	}
-	 
+	
 	@Bean
 	public TokenStore tokenStore() {
 	    return new JwtTokenStore(accessTokenConverter());
 	}
-	 
+	
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 	    JwtAccessTokenConverter converter = new JwtAccessTokenConverter();

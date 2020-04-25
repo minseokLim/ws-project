@@ -27,6 +27,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 사용자 정보를 담는 class
+ * @author mslim
+ *
+ */
 @Entity
 @Getter
 @NoArgsConstructor

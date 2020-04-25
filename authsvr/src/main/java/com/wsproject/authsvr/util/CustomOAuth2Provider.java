@@ -5,6 +5,12 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 
+/**
+ * {@link org.springframework.security.config.oauth2.client.CommonOAuth2Provider CommonOAuth2Provider} 에 등록되어 있지 않은<br>
+ * Social 서비스에 OAuth2로그인을 하기 위해, 관련 정보를 관리
+ * @author mslim
+ *
+ */
 public enum CustomOAuth2Provider {
 	 
 	KAKAO {

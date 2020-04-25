@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.wsproject.userservice.domain.User;
-import com.wsproject.userservice.repository.UserRepository;
+import com.wsproject.userservice.service.UserService;
 
 import lombok.AllArgsConstructor;
 
@@ -23,20 +23,26 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/v1.0/users")
 public class UserController {
 	
-	private final UserRepository userRepository;
+	private final UserService userService;
 	
 	private final Gson gson;
 	
+	/**
+	 * 로그인 이후 사용자 정보를 얻기 위해 호출하는 부분
+	 * @param authorizatioin
+	 * @return 로그인 사용자 정보
+	 */
 	@GetMapping("/me")
-	public ResponseEntity<User> getLoginUserInfo(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String header) {
-		String accessToken = header.split(" ")[1];
+	public ResponseEntity<User> selectLoginUser(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String authorizatioin) {
+		String accessToken = authorizatioin.split(" ")[1];
 		String payload = accessToken.split("\\.")[1];
+		
+		// Base64로 인코딩되어 있는 JWT로부터 로그인한 사용자의 userIdx를 추출한다.
 		@SuppressWarnings("unchecked")
 		Map<String, Object> tokenInfo = gson.fromJson(new String(Base64.getDecoder().decode(payload)), Map.class);
-		
 		Long userIdx = Long.parseLong((String) tokenInfo.get("user_name"));
 		
-		Optional<User> user = userRepository.findById(userIdx);
+		Optional<User> user = userService.selectUser(userIdx);
 		
 		if(user.isPresent()) {
 			return new ResponseEntity<User>(user.get(), HttpStatus.OK);
@@ -45,9 +51,12 @@ public class UserController {
 		}
 	}
 	
+	/**
+	 * @return AUTO_INCREMENT로 설정되어 있는 사용자의 ID 중 가장 큰 값을 반환
+	 */
 	@GetMapping("/maxIdx")
 	public ResponseEntity<Long> getMaxUserIdx() {
-		Long maxIdx = userRepository.getMaxUserIdx();
+		Long maxIdx = userService.getMaxUserIdx();
 		
 		return ResponseEntity.ok(maxIdx);
 	}

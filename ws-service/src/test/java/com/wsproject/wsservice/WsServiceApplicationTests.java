@@ -10,7 +10,7 @@ class WsServiceApplicationTests {
 //	private WsController wsController;
 //	
 //	@Autowired
-//	private WsPersonalController wsPersonalController;
+//	private WsPslController wsPslController;
 //	
 //	@Autowired
 //	private ObjectMapper objectMapper;
@@ -19,7 +19,7 @@ class WsServiceApplicationTests {
 //	
 //	@BeforeEach
 //	public void setup() {
-//		mockMvc = MockMvcBuilders.standaloneSetup(wsController, wsPersonalController).build();
+//		mockMvc = MockMvcBuilders.standaloneSetup(wsController, wsPslController).build();
 //	}
 //	
 //	@Test

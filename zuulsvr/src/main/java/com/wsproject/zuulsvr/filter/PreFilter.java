@@ -1,6 +1,8 @@
 package com.wsproject.zuulsvr.filter;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +15,12 @@ import com.wsproject.zuulsvr.constant.FilterType;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 사전 필터 <br>
+ * 클라이언트로 요청이 들어왔을 때 실행될 필터
+ * @author mslim
+ *
+ */
 @Component
 @Slf4j
 public class PreFilter extends ZuulFilter {
@@ -42,18 +50,16 @@ public class PreFilter extends ZuulFilter {
 		
 		log.info("Incoming request for {}", request.getRequestURI());
 		
-		Enumeration<String> keys = request.getParameterNames();
-		
-		// 파라미터가 1개 이상일 때
-		if(keys.hasMoreElements()) {
-			log.debug("===== Parameters start =====");
+		if(log.isDebugEnabled()) {
+			Enumeration<String> keys = request.getParameterNames();
+			List<String> paramStrs = new ArrayList<>();
 			
 			while(keys.hasMoreElements()) {
 				String key = keys.nextElement();
-				log.debug(key + "=" + request.getParameter(key));
+				paramStrs.add(key + "=" + request.getParameter(key));
 			}
 			
-			log.debug("===== Parameters end =====");
+			log.debug("Parameters : {}", String.join(", ", paramStrs));
 		}
 		
 		return null;

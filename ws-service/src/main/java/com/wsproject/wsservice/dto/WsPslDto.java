@@ -10,6 +10,11 @@ import com.wsproject.wsservice.domain.enums.WsType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 명언(사용자등록) DTO Class
+ * @author mslim
+ *
+ */
 @Getter
 @NoArgsConstructor
 public class WsPslDto extends RepresentationModel<WsPslDto> {
@@ -28,14 +33,14 @@ public class WsPslDto extends RepresentationModel<WsPslDto> {
 	
 	private LocalDateTime modifiedDate;
 
-	public WsPslDto(WsPsl wsPersonal) {
-		this.id = wsPersonal.getId();
-		this.content = wsPersonal.getContent();
-		this.author = wsPersonal.getAuthor();
-		this.type = wsPersonal.getType();
-		this.ownerIdx = wsPersonal.getOwnerIdx();
-		this.createdDate = wsPersonal.getCreatedDate();
-		this.modifiedDate = wsPersonal.getModifiedDate();
+	public WsPslDto(WsPsl wsPsl) {
+		this.id = wsPsl.getId();
+		this.content = wsPsl.getContent();
+		this.author = wsPsl.getAuthor();
+		this.type = wsPsl.getType();
+		this.ownerIdx = wsPsl.getOwnerIdx();
+		this.createdDate = wsPsl.getCreatedDate();
+		this.modifiedDate = wsPsl.getModifiedDate();
 	}
 	
 	public WsPsl toEntity() {
