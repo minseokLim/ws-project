@@ -1,2 +1,6 @@
 server:
   port: 8082
+
+# config server에도 custom 속성이 profile별로 있으나, api문서 생성 및 test code 실행 시 해당 속성들이 필요해서 중복으로 추가됨  
+custom:
+  jwt-signkey: "{cipher}73e168f04e3f17ce08518b76f28cbf303a18b6b8700cfb0fcfa1f338f7fc56b6"

@@ -1,0 +1,14 @@
+= 사용자 정보
+
+NOTE: Authorization Header의 형태는 Bearer + " " + accessToken
+
+=== 로그인 사용자 정보 조회
+NOTE: 로그인 후, 인증서버에서 발급받은 토큰에 있는 정보(userIdx)를 바탕으로 사용자 정보를 조회한다.
+include::{snippets}/api-documentation-test/select-login-user/http-request.adoc[]
+include::{snippets}/api-documentation-test/select-login-user/http-response.adoc[]
+include::{snippets}/api-documentation-test/select-login-user/response-fields.adoc[]
+
+=== 사용자 Idx 최대값 조회
+NOTE: Auto Increment방식으로 사용자별로 부여되는 Key 값 중 최대값을 조회
+include::{snippets}/api-documentation-test/get-max-user-idx/http-request.adoc[]
+include::{snippets}/api-documentation-test/get-max-user-idx/http-response.adoc[]

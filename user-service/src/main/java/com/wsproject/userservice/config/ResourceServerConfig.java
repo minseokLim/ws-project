@@ -21,6 +21,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+			.antMatchers("/docs/**").permitAll() // API 문서에 대해서는 모두 접근 가능
 			.antMatchers("/v1.0/users/me").access("#oauth2.hasScope('mobile')")
 			.anyRequest().authenticated();
 	}
