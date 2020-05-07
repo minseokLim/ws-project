@@ -206,7 +206,7 @@ public class ApiDocumentationTest {
 						fieldWithPath("redirect_uri").description(Description.REDIRECT_URI)
 					),
 					responseFields(
-						fieldWithPath("access_token").type(Long.class).description(Description.ACCESS_TOKEN),
+						fieldWithPath("access_token").description(Description.ACCESS_TOKEN),
 						fieldWithPath("token_type").description(Description.TOKEN_TYPE),
 						fieldWithPath("refresh_token").description(Description.REFRESH_TOKEN),
 						fieldWithPath("expires_in").description(Description.EXPIRES_IN),
@@ -238,7 +238,7 @@ public class ApiDocumentationTest {
 						fieldWithPath("refresh_token").description(Description.REFRESH_TOKEN)
 					),
 					responseFields(
-						fieldWithPath("access_token").type(Long.class).description(Description.ACCESS_TOKEN),
+						fieldWithPath("access_token").description(Description.ACCESS_TOKEN),
 						fieldWithPath("token_type").description(Description.TOKEN_TYPE),
 						fieldWithPath("refresh_token").description(Description.REFRESH_TOKEN),
 						fieldWithPath("expires_in").description(Description.EXPIRES_IN),
