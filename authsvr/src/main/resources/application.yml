@@ -21,6 +21,8 @@ spring:
           github:
             client-id: "{cipher}92acbb49cc6115fad6fd4d87df951ce162165174b91b80d977ce1377e911956a62a252c2c2658f9cb9d7484f31b80b24"
             client-secret: "{cipher}689c2a37db0ae94a1e9265937f9a0fdced6208fcbc418f48ce01ef9f9ab57a5fd2da288d180632af20fcb2612a632b9adb0c0d63ff618b0d9f1dbee107eb4260"
+
+# config server에도 custom 속성이 profile별로 있으나, api문서 생성 및 test code 실행 시 해당 속성들이 필요해서 중복으로 추가됨  
 custom:
-  api-private-base-uri: http://localhost:5555/api
+  api-private-base-uri: http://zuulsvr:5555/api
   jwt-signkey: "{cipher}73e168f04e3f17ce08518b76f28cbf303a18b6b8700cfb0fcfa1f338f7fc56b6"

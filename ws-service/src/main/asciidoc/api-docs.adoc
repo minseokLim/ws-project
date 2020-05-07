@@ -1,0 +1,90 @@
+= 오늘의 명언
+
+NOTE: 관리자가 등록한 명언과 사용자가 등록한 명언 중, 임의로 선택된 명언. 매일 자동으로 새로고침 된다. +
+Authorization Header의 형태는 Bearer + " " + accessToken
+
+=== 오늘의 명언 조회
+include::{snippets}/api-documentation-test/select-todays-ws/http-request.adoc[]
+include::{snippets}/api-documentation-test/select-todays-ws/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/select-todays-ws/http-response.adoc[]
+include::{snippets}/api-documentation-test/select-todays-ws/response-fields.adoc[]
+
+=== 오늘의 명언 새로고침
+include::{snippets}/api-documentation-test/refresh-todays-ws/http-request.adoc[]
+include::{snippets}/api-documentation-test/refresh-todays-ws/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/refresh-todays-ws/http-response.adoc[]
+include::{snippets}/api-documentation-test/refresh-todays-ws/response-fields.adoc[]
+
+'''
+
+= 명언 (관리자 등록)
+
+NOTE: 관리자(ADMIN 권한)만 등록할 수 있는 명언. 
+
+=== 명언 (관리자) 리스트 조회
+include::{snippets}/api-documentation-test/select-ws-list/http-request.adoc[]
+include::{snippets}/api-documentation-test/select-ws-list/request-parameters.adoc[]
+include::{snippets}/api-documentation-test/select-ws-list/http-response.adoc[]
+include::{snippets}/api-documentation-test/select-ws-list/response-fields.adoc[]
+
+=== 명언 (관리자) 조회
+include::{snippets}/api-documentation-test/select-ws/http-request.adoc[]
+include::{snippets}/api-documentation-test/select-ws/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/select-ws/http-response.adoc[]
+include::{snippets}/api-documentation-test/select-ws/response-fields.adoc[]
+
+=== 명언 (관리자) 추가
+include::{snippets}/api-documentation-test/insert-ws/http-request.adoc[]
+include::{snippets}/api-documentation-test/insert-ws/request-fields.adoc[]
+include::{snippets}/api-documentation-test/insert-ws/http-response.adoc[]
+include::{snippets}/api-documentation-test/insert-ws/response-fields.adoc[]
+
+=== 명언 (관리자) 수정
+include::{snippets}/api-documentation-test/update-ws/http-request.adoc[]
+include::{snippets}/api-documentation-test/update-ws/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/update-ws/request-fields.adoc[]
+include::{snippets}/api-documentation-test/update-ws/http-response.adoc[]
+include::{snippets}/api-documentation-test/update-ws/response-fields.adoc[]
+
+=== 명언 (관리자) 삭제
+include::{snippets}/api-documentation-test/delete-ws/http-request.adoc[]
+include::{snippets}/api-documentation-test/delete-ws/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/delete-ws/http-response.adoc[]
+
+'''
+
+= 명언 (사용자 등록)
+
+NOTE: 사용자가 등록하는 명언. 등록한 사용자만 조회 가능
+
+=== 명언 (사용자) 리스트 조회
+include::{snippets}/api-documentation-test/select-ws-psl-list/http-request.adoc[]
+include::{snippets}/api-documentation-test/select-ws-psl-list/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/select-ws-psl-list/request-parameters.adoc[]
+include::{snippets}/api-documentation-test/select-ws-psl-list/http-response.adoc[]
+include::{snippets}/api-documentation-test/select-ws-psl-list/response-fields.adoc[]
+
+=== 명언 (사용자) 조회
+include::{snippets}/api-documentation-test/select-ws-psl/http-request.adoc[]
+include::{snippets}/api-documentation-test/select-ws-psl/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/select-ws-psl/http-response.adoc[]
+include::{snippets}/api-documentation-test/select-ws-psl/response-fields.adoc[]
+
+=== 명언 (사용자) 추가
+include::{snippets}/api-documentation-test/insert-ws-psl/http-request.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-psl/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-psl/request-fields.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-psl/http-response.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-psl/response-fields.adoc[]
+
+=== 명언 (사용자) 수정
+include::{snippets}/api-documentation-test/update-ws-psl/http-request.adoc[]
+include::{snippets}/api-documentation-test/update-ws-psl/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/update-ws-psl/request-fields.adoc[]
+include::{snippets}/api-documentation-test/update-ws-psl/http-response.adoc[]
+include::{snippets}/api-documentation-test/update-ws-psl/response-fields.adoc[]
+
+=== 명언 (사용자) 삭제
+include::{snippets}/api-documentation-test/delete-ws-psl/http-request.adoc[]
+include::{snippets}/api-documentation-test/delete-ws-psl/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/delete-ws-psl/http-response.adoc[]

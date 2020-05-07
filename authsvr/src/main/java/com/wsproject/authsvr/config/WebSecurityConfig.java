@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.authorizeRequests()
 							// 인증 없이 접근할 수 있는 url목록
-				.antMatchers("/login/**", "/images/**", "/js/**", "/css/**", "/oauth/**", "/invalidApproach").permitAll()
+				.antMatchers("/login/**", "/images/**", "/js/**", "/css/**", "/oauth/**", "/invalidApproach", "/docs/**").permitAll()
 				.anyRequest().authenticated()
 			.and()
 				.oauth2Login()
