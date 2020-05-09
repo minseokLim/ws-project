@@ -39,6 +39,7 @@ public class RestUtil {
 	}
 	
 	/**
+	 * RestTemplate과 객체에 있는 정보를 기반으로 http 요청을 한다. <br>
 	 * ResponseEntity에 담길 body의 class가 지정이 안 될 경우 String
 	 * @return 리스판스
 	 */
