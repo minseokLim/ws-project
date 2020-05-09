@@ -147,7 +147,7 @@ public class ApiDocumentationTest {
 		public static final String TOKEN_TYPE = "토큰 종류";
 		public static final String REFRESH_TOKEN = "리프레쉬 토큰. 토큰이 만료되었을 때, 토큰 재발급에 쓰임.";
 		public static final String EXPIRES_IN = "토큰 유효 시간(초)";
-		public static final String SCOPE = "요청하는 접근 범위 (현재 mobile, admin 두 종류)";
+		public static final String SCOPE = "요청하는 접근 범위 (현재 mobile만 있음)";
 		public static final String JTI = "JWT의 고유 식별자로서, 주로 중복적인 처리를 방지하기 위하여 사용.";
 		public static final String RESPONSE_TYPE = "Authorization_code 그랜트 타입을 사용한다는 것을 나타내기 위한 파라미터. code로 셋팅되어야 한다";
 		public static final String CLIENT_ID = "Client를 식별하기 위한 ID";

@@ -52,7 +52,7 @@ public class TokenUtil {
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
 		
 		params.add("grant_type", "password");
-		params.add("scope", "admin");
+		params.add("scope", "mobile");
 		params.add("username", "1");
 		params.add("password", properties.getAdminPassword());
 		
