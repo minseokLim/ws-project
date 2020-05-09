@@ -38,11 +38,21 @@ public class RestUtil {
 		this.bodyParam = bodyParam;
 	}
 	
-	/** 
-	 * RestTemplate과 객체에 있는 정보를 기반으로 http 요청을 한다.
+	/**
+	 * ResponseEntity에 담길 body의 class가 지정이 안 될 경우 String
 	 * @return 리스판스
 	 */
 	public ResponseEntity<String> exchange() {
+		return exchange(String.class);
+	}
+	
+	/**
+	 * RestTemplate과 객체에 있는 정보를 기반으로 http 요청을 한다.
+	 * @param <T>
+	 * @param clazz ResponseEntity에 담길 body의 class
+	 * @return 리스판스
+	 */
+	public <T> ResponseEntity<T> exchange(Class<T> clazz) {
 		log.info("exchange started - url : {}", url);
 		CustomProperties properties = CommonUtil.getBean(CustomProperties.class);
 		
@@ -55,7 +65,7 @@ public class RestUtil {
 		
 		RestTemplate restTemplate = CommonUtil.getBean(RestTemplate.class);
 		
-		ResponseEntity<String> result = restTemplate.exchange(builder.toUriString(), method, entity, String.class);
+		ResponseEntity<T> result = restTemplate.exchange(builder.toUriString(), method, entity, clazz);
 		
 		log.info("exchange ended - url : {}", url);
 		return result;

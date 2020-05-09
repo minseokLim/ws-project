@@ -57,7 +57,7 @@ public class BatchJob {
 		try {
 			tokenInfo = tokenUtil.getTokenInfo();
 			RestUtil restUtil = RestUtil.builder().url("/user-service/v1.0/users/maxIdx").tokenInfo(tokenInfo).build();
-			long maxUserIdx = Long.parseLong(restUtil.exchange().getBody()); // auto increment로 설정되어있는 userIdx의 최대값을 구한다.
+			long maxUserIdx = restUtil.exchange(Long.class).getBody(); // auto increment로 설정되어있는 userIdx의 최대값을 구한다.
 			List<Long> userIdxList = LongStream.rangeClosed(1, maxUserIdx).mapToObj(Long::new).collect(Collectors.toList());
 			
 			return new QueueItemReader<Long>(userIdxList);

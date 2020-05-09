@@ -132,7 +132,7 @@ public class ApiDocumentationTest {
 						fieldWithPath("pictureUrl").description(Description.PICTURE_URL),
 						fieldWithPath("uid").description(Description.UID),
 						fieldWithPath("roles").description(Description.AUTHORITY),
-						fieldWithPath("authorities[].authority").description(Description.AUTHORITY),
+//						fieldWithPath("authorities[].authority").description(Description.AUTHORITY),
 						fieldWithPath("createdDate").type(LocalDateTime.class).description(Description.CREATED_DATE),
 						fieldWithPath("modifiedDate").type(LocalDateTime.class).description(Description.MODIFIED_DATE)
 					)
