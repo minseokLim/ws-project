@@ -5,12 +5,10 @@ import javax.annotation.PostConstruct;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.google.gson.Gson;
 import com.wsproject.batchservice.config.CustomProperties;
 import com.wsproject.batchservice.dto.TokenInfo;
 import com.wsproject.batchservice.util.RestUtil.RestUtilBuilder;
@@ -27,8 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 public class TokenUtil {
-	
-	private final Gson gson;
 	
 	private final CustomProperties properties;
 	
@@ -60,9 +56,7 @@ public class TokenUtil {
 		params.add("username", "1");
 		params.add("password", properties.getAdminPassword());
 		
-		ResponseEntity<String> responseEntity = restUtilBuilder.bodyParam(params).build().exchange();
-		
-		TokenInfo tokenInfo = gson.fromJson(responseEntity.getBody(), TokenInfo.class);
+		TokenInfo tokenInfo = restUtilBuilder.bodyParam(params).build().exchange(TokenInfo.class).getBody();
 		
 		log.info("getTokenInfo ended");
 		return tokenInfo;
