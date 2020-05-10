@@ -12,20 +12,23 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import lombok.AllArgsConstructor;
 
+/**
+ * 로컬에서 인증서버 영향없이 테스트하기 위해 추가
+ * @author mslim
+ *
+ */
 @Configuration
-@Profile("!local")
+@Profile("local")
 @AllArgsConstructor
 @EnableResourceServer
-public class ResourceServerConfig  extends ResourceServerConfigurerAdapter {
+public class ResourceServerConfig_local  extends ResourceServerConfigurerAdapter {
 	
 	private CustomProperties properties;
 	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.antMatchers("/docs/**").permitAll() // API 문서에 대해서는 모두 접근 가능
-			.antMatchers("/v1.0/wses/**").hasRole("ADMIN") // 관리자만 명언서비스(각 사용자별 명언이 아닌 모든 사용자에게 노출되는 명언)에 접근할 수 있음
-			.anyRequest().authenticated();
+			.anyRequest().permitAll();
 	}
 	 
 	@Bean
