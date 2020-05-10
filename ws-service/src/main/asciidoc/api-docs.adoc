@@ -17,6 +17,25 @@ include::{snippets}/api-documentation-test/refresh-todays-ws/response-fields.ado
 
 '''
 
+= 좋아요 기능
+
+NOTE: 명언에 대해서 사용자가 좋아요 표시를 할 수 있다.
+
+=== 좋아요 표시
+include::{snippets}/api-documentation-test/insert-like/http-request.adoc[]
+include::{snippets}/api-documentation-test/insert-like/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/insert-like/request-fields.adoc[]
+include::{snippets}/api-documentation-test/insert-like/http-response.adoc[]
+include::{snippets}/api-documentation-test/insert-like/response-fields.adoc[]
+
+== 좋아요 해제
+include::{snippets}/api-documentation-test/delete-like/http-request.adoc[]
+include::{snippets}/api-documentation-test/delete-like/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/delete-like/request-fields.adoc[]
+include::{snippets}/api-documentation-test/delete-like/http-response.adoc[]
+
+'''
+
 = 명언 (관리자 등록)
 
 NOTE: 관리자(ADMIN 권한)만 등록할 수 있는 명언. 
