@@ -39,6 +39,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.google.gson.GsonBuilder;
+import com.wsproject.wsservice.domain.LikeId;
 import com.wsproject.wsservice.domain.Ws;
 import com.wsproject.wsservice.domain.WsPsl;
 import com.wsproject.wsservice.domain.enums.WsType;
@@ -155,6 +156,9 @@ public class ApiDocumentationTest {
 		private static final String SELF_DETAIL_HREF = "명언 상세 조회 링크";
 		
 		private static final String USER_IDX = "사용자별로 부여되는 고유한 Key Value";
+		private static final String WS_ID = "명언 Key Value";
+		private static final String PSL = "사용자가 등록한 명언인지의 여부 (true: 사용자 등록, false: 관리자 등록)";
+		private static final String LIKED = "사용자가 해당 명언에 대해 좋아요를 눌렀는지의 여부";
 	}
 	
 	@Test
@@ -174,6 +178,9 @@ public class ApiDocumentationTest {
 						fieldWithPath("content").description(Description.CONTENT),
 						fieldWithPath("author").description(Description.AUTHOR),
 						fieldWithPath("type").description(Description.TYPE),
+						fieldWithPath("wsId").description(Description.WS_ID),
+						fieldWithPath("psl").description(Description.PSL),
+						fieldWithPath("liked").description(Description.LIKED),
 						fieldWithPath("createdDate").type(LocalDateTime.class).description(Description.CREATED_DATE),
 						fieldWithPath("modifiedDate").type(LocalDateTime.class).description(Description.MODIFIED_DATE),
 						fieldWithPath("_links.self.href").description(Description.SELF_DETAIL_HREF)
@@ -205,6 +212,9 @@ public class ApiDocumentationTest {
 					fieldWithPath("content").description(Description.CONTENT),
 					fieldWithPath("author").description(Description.AUTHOR),
 					fieldWithPath("type").description(Description.TYPE),
+					fieldWithPath("wsId").description(Description.WS_ID),
+					fieldWithPath("psl").description(Description.PSL),
+					fieldWithPath("liked").description(Description.LIKED),
 					fieldWithPath("createdDate").type(LocalDateTime.class).description(Description.CREATED_DATE),
 					fieldWithPath("modifiedDate").type(LocalDateTime.class).description(Description.MODIFIED_DATE),
 					fieldWithPath("_links.self.href").description(Description.SELF_DETAIL_HREF)
@@ -219,6 +229,76 @@ public class ApiDocumentationTest {
 			.andExpect(jsonPath("_links", is(notNullValue())));
 	}
 	
+	@Test
+	public void insertLike() throws Exception {
+		LikeId like = LikeId.builder().wsId(1L).psl(false).userIdx(1L).build();
+		
+		String jsonString = gsonBuilder.setPrettyPrinting().create().toJson(like);
+		
+		mockMvc.perform(
+					post("/v1.0/users/{userIdx}/wses/like", 1)
+					.header(HttpHeaders.AUTHORIZATION, AUTH_HEADER)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(jsonString)
+					.accept(MediaType.APPLICATION_JSON))
+				.andDo(print())
+				.andExpect(status().isCreated())
+				.andDo(document.document(
+					pathParameters(
+						parameterWithName("userIdx").description(Description.USER_IDX)
+					),
+					requestFields(
+						fieldWithPath("wsId").type(Long.class).description(Description.WS_ID),
+						fieldWithPath("psl").description(Description.PSL),
+						fieldWithPath("userIdx").type(Long.class).description(Description.USER_IDX)
+					),
+					responseFields(
+						fieldWithPath("wsId").type(Long.class).description(Description.WS_ID),
+						fieldWithPath("psl").description(Description.PSL),
+						fieldWithPath("userIdx").type(Long.class).description(Description.USER_IDX),
+						fieldWithPath("createdDate").type(LocalDateTime.class).description(Description.CREATED_DATE),
+						fieldWithPath("modifiedDate").type(LocalDateTime.class).description(Description.MODIFIED_DATE)
+					)
+				))
+				.andExpect(jsonPath("wsId", is(notNullValue())))
+				.andExpect(jsonPath("psl", is(notNullValue())))
+				.andExpect(jsonPath("userIdx", is(notNullValue())))
+				.andExpect(jsonPath("createdDate", is(notNullValue())))
+				.andExpect(jsonPath("modifiedDate", is(notNullValue())));
+	}
+	
+	@Test
+	public void deleteLike() throws Exception {
+		LikeId like = LikeId.builder().wsId(1L).psl(true).userIdx(2L).build();
+		String jsonString = gsonBuilder.setPrettyPrinting().create().toJson(like);
+		
+		mockMvc.perform(
+					post("/v1.0/users/{userIdx}/wses/like", 2)
+					.header(HttpHeaders.AUTHORIZATION, AUTH_HEADER)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(jsonString)
+					.accept(MediaType.APPLICATION_JSON));
+		
+		mockMvc.perform(
+					delete("/v1.0/users/{userIdx}/wses/like", 2)
+					.header(HttpHeaders.AUTHORIZATION, AUTH_HEADER)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(jsonString)
+					.accept(MediaType.APPLICATION_JSON))
+				.andDo(print())
+				.andExpect(status().isNoContent())
+				.andDo(document.document(
+					pathParameters(
+						parameterWithName("userIdx").description(Description.USER_IDX)
+					),
+					requestFields(
+						fieldWithPath("wsId").type(Long.class).description(Description.WS_ID),
+						fieldWithPath("psl").description(Description.PSL),
+						fieldWithPath("userIdx").type(Long.class).description(Description.USER_IDX)
+					)
+				));
+	}
+
 	@Test
 	public void selectWsList() throws Exception {
 		mockMvc.perform(

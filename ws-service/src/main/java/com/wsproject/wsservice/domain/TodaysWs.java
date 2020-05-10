@@ -30,12 +30,18 @@ public class TodaysWs extends BaseTimeEntity {
 	
 	private WsType type;
 	
+	private Long wsId; // 명언 ID
+	
+	private boolean psl; // 사용자가 등록한 명언인지의 여부
+	
 	@Builder
-	public TodaysWs(Long userIdx, String content, String author, WsType type) {
+	public TodaysWs(Long userIdx, String content, String author, WsType type, Long wsId, boolean psl) {
 		this.userIdx = userIdx;
 		this.content = content;
 		this.author = author;
 		this.type = type;
+		this.wsId = wsId;
+		this.psl = psl;
 	}
 	
 	public void update(TodaysWs todaysWs) {
@@ -43,5 +49,7 @@ public class TodaysWs extends BaseTimeEntity {
 		this.content = todaysWs.getContent();
 		this.author = todaysWs.getAuthor();
 		this.type = todaysWs.getType();
-	}
+		this.wsId = todaysWs.getWsId();
+		this.psl = todaysWs.isPsl();
+	}	
 }

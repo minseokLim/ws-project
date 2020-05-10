@@ -11,10 +11,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.wsproject.wsservice.controller.TodaysWsController;
+import com.wsproject.wsservice.domain.Like;
+import com.wsproject.wsservice.domain.LikeId;
 import com.wsproject.wsservice.domain.TodaysWs;
 import com.wsproject.wsservice.domain.Ws;
 import com.wsproject.wsservice.domain.WsPsl;
 import com.wsproject.wsservice.dto.TodaysWsDto;
+import com.wsproject.wsservice.repository.LikeRepository;
 import com.wsproject.wsservice.repository.TodaysWsRepository;
 import com.wsproject.wsservice.repository.WsPslRepository;
 import com.wsproject.wsservice.repository.WsRepository;
@@ -35,6 +38,8 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 	private WsRepository wsRepository;
 	
 	private WsPslRepository wsPslRepository;
+	
+	private LikeRepository likeRepository;
 	
 	private Tracer tracer;
 	
@@ -69,6 +74,9 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 			result = new TodaysWsDto(data.get());
 		}
 		
+		// TODO 원래 JPA의 연관관계 매핑을 통해 처리해야할 것 같으나 JPA 지식이 짧은 관계로 일단 이렇게 처리한 후 나중에 공부해서 바꿀 예정
+		result.setLiked(isLiked(result));
+		
 		// HATEOAS Link 정보 추가
 		CommonUtil.setLinkAdvice(result, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(ownerIdx)).withSelfRel());
 
@@ -83,6 +91,9 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		
 		TodaysWsDto result = new TodaysWsDto(todaysWsRepository.save(todaysWs));
 		
+		// TODO 원래 JPA의 연관관계 매핑을 통해 처리해야할 것 같으나 JPA 지식이 짧은 관계로 일단 이렇게 처리한 후 나중에 공부해서 바꿀 예정
+		result.setLiked(isLiked(result));
+				
 		// HATEOAS Link 정보 추가
 		CommonUtil.setLinkAdvice(result, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(ownerIdx)).withSelfRel());
 		
@@ -108,17 +119,31 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 			
 			if(page.getSize() != 0) {
 				Ws ws = page.getContent().get(0);
-				todaysWs = TodaysWs.builder().userIdx(ownerIdx).content(ws.getContent()).author(ws.getAuthor()).type(ws.getType()).build();
+				todaysWs = TodaysWs.builder().userIdx(ownerIdx).content(ws.getContent()).author(ws.getAuthor()).type(ws.getType()).wsId(ws.getId()).psl(false).build();
 			} 
 		} else {
 			Page<WsPsl> page  = wsPslRepository.findByOwnerIdx(ownerIdx, PageRequest.of((int) (randomNo - wsCount), 1));
 			
 			if(page.getSize() != 0) {
 				WsPsl wsPsl = page.getContent().get(0);
-				todaysWs = TodaysWs.builder().userIdx(ownerIdx).content(wsPsl.getContent()).author(wsPsl.getAuthor()).type(wsPsl.getType()).build();
+				todaysWs = TodaysWs.builder().userIdx(ownerIdx).content(wsPsl.getContent()).author(wsPsl.getAuthor()).type(wsPsl.getType()).wsId(wsPsl.getId()).psl(true).build();
 			} 
 		}
 		
 		return todaysWs;
+	}
+	
+	private boolean isLiked(TodaysWsDto dto) {
+		boolean ret = false;
+		
+		LikeId likeId = LikeId.builder().wsId(dto.getWsId()).psl(dto.isPsl()).userIdx(dto.getUserIdx()).build();
+		
+		Optional<Like> like = likeRepository.findById(likeId);
+		
+		if(like.isPresent()) {
+			ret = true;
+		}
+		
+		return ret;
 	}
 }
