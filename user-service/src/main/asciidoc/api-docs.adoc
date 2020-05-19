@@ -8,7 +8,7 @@ include::{snippets}/api-documentation-test/select-login-user/http-request.adoc[]
 include::{snippets}/api-documentation-test/select-login-user/http-response.adoc[]
 include::{snippets}/api-documentation-test/select-login-user/response-fields.adoc[]
 
-=== 사용자 Idx 최대값 조회
-NOTE: Auto Increment방식으로 사용자별로 부여되는 Key 값 중 최대값을 조회
-include::{snippets}/api-documentation-test/get-max-user-idx/http-request.adoc[]
-include::{snippets}/api-documentation-test/get-max-user-idx/http-response.adoc[]
+// === 사용자 Idx 최대값 조회
+// NOTE: Auto Increment방식으로 사용자별로 부여되는 Key 값 중 최대값을 조회
+// include::{snippets}/api-documentation-test/get-max-user-idx/http-request.adoc[]
+// include::{snippets}/api-documentation-test/get-max-user-idx/http-response.adoc[]

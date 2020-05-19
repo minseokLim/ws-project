@@ -145,12 +145,12 @@ public class ApiDocumentationTest {
 				.andExpect(jsonPath("modifiedDate", is(notNullValue())));
 	}
 	
-	@Test
-	public void getMaxUserIdx() throws Exception {
-		mockMvc.perform(
-					get("/v1.0/users/maxIdx")
-					.header(HttpHeaders.AUTHORIZATION, AUTH_HEADER))
-				.andDo(print())
-				.andExpect(status().isOk());
-	}
+//	@Test
+//	public void getMaxUserIdx() throws Exception {
+//		mockMvc.perform(
+//					get("/v1.0/users/maxIdx")
+//					.header(HttpHeaders.AUTHORIZATION, AUTH_HEADER))
+//				.andDo(print())
+//				.andExpect(status().isOk());
+//	}
 }
