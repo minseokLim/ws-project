@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wsproject.wsservice.dto.WsPslDto;
-import com.wsproject.wsservice.service.WsPslService;
+import com.wsproject.wsservice.dto.WsPrivateRequestDto;
+import com.wsproject.wsservice.dto.WsPrivateResponseDto;
+import com.wsproject.wsservice.service.WsPrivateService;
 
 import lombok.AllArgsConstructor;
 
@@ -28,9 +29,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/v1.0/users/{ownerIdx}/wses")
-public class WsPslController {
+public class WsPrivateController {
 	
-	private WsPslService service;
+	private WsPrivateService wsPrivateService;
 	
 	/**
 	 * 사용자 명언 리스트 조회
@@ -40,14 +41,14 @@ public class WsPslController {
 	 * @return
 	 */
 	@GetMapping
-	public ResponseEntity<PagedModel<WsPslDto>> selectWsPslList(@PathVariable("ownerIdx") Long ownerIdx, 
+	public ResponseEntity<PagedModel<WsPrivateResponseDto>> selectWsPrivateList(@PathVariable("ownerIdx") Long ownerIdx, 
 			@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
-		PagedModel<WsPslDto> result = service.selectWsPslList(ownerIdx, search, pageable);
+		PagedModel<WsPrivateResponseDto> result = wsPrivateService.selectWsPrivateList(ownerIdx, search, pageable);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
 		} else {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.notFound().build();
 		}	
 	}
 	
@@ -58,8 +59,8 @@ public class WsPslController {
 	 * @return
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<WsPslDto> selectWsPsl(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
-		WsPslDto result = service.selectWsPsl(ownerIdx, id);
+	public ResponseEntity<WsPrivateResponseDto> selectWsPrivate(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
+		WsPrivateResponseDto result = wsPrivateService.selectWsPrivate(ownerIdx, id);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -75,14 +76,17 @@ public class WsPslController {
 	 * @return
 	 */
 	@PostMapping
-	public ResponseEntity<WsPslDto> insertWsPsl(@PathVariable("ownerIdx") Long ownerIdx, @RequestBody WsPslDto dto) {
+	public ResponseEntity<WsPrivateResponseDto> insertWsPrivate(@PathVariable("ownerIdx") Long ownerIdx, @RequestBody WsPrivateRequestDto dto) {
 		
-		if(ownerIdx != dto.getOwnerIdx()) {
+		if(dto.getOwnerIdx() == null) {
+			dto.setOwnerIdx(ownerIdx);
+		} else if(!dto.getOwnerIdx().equals(ownerIdx)) {
 			return ResponseEntity.badRequest().build();
 		}
 		
-		WsPslDto result = service.insertWsPsl(dto);
-		return new ResponseEntity<WsPslDto>(result, HttpStatus.CREATED);
+		WsPrivateResponseDto result = wsPrivateService.insertWsPrivate(dto);
+		
+		return new ResponseEntity<WsPrivateResponseDto>(result, HttpStatus.CREATED);
 	}
 	
 	/**
@@ -93,8 +97,15 @@ public class WsPslController {
 	 * @return
 	 */
 	@PutMapping("/{id}")
-	public ResponseEntity<WsPslDto> updateWsPsl(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id, @RequestBody WsPslDto dto) {
-		WsPslDto result = service.updateWsPsl(ownerIdx, id, dto);
+	public ResponseEntity<WsPrivateResponseDto> updateWsPrivate(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id, @RequestBody WsPrivateRequestDto dto) {
+		
+		if(dto.getOwnerIdx() == null) {
+			dto.setOwnerIdx(ownerIdx);
+		} else if(!dto.getOwnerIdx().equals(ownerIdx)) {
+			return ResponseEntity.badRequest().build();
+		}
+		
+		WsPrivateResponseDto result = wsPrivateService.updateWsPrivate(ownerIdx, id, dto);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -110,14 +121,9 @@ public class WsPslController {
 	 * @return
 	 */
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteWsPsl(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
+	public ResponseEntity<Void> deleteWsPrivate(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
+		wsPrivateService.deleteWsPrivate(ownerIdx, id);
 		
-		boolean result = service.deleteWsPsl(ownerIdx, id);
-		
-		if(result) {
-			return ResponseEntity.noContent().build();
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		return ResponseEntity.noContent().build();
 	}
 }

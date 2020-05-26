@@ -24,14 +24,13 @@ NOTE: 명언에 대해서 사용자가 좋아요 표시를 할 수 있다.
 === 좋아요 표시
 include::{snippets}/api-documentation-test/insert-like/http-request.adoc[]
 include::{snippets}/api-documentation-test/insert-like/path-parameters.adoc[]
-include::{snippets}/api-documentation-test/insert-like/request-fields.adoc[]
+include::{snippets}/api-documentation-test/insert-like/request-parameters.adoc[]
 include::{snippets}/api-documentation-test/insert-like/http-response.adoc[]
-include::{snippets}/api-documentation-test/insert-like/response-fields.adoc[]
 
 == 좋아요 해제
 include::{snippets}/api-documentation-test/delete-like/http-request.adoc[]
 include::{snippets}/api-documentation-test/delete-like/path-parameters.adoc[]
-include::{snippets}/api-documentation-test/delete-like/request-fields.adoc[]
+include::{snippets}/api-documentation-test/delete-like/request-parameters.adoc[]
 include::{snippets}/api-documentation-test/delete-like/http-response.adoc[]
 
 '''
@@ -41,34 +40,34 @@ include::{snippets}/api-documentation-test/delete-like/http-response.adoc[]
 NOTE: 관리자(ADMIN 권한)만 등록할 수 있는 명언. 
 
 === 명언 (관리자) 리스트 조회
-include::{snippets}/api-documentation-test/select-ws-list/http-request.adoc[]
-include::{snippets}/api-documentation-test/select-ws-list/request-parameters.adoc[]
-include::{snippets}/api-documentation-test/select-ws-list/http-response.adoc[]
-include::{snippets}/api-documentation-test/select-ws-list/response-fields.adoc[]
+include::{snippets}/api-documentation-test/select-ws-admin-list/http-request.adoc[]
+include::{snippets}/api-documentation-test/select-ws-admin-list/request-parameters.adoc[]
+include::{snippets}/api-documentation-test/select-ws-admin-list/http-response.adoc[]
+include::{snippets}/api-documentation-test/select-ws-admin-list/response-fields.adoc[]
 
 === 명언 (관리자) 조회
-include::{snippets}/api-documentation-test/select-ws/http-request.adoc[]
-include::{snippets}/api-documentation-test/select-ws/path-parameters.adoc[]
-include::{snippets}/api-documentation-test/select-ws/http-response.adoc[]
-include::{snippets}/api-documentation-test/select-ws/response-fields.adoc[]
+include::{snippets}/api-documentation-test/select-ws-admin/http-request.adoc[]
+include::{snippets}/api-documentation-test/select-ws-admin/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/select-ws-admin/http-response.adoc[]
+include::{snippets}/api-documentation-test/select-ws-admin/response-fields.adoc[]
 
 === 명언 (관리자) 추가
-include::{snippets}/api-documentation-test/insert-ws/http-request.adoc[]
-include::{snippets}/api-documentation-test/insert-ws/request-fields.adoc[]
-include::{snippets}/api-documentation-test/insert-ws/http-response.adoc[]
-include::{snippets}/api-documentation-test/insert-ws/response-fields.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-admin/http-request.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-admin/request-fields.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-admin/http-response.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-admin/response-fields.adoc[]
 
 === 명언 (관리자) 수정
-include::{snippets}/api-documentation-test/update-ws/http-request.adoc[]
-include::{snippets}/api-documentation-test/update-ws/path-parameters.adoc[]
-include::{snippets}/api-documentation-test/update-ws/request-fields.adoc[]
-include::{snippets}/api-documentation-test/update-ws/http-response.adoc[]
-include::{snippets}/api-documentation-test/update-ws/response-fields.adoc[]
+include::{snippets}/api-documentation-test/update-ws-admin/http-request.adoc[]
+include::{snippets}/api-documentation-test/update-ws-admin/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/update-ws-admin/request-fields.adoc[]
+include::{snippets}/api-documentation-test/update-ws-admin/http-response.adoc[]
+include::{snippets}/api-documentation-test/update-ws-admin/response-fields.adoc[]
 
 === 명언 (관리자) 삭제
-include::{snippets}/api-documentation-test/delete-ws/http-request.adoc[]
-include::{snippets}/api-documentation-test/delete-ws/path-parameters.adoc[]
-include::{snippets}/api-documentation-test/delete-ws/http-response.adoc[]
+include::{snippets}/api-documentation-test/delete-ws-admin/http-request.adoc[]
+include::{snippets}/api-documentation-test/delete-ws-admin/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/delete-ws-admin/http-response.adoc[]
 
 '''
 
@@ -77,33 +76,33 @@ include::{snippets}/api-documentation-test/delete-ws/http-response.adoc[]
 NOTE: 사용자가 등록하는 명언. 등록한 사용자만 조회 가능
 
 === 명언 (사용자) 리스트 조회
-include::{snippets}/api-documentation-test/select-ws-psl-list/http-request.adoc[]
-include::{snippets}/api-documentation-test/select-ws-psl-list/path-parameters.adoc[]
-include::{snippets}/api-documentation-test/select-ws-psl-list/request-parameters.adoc[]
-include::{snippets}/api-documentation-test/select-ws-psl-list/http-response.adoc[]
-include::{snippets}/api-documentation-test/select-ws-psl-list/response-fields.adoc[]
+include::{snippets}/api-documentation-test/select-ws-private-list/http-request.adoc[]
+include::{snippets}/api-documentation-test/select-ws-private-list/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/select-ws-private-list/request-parameters.adoc[]
+include::{snippets}/api-documentation-test/select-ws-private-list/http-response.adoc[]
+include::{snippets}/api-documentation-test/select-ws-private-list/response-fields.adoc[]
 
 === 명언 (사용자) 조회
-include::{snippets}/api-documentation-test/select-ws-psl/http-request.adoc[]
-include::{snippets}/api-documentation-test/select-ws-psl/path-parameters.adoc[]
-include::{snippets}/api-documentation-test/select-ws-psl/http-response.adoc[]
-include::{snippets}/api-documentation-test/select-ws-psl/response-fields.adoc[]
+include::{snippets}/api-documentation-test/select-ws-private/http-request.adoc[]
+include::{snippets}/api-documentation-test/select-ws-private/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/select-ws-private/http-response.adoc[]
+include::{snippets}/api-documentation-test/select-ws-private/response-fields.adoc[]
 
 === 명언 (사용자) 추가
-include::{snippets}/api-documentation-test/insert-ws-psl/http-request.adoc[]
-include::{snippets}/api-documentation-test/insert-ws-psl/path-parameters.adoc[]
-include::{snippets}/api-documentation-test/insert-ws-psl/request-fields.adoc[]
-include::{snippets}/api-documentation-test/insert-ws-psl/http-response.adoc[]
-include::{snippets}/api-documentation-test/insert-ws-psl/response-fields.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-private/http-request.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-private/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-private/request-fields.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-private/http-response.adoc[]
+include::{snippets}/api-documentation-test/insert-ws-private/response-fields.adoc[]
 
 === 명언 (사용자) 수정
-include::{snippets}/api-documentation-test/update-ws-psl/http-request.adoc[]
-include::{snippets}/api-documentation-test/update-ws-psl/path-parameters.adoc[]
-include::{snippets}/api-documentation-test/update-ws-psl/request-fields.adoc[]
-include::{snippets}/api-documentation-test/update-ws-psl/http-response.adoc[]
-include::{snippets}/api-documentation-test/update-ws-psl/response-fields.adoc[]
+include::{snippets}/api-documentation-test/update-ws-private/http-request.adoc[]
+include::{snippets}/api-documentation-test/update-ws-private/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/update-ws-private/request-fields.adoc[]
+include::{snippets}/api-documentation-test/update-ws-private/http-response.adoc[]
+include::{snippets}/api-documentation-test/update-ws-private/response-fields.adoc[]
 
 === 명언 (사용자) 삭제
-include::{snippets}/api-documentation-test/delete-ws-psl/http-request.adoc[]
-include::{snippets}/api-documentation-test/delete-ws-psl/path-parameters.adoc[]
-include::{snippets}/api-documentation-test/delete-ws-psl/http-response.adoc[]
+include::{snippets}/api-documentation-test/delete-ws-private/http-request.adoc[]
+include::{snippets}/api-documentation-test/delete-ws-private/path-parameters.adoc[]
+include::{snippets}/api-documentation-test/delete-ws-private/http-response.adoc[]

@@ -1,10 +1,16 @@
 package com.wsproject.wsservice.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-import com.wsproject.wsservice.domain.enums.WsType;
+import org.springframework.util.Assert;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,38 +24,40 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "TBL_TODAYS_WS")
+@Table(name = "TBL_TODAYS_WS", uniqueConstraints = @UniqueConstraint(columnNames = {"USER_IDX"}))
 public class TodaysWs extends BaseTimeEntity {
 	
 	@Id
-	private Long userIdx;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "TODAYS_WS_ID")
+	private Long id;
 	
-	private String content;
+	// 현재는 USER_IDX를 PK로 잡아도 관계없으나, 요구사항은 언제든지 바뀔 수 있기 때문에 
+	// 한 사용자가 여러 개의 오늘의 명언을 가지게 되는 상황이 왔을 때를 대비
+	@Column(name = "USER_IDX")
+	private Long userIdx; // 사용자의 Key Value
 	
-	private String author;
+	@ManyToOne
+	@JoinColumn(name = "WS_ADMIN_ID")
+	private WsAdmin wsAdmin; // 명언(관리자 등록)
 	
-	private WsType type;
-	
-	private Long wsId; // 명언 ID
-	
-	private boolean psl; // 사용자가 등록한 명언인지의 여부
+	@ManyToOne
+	@JoinColumn(name = "WS_PRIVATE_ID")
+	private WsPrivate wsPrivate; // 명언(사용자 등록)
 	
 	@Builder
-	public TodaysWs(Long userIdx, String content, String author, WsType type, Long wsId, boolean psl) {
+	public TodaysWs(Long userIdx, WsAdmin wsAdmin, WsPrivate wsPrivate) {
+		// 오늘의 명언은 wsAdmin, wsPrivate 둘 중 하나만 가지고 있어야한다.
+		Assert.isTrue(wsAdmin == null || wsPrivate == null, "Either wsAdmin or wsPrivate must be null");
+		Assert.isTrue(wsAdmin != null || wsPrivate != null, "Either wsAdmin or wsPrivate must be not null");
 		this.userIdx = userIdx;
-		this.content = content;
-		this.author = author;
-		this.type = type;
-		this.wsId = wsId;
-		this.psl = psl;
-	}
+		this.wsAdmin = wsAdmin;
+		this.wsPrivate = wsPrivate;
+	}	
 	
 	public void update(TodaysWs todaysWs) {
-		this.userIdx = todaysWs.getUserIdx();
-		this.content = todaysWs.getContent();
-		this.author = todaysWs.getAuthor();
-		this.type = todaysWs.getType();
-		this.wsId = todaysWs.getWsId();
-		this.psl = todaysWs.isPsl();
-	}	
+		this.userIdx = todaysWs.getUserIdx() != null ? todaysWs.getUserIdx() : userIdx;
+		this.wsAdmin = todaysWs.getWsAdmin() != null ? todaysWs.getWsAdmin() : wsAdmin;
+		this.wsPrivate = todaysWs.getWsPrivate() != null ? todaysWs.getWsPrivate() : wsPrivate;
+	}
 }

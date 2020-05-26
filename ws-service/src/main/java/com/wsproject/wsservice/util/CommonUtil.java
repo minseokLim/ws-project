@@ -12,6 +12,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -124,5 +125,23 @@ public class CommonUtil {
 	 */
 	public static String getLikeStr(String value) {
 		return "%" + value + "%";
+	}
+	
+	/**
+	 * Search parameter를 key, value를 가진 length가 2인 String 배열로 반환한다. <br>
+	 * @param search 'key=value' 형태이며 UTF-8로 인코딩 되어있음
+	 * @return
+	 */
+	public static String[] extractSearchParameter(String search) {
+		try {
+			search = URLDecoder.decode(search, "UTF-8");
+			String[] keyValue = search.split("=");
+			Assert.isTrue(keyValue.length == 2, "Search Parameter must be look like 'key=value'");
+			
+			return keyValue;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 }

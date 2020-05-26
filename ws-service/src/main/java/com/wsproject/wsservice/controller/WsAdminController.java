@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wsproject.wsservice.dto.WsDto;
-import com.wsproject.wsservice.service.WsService;
+import com.wsproject.wsservice.dto.WsAdminRequestDto;
+import com.wsproject.wsservice.dto.WsAdminResponseDto;
+import com.wsproject.wsservice.service.WsAdminService;
 
 import lombok.AllArgsConstructor;;
 
@@ -26,10 +27,10 @@ import lombok.AllArgsConstructor;;
  */
 @AllArgsConstructor
 @RestController
-@RequestMapping("/v1.0/wses")
-public class WsController {
+@RequestMapping("/v1.0/admin/wses")
+public class WsAdminController {
 		
-	private WsService wsService;
+	private WsAdminService wsAdminService;
 		
 	/**
 	 * 명언 리스트 조회
@@ -38,13 +39,13 @@ public class WsController {
 	 * @return
 	 */
 	@GetMapping
-	public ResponseEntity<PagedModel<WsDto>> selectWsList(@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
-		PagedModel<WsDto> result = wsService.selectWsList(search, pageable);
+	public ResponseEntity<PagedModel<WsAdminResponseDto>> selectWsAdminList(@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
+		PagedModel<WsAdminResponseDto> result = wsAdminService.selectWsAdminList(search, pageable);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
 		} else {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.notFound().build();
 		}	
 	}
 	
@@ -54,8 +55,8 @@ public class WsController {
 	 * @return
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<WsDto> selectWs(@PathVariable("id") Long id) {
-		WsDto result = wsService.selectWs(id);
+	public ResponseEntity<WsAdminResponseDto> selectWsAdmin(@PathVariable("id") Long id) {
+		WsAdminResponseDto result = wsAdminService.selectWsAdmin(id);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -70,9 +71,10 @@ public class WsController {
 	 * @return
 	 */
 	@PostMapping
-	public ResponseEntity<WsDto> insertWs(@RequestBody WsDto dto) {
-		WsDto result = wsService.insertWs(dto);
-		return new ResponseEntity<WsDto>(result, HttpStatus.CREATED);
+	public ResponseEntity<WsAdminResponseDto> insertWsAdmin(@RequestBody WsAdminRequestDto dto) {
+		WsAdminResponseDto result = wsAdminService.insertWsAdmin(dto);
+		
+		return new ResponseEntity<WsAdminResponseDto>(result, HttpStatus.CREATED);
 	}
 	
 	/**
@@ -82,8 +84,8 @@ public class WsController {
 	 * @return
 	 */
 	@PutMapping("/{id}")
-	public ResponseEntity<WsDto> updateWs(@PathVariable("id") Long id, @RequestBody WsDto dto) {
-		WsDto result = wsService.updateWs(id, dto);
+	public ResponseEntity<WsAdminResponseDto> updateWsAdmin(@PathVariable("id") Long id, @RequestBody WsAdminRequestDto dto) {
+		WsAdminResponseDto result = wsAdminService.updateWsAdmin(id, dto);
 		
 		if(result != null) {
 			return ResponseEntity.ok(result);
@@ -98,13 +100,9 @@ public class WsController {
 	 * @return
 	 */
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteWs(@PathVariable("id") Long id) {
-		boolean result = wsService.deleteWs(id);
+	public ResponseEntity<Void> deleteWsAdmin(@PathVariable("id") Long id) {
+		wsAdminService.deleteWsAdmin(id);
 		
-		if(result) {
-			return ResponseEntity.noContent().build();
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		return ResponseEntity.noContent().build();
 	}
 }
