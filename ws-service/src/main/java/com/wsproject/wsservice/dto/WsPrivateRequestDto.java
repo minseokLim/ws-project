@@ -8,6 +8,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 명언(사용자등록) Request DTO Class
+ * @author mslim
+ *
+ */
 @Getter
 @Setter
 @NoArgsConstructor

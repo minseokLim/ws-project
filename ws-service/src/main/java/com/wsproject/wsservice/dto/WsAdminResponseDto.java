@@ -14,7 +14,7 @@ import com.wsproject.wsservice.util.CommonUtil;
 import lombok.Getter;
 
 /**
- * 명언(관리자등록) DTO Class
+ * 명언(관리자등록) Response DTO Class
  * @author mslim
  *
  */
