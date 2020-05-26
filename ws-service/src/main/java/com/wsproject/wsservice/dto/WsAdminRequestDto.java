@@ -7,6 +7,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 명언(관리자등록) Request DTO Class
+ * @author mslim
+ *
+ */
 @Getter
 @NoArgsConstructor
 public class WsAdminRequestDto {

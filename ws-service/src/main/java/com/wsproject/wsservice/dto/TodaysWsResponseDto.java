@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 오늘의 명언 DTO class
+ * 오늘의 명언 Response DTO class
  * @author mslim
  *
  */
