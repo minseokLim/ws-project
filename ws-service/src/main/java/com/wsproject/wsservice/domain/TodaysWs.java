@@ -57,7 +57,18 @@ public class TodaysWs extends BaseTimeEntity {
 	
 	public void update(TodaysWs todaysWs) {
 		this.userIdx = todaysWs.getUserIdx() != null ? todaysWs.getUserIdx() : userIdx;
-		this.wsAdmin = todaysWs.getWsAdmin() != null ? todaysWs.getWsAdmin() : wsAdmin;
-		this.wsPrivate = todaysWs.getWsPrivate() != null ? todaysWs.getWsPrivate() : wsPrivate;
+		
+		if(todaysWs.getWsAdmin() != null) {
+			this.wsAdmin = todaysWs.getWsAdmin();
+			this.wsPrivate = null;
+		}
+		
+		if(todaysWs.getWsPrivate() != null) {
+			this.wsPrivate = todaysWs.getWsPrivate();
+			this.wsAdmin = null;
+		}
+		
+		Assert.isTrue(wsAdmin == null || wsPrivate == null, "Either wsAdmin or wsPrivate must be null");
+		Assert.isTrue(wsAdmin != null || wsPrivate != null, "Either wsAdmin or wsPrivate must be not null");
 	}
 }
