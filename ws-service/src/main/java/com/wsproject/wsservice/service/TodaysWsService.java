@@ -1,6 +1,6 @@
 package com.wsproject.wsservice.service;
 
-import com.wsproject.wsservice.dto.TodaysWsDto;
+import com.wsproject.wsservice.dto.TodaysWsResponseDto;
 
 public interface TodaysWsService {
 	
@@ -11,12 +11,12 @@ public interface TodaysWsService {
 	 * @param ownerIdx
 	 * @return 오늘의 명언
 	 */
-	public TodaysWsDto selectTodaysWs(Long ownerIdx);
+	public TodaysWsResponseDto selectTodaysWs(Long ownerIdx);
 	
 	/**
 	 * 오늘의 명언을 새로고침한다.
 	 * @param ownerIdx
 	 * @return
 	 */
-	public TodaysWsDto refreshTodaysWs(Long ownerIdx);
+	public TodaysWsResponseDto refreshTodaysWs(Long ownerIdx);
 }
