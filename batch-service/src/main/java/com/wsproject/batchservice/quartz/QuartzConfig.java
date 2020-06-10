@@ -45,12 +45,12 @@ public class QuartzConfig {
 	@Bean
 	public JobDetail todaysWsJobDetail() {	
 		JobDataMap jobDataMap = new JobDataMap();
-		jobDataMap.put("jobName", "todayWsJob");
+		jobDataMap.put("jobName", "todaysWsJob");
 		jobDataMap.put("jobLauncher", jobLauncher);
 		jobDataMap.put("jobLocator", jobLocator);
 		
 		return JobBuilder.newJob(CustomQuartzJob.class)
-					.withIdentity("todayWsJob")
+					.withIdentity("todaysWsJob")
 					.setJobData(jobDataMap)
 					.storeDurably()
 					.build();
@@ -60,7 +60,7 @@ public class QuartzConfig {
 	public Trigger todaysWsJobTrigger() throws ParseException {		
 		CronTriggerFactoryBean trigger = new CronTriggerFactoryBean();
 		trigger.setJobDetail(todaysWsJobDetail());
-		trigger.setCronExpression("10 0 0 * * ?"); // 매일 0시 10분으로 설정. TODO customProperties로 cron 속성을 뺄 예정
+		trigger.setCronExpression("10 0 0 * * ?"); // 매일 0시 0분 10초로 설정. TODO customProperties로 cron 속성을 뺄 예정
 //		trigger.setCronExpression("0/5 * * * * ?");
 		trigger.setDescription("todaysWsJobTrigger");
 		trigger.afterPropertiesSet();
