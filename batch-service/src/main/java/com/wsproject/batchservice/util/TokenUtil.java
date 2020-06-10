@@ -35,7 +35,7 @@ public class TokenUtil {
 		String credentials = properties.getClientId() + ":" + properties.getClientSecret();
 		String authorization = "Basic " + new String(Base64.encodeBase64(credentials.getBytes()));
 		
-		String url = properties.getApiPrivateBaseUri() + "/authsvr/oauth/token";
+		String url = "/authsvr/oauth/token";
 		
 		restUtilBuilder = RestUtil.builder().url(url).post().headers(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
 															.headers(HttpHeaders.AUTHORIZATION, authorization)

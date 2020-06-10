@@ -82,4 +82,21 @@ public class TodaysWsResponseDto extends RepresentationModel<TodaysWsResponseDto
 		// HATEOAS Link 정보 추가
 		CommonUtil.setLinkAdvice(this, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(this.userIdx)).withSelfRel());
 	}
+
+	public TodaysWsResponseDto(Long id, Long userIdx, String content, String author, WsType type, Long wsId,
+							boolean privateFlag, boolean liked, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+		this.id = id;
+		this.userIdx = userIdx;
+		this.content = content;
+		this.author = author;
+		this.type = type;
+		this.wsId = wsId;
+		this.privateFlag = privateFlag;
+		this.liked = liked;
+		this.createdDate = createdDate;
+		this.modifiedDate = modifiedDate;
+		
+		// HATEOAS Link 정보 추가
+		CommonUtil.setLinkAdvice(this, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(this.userIdx)).withSelfRel());
+	}
 }

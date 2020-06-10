@@ -32,18 +32,21 @@ public class WsPrivateResponseDto extends RepresentationModel<WsPrivateResponseD
 	
 	private Long ownerIdx;
 	
+	private boolean liked;
+	
 	private LocalDateTime createdDate;
 	
 	private LocalDateTime modifiedDate;
 
-	public WsPrivateResponseDto(WsPrivate wsPsl) {
-		this.id = wsPsl.getId();
-		this.content = wsPsl.getContent();
-		this.author = wsPsl.getAuthor();
-		this.type = wsPsl.getType();
-		this.ownerIdx = wsPsl.getOwnerIdx();
-		this.createdDate = wsPsl.getCreatedDate();
-		this.modifiedDate = wsPsl.getModifiedDate();
+	public WsPrivateResponseDto(WsPrivate ws) {
+		this.id = ws.getId();
+		this.content = ws.getContent();
+		this.author = ws.getAuthor();
+		this.type = ws.getType();
+		this.ownerIdx = ws.getOwnerIdx();
+		this.liked = ws.isLiked();
+		this.createdDate = ws.getCreatedDate();
+		this.modifiedDate = ws.getModifiedDate();
 		
 		// HATEOAS Link 정보 추가
 		CommonUtil.setLinkAdvice(this, linkTo(methodOn(WsPrivateController.class).selectWsPrivate(this.ownerIdx, this.id)).withSelfRel());
