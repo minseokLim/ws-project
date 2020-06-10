@@ -45,12 +45,12 @@ public class QuartzConfig {
 	@Bean
 	public JobDetail todaysWsJobDetail() {	
 		JobDataMap jobDataMap = new JobDataMap();
-		jobDataMap.put("jobName", "todayWsJob");
+		jobDataMap.put("jobName", "todaysWsJob");
 		jobDataMap.put("jobLauncher", jobLauncher);
 		jobDataMap.put("jobLocator", jobLocator);
 		
 		return JobBuilder.newJob(CustomQuartzJob.class)
-					.withIdentity("todayWsJob")
+					.withIdentity("todaysWsJob")
 					.setJobData(jobDataMap)
 					.storeDurably()
 					.build();
