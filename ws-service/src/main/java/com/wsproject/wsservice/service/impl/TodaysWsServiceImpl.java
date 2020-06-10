@@ -36,13 +36,13 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 	@Override
 	public TodaysWsResponseDto selectTodaysWs(Long userIdx) {
 		
-		Optional<TodaysWs> data = null; 
+		Optional<TodaysWsResponseDto> data = null; 
 		
 		// TODO 불필요한 로직. 슬루스 및 집킨에서 사용자 정의 스팬을 테스트해보기 위해 추가
 		Span newSpan = tracer.nextSpan().name("findTodaysWsByOwnerIdx");
 		
 		try(SpanInScope spanInScope = tracer.withSpanInScope(newSpan.start())) {
-			data = todaysWsRepository.findByUserIdx(userIdx);
+			data = todaysWsRepository.findWithLikeByUserIdx(userIdx);
 		} finally {
 			newSpan.tag("peer.service", "mariaDB");
 			newSpan.annotate("test");
@@ -58,7 +58,7 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		if(!data.isPresent() || data.get().getModifiedDate().isBefore(today)) {
 			result = refreshTodaysWs(userIdx);
 		} else {
-			result = new TodaysWsResponseDto(data.get());
+			result = data.get();
 		}
 		
 		return result;
@@ -71,20 +71,20 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		todaysWs.update(getRandomTodaysWs(userIdx));
 		
 		TodaysWsResponseDto result = new TodaysWsResponseDto(todaysWsRepository.save(todaysWs));
-				
+		
 		return result;
 	}
 	
 	/**
 	 * 관리자가 추가한 명언 + 사용자가 추가한 명언 중 랜덤으로 오늘의 명언이 선택되어 반환된다.
-	 * @param ownerIdx
+	 * @param userIdx
 	 * @return
 	 */
-	private TodaysWs getRandomTodaysWs(Long ownerIdx) {
+	private TodaysWs getRandomTodaysWs(Long userIdx) {
 		TodaysWs todaysWs = null;
 		
 		long wsAdminCount = wsAdminRepository.count();
-		long wsPrivateCount = wsPrivateRepository.countByOwnerIdx(ownerIdx);
+		long wsPrivateCount = wsPrivateRepository.countByOwnerIdx(userIdx);
 		long totalWsCount = wsAdminCount + wsPrivateCount;
 		
 		int randomNo = (int) (Math.random() * totalWsCount);
@@ -93,12 +93,12 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 			Page<WsAdmin> page = wsAdminRepository.findAll(PageRequest.of((int) randomNo, 1));
 			
 			WsAdmin wsAdmin = page.getContent().get(0);
-			todaysWs = TodaysWs.builder().userIdx(ownerIdx).wsAdmin(wsAdmin).build();
+			todaysWs = TodaysWs.builder().userIdx(userIdx).wsAdmin(wsAdmin).build();
 		} else {
-			Page<WsPrivate> page  = wsPrivateRepository.findByOwnerIdx(ownerIdx, PageRequest.of((int) (randomNo - wsAdminCount), 1));
+			Page<WsPrivate> page  = wsPrivateRepository.findByOwnerIdx(userIdx, PageRequest.of((int) (randomNo - wsAdminCount), 1));
 			
 			WsPrivate wsPrivate = page.getContent().get(0);
-			todaysWs = TodaysWs.builder().userIdx(ownerIdx).wsPrivate(wsPrivate).build();
+			todaysWs = TodaysWs.builder().userIdx(userIdx).wsPrivate(wsPrivate).build();
 		}
 		
 		return todaysWs;

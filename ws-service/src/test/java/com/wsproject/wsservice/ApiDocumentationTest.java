@@ -303,7 +303,7 @@ public class ApiDocumentationTest {
 						parameterWithName("search").description(Description.SEARCH)
 					), 
 					responseFields(
-						fieldWithPath("_embedded.wsAdminResponseDtoList[].id").type(Long.class).description(Description.ID),
+						fieldWithPath("_embedded.wsAdminResponseDtoList[].id").description(Description.ID),
 						fieldWithPath("_embedded.wsAdminResponseDtoList[].content").description(Description.CONTENT),
 						fieldWithPath("_embedded.wsAdminResponseDtoList[].author").description(Description.AUTHOR),
 						fieldWithPath("_embedded.wsAdminResponseDtoList[].type").description(Description.TYPE),
@@ -346,7 +346,7 @@ public class ApiDocumentationTest {
 							parameterWithName("id").description(Description.ID)
 						),
 						responseFields(
-							fieldWithPath("id").type(Long.class).description(Description.ID),
+							fieldWithPath("id").description(Description.ID),
 							fieldWithPath("content").description(Description.CONTENT),
 							fieldWithPath("author").description(Description.AUTHOR),
 							fieldWithPath("type").description(Description.TYPE),
@@ -386,7 +386,7 @@ public class ApiDocumentationTest {
 						fieldWithPath("type").description(Description.TYPE)
 					),
 					responseFields(
-						fieldWithPath("id").type(Long.class).description(Description.ID),
+						fieldWithPath("id").description(Description.ID),
 						fieldWithPath("content").description(Description.CONTENT),
 						fieldWithPath("author").description(Description.AUTHOR),
 						fieldWithPath("type").description(Description.TYPE),
@@ -428,7 +428,7 @@ public class ApiDocumentationTest {
 						fieldWithPath("type").description(Description.TYPE)
 					),
 					responseFields(
-						fieldWithPath("id").type(Long.class).description(Description.ID),
+						fieldWithPath("id").description(Description.ID),
 						fieldWithPath("content").description(Description.CONTENT),
 						fieldWithPath("author").description(Description.AUTHOR),
 						fieldWithPath("type").description(Description.TYPE),
@@ -483,11 +483,12 @@ public class ApiDocumentationTest {
 						parameterWithName("search").description(Description.SEARCH)
 					), 
 					responseFields(
-						fieldWithPath("_embedded.wsPrivateResponseDtoList[].id").type(Long.class).description(Description.ID),
+						fieldWithPath("_embedded.wsPrivateResponseDtoList[].id").description(Description.ID),
 						fieldWithPath("_embedded.wsPrivateResponseDtoList[].content").description(Description.CONTENT),
 						fieldWithPath("_embedded.wsPrivateResponseDtoList[].author").description(Description.AUTHOR),
 						fieldWithPath("_embedded.wsPrivateResponseDtoList[].type").description(Description.TYPE),
 						fieldWithPath("_embedded.wsPrivateResponseDtoList[].ownerIdx").description(Description.USER_IDX),
+						fieldWithPath("_embedded.wsPrivateResponseDtoList[].liked").description(Description.LIKED),
 						fieldWithPath("_embedded.wsPrivateResponseDtoList[].createdDate").type(LocalDateTime.class).description(Description.CREATED_DATE),
 						fieldWithPath("_embedded.wsPrivateResponseDtoList[].modifiedDate").type(LocalDateTime.class).description(Description.MODIFIED_DATE),
 						fieldWithPath("_embedded.wsPrivateResponseDtoList[]._links.self.href").description(Description.SELF_DETAIL_HREF),
@@ -508,6 +509,7 @@ public class ApiDocumentationTest {
 				.andExpect(jsonPath("_embedded.wsPrivateResponseDtoList[0].author", is(notNullValue())))
 				.andExpect(jsonPath("_embedded.wsPrivateResponseDtoList[0].type", is(notNullValue())))
 				.andExpect(jsonPath("_embedded.wsPrivateResponseDtoList[0].ownerIdx", is(notNullValue())))
+				.andExpect(jsonPath("_embedded.wsPrivateResponseDtoList[0].liked", is(notNullValue())))
 				.andExpect(jsonPath("_embedded.wsPrivateResponseDtoList[0].createdDate", is(notNullValue())))
 				.andExpect(jsonPath("_embedded.wsPrivateResponseDtoList[0].modifiedDate", is(notNullValue())))
 				.andExpect(jsonPath("_embedded.wsPrivateResponseDtoList[0]._links.self.href", is(notNullValue())))
@@ -529,11 +531,12 @@ public class ApiDocumentationTest {
 							parameterWithName("id").description(Description.ID)
 						),
 						responseFields(
-							fieldWithPath("id").type(Long.class).description(Description.ID),
+							fieldWithPath("id").description(Description.ID),
 							fieldWithPath("content").description(Description.CONTENT),
 							fieldWithPath("author").description(Description.AUTHOR),
 							fieldWithPath("type").description(Description.TYPE),
 							fieldWithPath("ownerIdx").description(Description.USER_IDX),
+							fieldWithPath("liked").description(Description.LIKED),
 							fieldWithPath("createdDate").type(LocalDateTime.class).description(Description.CREATED_DATE),
 							fieldWithPath("modifiedDate").type(LocalDateTime.class).description(Description.MODIFIED_DATE),
 							fieldWithPath("_links.self.href").description(Description.SELF_DETAIL_HREF)
@@ -544,6 +547,7 @@ public class ApiDocumentationTest {
 				.andExpect(jsonPath("author", is(notNullValue())))
 				.andExpect(jsonPath("type", is(notNullValue())))
 				.andExpect(jsonPath("ownerIdx", is(notNullValue())))
+				.andExpect(jsonPath("liked", is(notNullValue())))
 				.andExpect(jsonPath("createdDate", is(notNullValue())))
 				.andExpect(jsonPath("modifiedDate", is(notNullValue())))
 				.andExpect(jsonPath("_links", is(notNullValue())));
@@ -574,11 +578,12 @@ public class ApiDocumentationTest {
 						fieldWithPath("type").description(Description.TYPE)
 					),
 					responseFields(
-						fieldWithPath("id").type(Long.class).description(Description.ID),
+						fieldWithPath("id").description(Description.ID),
 						fieldWithPath("content").description(Description.CONTENT),
 						fieldWithPath("author").description(Description.AUTHOR),
 						fieldWithPath("type").description(Description.TYPE),
 						fieldWithPath("ownerIdx").description(Description.USER_IDX),
+						fieldWithPath("liked").description(Description.LIKED),
 						fieldWithPath("createdDate").type(LocalDateTime.class).description(Description.CREATED_DATE),
 						fieldWithPath("modifiedDate").type(LocalDateTime.class).description(Description.MODIFIED_DATE),
 						fieldWithPath("_links.self.href").description(Description.SELF_DETAIL_HREF)
@@ -589,6 +594,7 @@ public class ApiDocumentationTest {
 				.andExpect(jsonPath("author", is(notNullValue())))
 				.andExpect(jsonPath("type", is(notNullValue())))
 				.andExpect(jsonPath("ownerIdx", is(notNullValue())))
+				.andExpect(jsonPath("liked", is(notNullValue())))
 				.andExpect(jsonPath("createdDate", is(notNullValue())))
 				.andExpect(jsonPath("modifiedDate", is(notNullValue())))
 				.andExpect(jsonPath("_links", is(notNullValue())));
@@ -619,11 +625,12 @@ public class ApiDocumentationTest {
 						fieldWithPath("type").description(Description.TYPE)
 					),
 					responseFields(
-						fieldWithPath("id").type(Long.class).description(Description.ID),
+						fieldWithPath("id").description(Description.ID),
 						fieldWithPath("content").description(Description.CONTENT),
 						fieldWithPath("author").description(Description.AUTHOR),
 						fieldWithPath("type").description(Description.TYPE),
 						fieldWithPath("ownerIdx").description(Description.USER_IDX),
+						fieldWithPath("liked").description(Description.LIKED),
 						fieldWithPath("createdDate").type(LocalDateTime.class).description(Description.CREATED_DATE),
 						fieldWithPath("modifiedDate").type(LocalDateTime.class).description(Description.MODIFIED_DATE),
 						fieldWithPath("_links.self.href").description(Description.SELF_DETAIL_HREF)
@@ -634,6 +641,7 @@ public class ApiDocumentationTest {
 				.andExpect(jsonPath("author", is(notNullValue())))
 				.andExpect(jsonPath("type", is(notNullValue())))
 				.andExpect(jsonPath("ownerIdx", is(notNullValue())))
+				.andExpect(jsonPath("liked", is(notNullValue())))
 				.andExpect(jsonPath("createdDate", is(notNullValue())))
 				.andExpect(jsonPath("modifiedDate", is(notNullValue())))
 				.andExpect(jsonPath("_links", is(notNullValue())));
