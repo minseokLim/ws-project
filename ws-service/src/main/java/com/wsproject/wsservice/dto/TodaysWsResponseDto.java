@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.wsproject.wsservice.controller.TodaysWsController;
 import com.wsproject.wsservice.domain.TodaysWs;
 import com.wsproject.wsservice.domain.WsAdmin;
@@ -83,6 +84,7 @@ public class TodaysWsResponseDto extends RepresentationModel<TodaysWsResponseDto
 		CommonUtil.setLinkAdvice(this, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(this.userIdx)).withSelfRel());
 	}
 
+	@QueryProjection
 	public TodaysWsResponseDto(Long id, Long userIdx, String content, String author, WsType type, Long wsId,
 							boolean privateFlag, boolean liked, LocalDateTime createdDate, LocalDateTime modifiedDate) {
 		this.id = id;
