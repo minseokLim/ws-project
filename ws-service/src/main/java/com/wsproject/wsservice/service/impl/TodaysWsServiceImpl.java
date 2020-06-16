@@ -12,6 +12,7 @@ import com.wsproject.wsservice.domain.WsAdmin;
 import com.wsproject.wsservice.domain.WsPrivate;
 import com.wsproject.wsservice.dto.TodaysWsResponseDto;
 import com.wsproject.wsservice.repository.TodaysWsRepository;
+import com.wsproject.wsservice.repository.TodaysWsRepositorySupport;
 import com.wsproject.wsservice.repository.WsAdminRepository;
 import com.wsproject.wsservice.repository.WsPrivateRepository;
 import com.wsproject.wsservice.service.TodaysWsService;
@@ -26,6 +27,8 @@ import lombok.AllArgsConstructor;
 public class TodaysWsServiceImpl implements TodaysWsService {
 
 	private TodaysWsRepository todaysWsRepository;
+	
+	private TodaysWsRepositorySupport todaysWsRepositorySupport;
 	
 	private WsAdminRepository wsAdminRepository;
 	
@@ -42,7 +45,7 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		Span newSpan = tracer.nextSpan().name("findTodaysWsByOwnerIdx");
 		
 		try(SpanInScope spanInScope = tracer.withSpanInScope(newSpan.start())) {
-			data = todaysWsRepository.findWithLikeByUserIdx(userIdx);
+			data = todaysWsRepositorySupport.findWithLikeByUserIdx(userIdx);
 		} finally {
 			newSpan.tag("peer.service", "mariaDB");
 			newSpan.annotate("test");
