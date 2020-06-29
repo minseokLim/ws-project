@@ -43,10 +43,10 @@ public class WsPrivateServiceImpl implements WsPrivateService {
 			
 			switch (key) {
 			case "content":
-				page = wsPrivateRepository.findByOwnerIdxAndContentLike(ownerIdx, CommonUtil.getLikeStr(value), pageable);
+				page = wsPrivateRepository.findByOwnerIdxAndContentContaining(ownerIdx, value, pageable);
 				break;
 			case "author":
-				page = wsPrivateRepository.findByOwnerIdxAndAuthorLike(ownerIdx, CommonUtil.getLikeStr(value), pageable);
+				page = wsPrivateRepository.findByOwnerIdxAndAuthorContaining(ownerIdx, value, pageable);
 				break;
 			case "type":
 				page = wsPrivateRepository.findByOwnerIdxAndType(ownerIdx, WsType.valueOf(value), pageable);

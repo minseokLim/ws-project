@@ -118,16 +118,6 @@ public class CommonUtil {
 	}
 	
 	/**
-	 * SQL query LIKE 조회에 적합하도록 value를 변경 <br>
-	 * 예) "사과" -> "%사과%"
-	 * @param value
-	 * @return
-	 */
-	public static String getLikeStr(String value) {
-		return "%" + value + "%";
-	}
-	
-	/**
 	 * Search parameter를 key, value를 가진 length가 2인 String 배열로 반환한다. <br>
 	 * @param search 'key=value' 형태이며 UTF-8로 인코딩 되어있음
 	 * @return

@@ -43,10 +43,10 @@ public class WsAdminServiceImpl implements WsAdminService {
 			
 			switch (key) {
 			case "content":
-				page = wsAdminRepository.findByContentLike(CommonUtil.getLikeStr(value), pageable);
+				page = wsAdminRepository.findByContentContaining(value, pageable);
 				break;
 			case "author":
-				page = wsAdminRepository.findByAuthorLike(CommonUtil.getLikeStr(value), pageable);
+				page = wsAdminRepository.findByAuthorContaining(value, pageable);
 				break;
 			case "type":
 				page = wsAdminRepository.findByType(WsType.valueOf(value), pageable);
