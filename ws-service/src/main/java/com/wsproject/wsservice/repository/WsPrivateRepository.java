@@ -11,8 +11,8 @@ import com.wsproject.wsservice.domain.enums.WsType;
 
 public interface WsPrivateRepository extends JpaRepository<WsPrivate, Long> {
 	Page<WsPrivate> findByOwnerIdx(Long ownerIdx, Pageable pageable);
-	Page<WsPrivate> findByOwnerIdxAndContentLike(Long ownerIdx, String content, Pageable pageable);
-	Page<WsPrivate> findByOwnerIdxAndAuthorLike(Long ownerIdx, String author, Pageable pageable);
+	Page<WsPrivate> findByOwnerIdxAndContentContaining(Long ownerIdx, String value, Pageable pageable);
+	Page<WsPrivate> findByOwnerIdxAndAuthorContaining(Long ownerIdx, String value, Pageable pageable);
 	Page<WsPrivate> findByOwnerIdxAndType(Long ownerIdx, WsType type, Pageable pageable);
 	
 	Optional<WsPrivate> findByIdAndOwnerIdx(Long id, Long ownerIdx);
