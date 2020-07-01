@@ -112,7 +112,7 @@ public class ApiDocumentationTest {
 			
 			content = "좋은 일을 많이 해내려고 기다리는 사람은 하나의 좋은 일도 해낼 수가 없다.";
 			author = "사무엘 존슨";
-			type = WsType.SELF_DEV;
+			type = WsType.ETC;
 			
 			setInitValue(content, author, type);
 		}
@@ -160,7 +160,7 @@ public class ApiDocumentationTest {
 		private static final String WS_ID = "명언 Key Value";
 		private static final String PRIVATE_FLAG = "사용자가 등록한 명언인지의 여부 (true: 사용자 등록, false: 관리자 등록)";
 		private static final String LIKED = "사용자가 해당 명언에 대해 좋아요를 눌렀는지의 여부";
-		private static final String SEARCH = "검색조건. 'key=value' 형태 (예: author=벤자민)";
+		private static final String SEARCH = "검색조건. 'key=value' 형태. 파라미터가 2개 이상일 경우 AND 조건 (예: author=벤자민,type=SELF_DEV)";
 	}
 	
 	@Test

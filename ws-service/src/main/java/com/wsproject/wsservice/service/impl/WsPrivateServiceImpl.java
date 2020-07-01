@@ -13,9 +13,10 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.stereotype.Service;
 
+import com.querydsl.core.types.Predicate;
 import com.wsproject.wsservice.controller.WsPrivateController;
 import com.wsproject.wsservice.domain.WsPrivate;
-import com.wsproject.wsservice.domain.enums.WsType;
+import com.wsproject.wsservice.domain.search.WsPrivateSearch;
 import com.wsproject.wsservice.dto.WsPrivateRequestDto;
 import com.wsproject.wsservice.dto.WsPrivateResponseDto;
 import com.wsproject.wsservice.repository.WsPrivateRepository;
@@ -30,30 +31,17 @@ public class WsPrivateServiceImpl implements WsPrivateService {
 		
 	private WsPrivateRepository wsPrivateRepository;
 	
+	private WsPrivateSearch wsPrivateSearch;
+	
 	@Override
 	public PagedModel<WsPrivateResponseDto> selectWsPrivateList(Long ownerIdx, String search, Pageable pageable) {
 		Page<WsPrivate> page;
+		Predicate predicate = CommonUtil.extractSearchParameter(search, wsPrivateSearch);
 		
-		if(search == null || "".equals(search)) {
-			page = wsPrivateRepository.findByOwnerIdx(ownerIdx, pageable);
+		if(predicate == null) {
+			page = wsPrivateRepository.findAll(pageable);
 		} else {
-			String[] keyValue = CommonUtil.extractSearchParameter(search);
-			String key = keyValue[0];
-			String value = keyValue[1];
-			
-			switch (key) {
-			case "content":
-				page = wsPrivateRepository.findByOwnerIdxAndContentContaining(ownerIdx, value, pageable);
-				break;
-			case "author":
-				page = wsPrivateRepository.findByOwnerIdxAndAuthorContaining(ownerIdx, value, pageable);
-				break;
-			case "type":
-				page = wsPrivateRepository.findByOwnerIdxAndType(ownerIdx, WsType.valueOf(value), pageable);
-				break;
-			default:
-				return null;
-			}
+			page = wsPrivateRepository.findAll(predicate, pageable);
 		}
 		
 		PagedModel<WsPrivateResponseDto> result = setPageLinksAdvice(ownerIdx, search, pageable, page);

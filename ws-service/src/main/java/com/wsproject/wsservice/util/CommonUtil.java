@@ -2,6 +2,7 @@ package com.wsproject.wsservice.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -12,10 +13,10 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.wsproject.wsservice.config.CustomProperties;
 
 import lombok.extern.slf4j.Slf4j;
@@ -118,17 +119,34 @@ public class CommonUtil {
 	}
 	
 	/**
-	 * Search parameter를 key, value를 가진 length가 2인 String 배열로 반환한다. <br>
-	 * @param search 'key=value' 형태이며 UTF-8로 인코딩 되어있음
-	 * @return
+	 * search파라미터를 파싱하여 적절한 QuerydslPredicate 형태로 반환
+	 * @param search
+	 * @param searchFunc
+	 * @return QuerydslPredicate
 	 */
-	public static String[] extractSearchParameter(String search) {
+	public static BooleanExpression extractSearchParameter(String search, Function<String, BooleanExpression> searchFunc) {
 		try {
-			search = URLDecoder.decode(search, "UTF-8");
-			String[] keyValue = search.split("=");
-			Assert.isTrue(keyValue.length == 2, "Search Parameter must be look like 'key=value'");
+			BooleanExpression result = null;
 			
-			return keyValue;
+			if(search != null && !"".equals(search)) {
+				search = URLDecoder.decode(search, "UTF-8");
+				
+				String[] keyValues = search.split(",");
+				
+				for(String param : keyValues) {
+					BooleanExpression predicate = searchFunc.apply(param);
+					
+					if(predicate != null) {
+						if(result == null) {
+							result = predicate;
+						} else {
+							result = result.and(predicate);
+						}
+					}
+				}
+			}
+			
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
