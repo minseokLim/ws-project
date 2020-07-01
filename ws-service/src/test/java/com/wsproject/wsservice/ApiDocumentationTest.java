@@ -97,7 +97,7 @@ public class ApiDocumentationTest {
 	
 	private void setInitValues() throws Exception {
 		
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < 3; i++) {
 			String content = "실패하는 것은 곧 성공으로 한 발짝 더 나아가는 것이다.";
 			String author = "메리 케이 애쉬";
 			WsType type = WsType.SELF_DEV;
@@ -287,10 +287,11 @@ public class ApiDocumentationTest {
 	@Test
 	public void selectWsAdminList() throws Exception {
 		mockMvc.perform(
-					get("/v1.0/admin/wses?sort=id,desc") // sort 값을 param함수로 주면 ,가 자꾸 %2C로 인코딩되버림-_-
+					get("/v1.0/admin/wses")
 					.header(HttpHeaders.AUTHORIZATION, AUTH_HEADER)
 					.param("page", "1")
 					.param("size", "5")
+					.param("sort", "id,asc")
 					.param("search", "type=SELF_DEV")
 					.accept(MediaType.APPLICATION_JSON))
 				.andDo(print())
@@ -464,10 +465,11 @@ public class ApiDocumentationTest {
 	@Test
 	public void selectWsPrivateList() throws Exception {
 		mockMvc.perform(
-					get("/v1.0/users/{userIdx}/wses?sort=id,desc", 1) // sort 값을 param함수로 주면 ,가 자꾸 %2C로 인코딩되버림-_-
+					get("/v1.0/users/{userIdx}/wses", 1)
 					.header(HttpHeaders.AUTHORIZATION, AUTH_HEADER)
 					.param("page", "1")
 					.param("size", "5")
+					.param("sort", "id,desc")
 					.param("search", "type=SELF_DEV")
 					.accept(MediaType.APPLICATION_JSON))
 				.andDo(print())
