@@ -13,9 +13,10 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.stereotype.Service;
 
+import com.querydsl.core.types.Predicate;
 import com.wsproject.wsservice.controller.WsAdminController;
 import com.wsproject.wsservice.domain.WsAdmin;
-import com.wsproject.wsservice.domain.enums.WsType;
+import com.wsproject.wsservice.domain.search.WsAdminSearch;
 import com.wsproject.wsservice.dto.WsAdminRequestDto;
 import com.wsproject.wsservice.dto.WsAdminResponseDto;
 import com.wsproject.wsservice.repository.WsAdminRepository;
@@ -29,31 +30,18 @@ import lombok.AllArgsConstructor;
 public class WsAdminServiceImpl implements WsAdminService {
 		
 	private WsAdminRepository wsAdminRepository;
-		
+	
+	private WsAdminSearch wsAdminSearch;
+	
 	@Override
 	public PagedModel<WsAdminResponseDto> selectWsAdminList(String search, Pageable pageable) {
 		Page<WsAdmin> page;
+		Predicate predicate = CommonUtil.extractSearchParameter(search, wsAdminSearch);
 		
-		if(search == null || "".equals(search)) {
+		if(predicate == null) {
 			page = wsAdminRepository.findAll(pageable);
 		} else {
-			String[] keyValue = CommonUtil.extractSearchParameter(search);
-			String key = keyValue[0];
-			String value = keyValue[1];
-			
-			switch (key) {
-			case "content":
-				page = wsAdminRepository.findByContentContaining(value, pageable);
-				break;
-			case "author":
-				page = wsAdminRepository.findByAuthorContaining(value, pageable);
-				break;
-			case "type":
-				page = wsAdminRepository.findByType(WsType.valueOf(value), pageable);
-				break;
-			default:
-				return null;
-			}
+			page = wsAdminRepository.findAll(predicate, pageable);
 		}
 		
 		PagedModel<WsAdminResponseDto> result = setPageLinksAdvice(search, pageable, page);
@@ -68,7 +56,7 @@ public class WsAdminServiceImpl implements WsAdminService {
 	 * @param page
 	 * @return
 	 */
-	private PagedModel<WsAdminResponseDto> setPageLinksAdvice(String search, Pageable pageable, Page<WsAdmin> page) {
+	private static PagedModel<WsAdminResponseDto> setPageLinksAdvice(String search, Pageable pageable, Page<WsAdmin> page) {
 		List<WsAdminResponseDto> content = page.stream().map(elem -> new WsAdminResponseDto(elem)).collect(Collectors.toList());
 		
 		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
