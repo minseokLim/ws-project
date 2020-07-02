@@ -22,12 +22,18 @@ public class WsPrivateSearch implements Function<String, BooleanExpression> {
 		String value = keyValue[1];
 		
 		switch (key) {
+		case "id":
+			return wsPrivate.id.eq(Long.parseLong(value));
 		case "content":
 			return wsPrivate.content.containsIgnoreCase(value);
 		case "author":
 			return wsPrivate.author.containsIgnoreCase(value);
 		case "type":
 			return wsPrivate.type.eq(WsType.valueOf(value));
+		case "ownerIdx":
+			return wsPrivate.ownerIdx.eq(Long.parseLong(value));
+		case "liked":
+			return wsPrivate.liked.eq(Boolean.parseBoolean(value));
 		}
 		
 		return null;

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.Predicate;
 import com.wsproject.wsservice.controller.WsAdminController;
@@ -26,6 +27,7 @@ import com.wsproject.wsservice.util.CommonUtil;
 import lombok.AllArgsConstructor;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class WsAdminServiceImpl implements WsAdminService {
 		
@@ -94,10 +96,7 @@ public class WsAdminServiceImpl implements WsAdminService {
 		}
 		
 		WsAdmin ws = data.get();
-		ws.update(dto);
-		
-		// TODO JPA 변경 감지 기능으로 이거 뺴도 되려나??;;
-		ws = wsAdminRepository.save(ws);
+		ws.update(dto); // 변경감지로 인한 업데이트
 		
 		return new WsAdminResponseDto(ws);
 	}
