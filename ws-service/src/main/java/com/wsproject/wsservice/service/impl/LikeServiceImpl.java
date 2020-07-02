@@ -3,6 +3,7 @@ package com.wsproject.wsservice.service.impl;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wsproject.wsservice.domain.WsAdmin;
 import com.wsproject.wsservice.domain.WsAdminLike;
@@ -15,6 +16,7 @@ import com.wsproject.wsservice.service.LikeService;
 import lombok.AllArgsConstructor;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class LikeServiceImpl implements LikeService {
 

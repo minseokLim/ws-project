@@ -1,5 +1,6 @@
 package com.wsproject.wsservice.service.impl;
 
+import static com.wsproject.wsservice.domain.QWsPrivate.wsPrivate;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -12,8 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.wsproject.wsservice.controller.WsPrivateController;
 import com.wsproject.wsservice.domain.WsPrivate;
 import com.wsproject.wsservice.domain.search.WsPrivateSearch;
@@ -26,6 +28,7 @@ import com.wsproject.wsservice.util.CommonUtil;
 import lombok.AllArgsConstructor;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class WsPrivateServiceImpl implements WsPrivateService {
 		
@@ -35,14 +38,16 @@ public class WsPrivateServiceImpl implements WsPrivateService {
 	
 	@Override
 	public PagedModel<WsPrivateResponseDto> selectWsPrivateList(Long ownerIdx, String search, Pageable pageable) {
-		Page<WsPrivate> page;
-		Predicate predicate = CommonUtil.extractSearchParameter(search, wsPrivateSearch);
+		BooleanExpression predicate = CommonUtil.extractSearchParameter(search, wsPrivateSearch);
+		BooleanExpression ownerIdxCondition = wsPrivate.ownerIdx.eq(ownerIdx);
 		
 		if(predicate == null) {
-			page = wsPrivateRepository.findAll(pageable);
+			predicate = ownerIdxCondition;
 		} else {
-			page = wsPrivateRepository.findAll(predicate, pageable);
+			predicate = predicate.and(ownerIdxCondition);
 		}
+		
+		Page<WsPrivate> page = wsPrivateRepository.findAll(predicate, pageable);
 		
 		PagedModel<WsPrivateResponseDto> result = setPageLinksAdvice(ownerIdx, search, pageable, page);
 		
@@ -95,10 +100,7 @@ public class WsPrivateServiceImpl implements WsPrivateService {
 		}
 		
 		WsPrivate wsPsl = data.get();
-		wsPsl.update(dto);
-		
-		// TODO JPA 변경 감지 기능으로 이거 뺴도 되려나??;;
-		wsPsl = wsPrivateRepository.save(wsPsl);
+		wsPsl.update(dto); // 변경감지로 인한 업데이트
 		
 		return new WsPrivateResponseDto(wsPsl);
 	}

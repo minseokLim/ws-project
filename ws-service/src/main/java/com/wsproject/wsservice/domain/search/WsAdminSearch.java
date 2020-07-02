@@ -22,6 +22,8 @@ public class WsAdminSearch implements Function<String, BooleanExpression> {
 		String value = keyValue[1];
 		
 		switch (key) {
+		case "id":
+			return wsAdmin.id.eq(Long.parseLong(value));
 		case "content":
 			return wsAdmin.content.containsIgnoreCase(value);
 		case "author":
