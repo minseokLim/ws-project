@@ -1,8 +1,6 @@
 package com.wsproject.wsservice.service.impl;
 
 import static com.wsproject.wsservice.domain.QWsPrivate.wsPrivate;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,13 +8,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.wsproject.wsservice.controller.WsPrivateController;
 import com.wsproject.wsservice.domain.WsPrivate;
 import com.wsproject.wsservice.domain.search.WsPrivateSearch;
 import com.wsproject.wsservice.dto.WsPrivateRequestDto;
@@ -67,7 +66,7 @@ public class WsPrivateServiceImpl implements WsPrivateService {
 		
 		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
 		PagedModel<WsPrivateResponseDto> result = new PagedModel<>(content, pageMetadata);
-		CommonUtil.setLinkAdvice(result, linkTo(methodOn(WsPrivateController.class).selectWsPrivateList(ownerIdx, search, pageable)).withSelfRel());
+		CommonUtil.setLinkAdvice(result, new Link(ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString()).withSelfRel());
 		CommonUtil.setPageLinksAdvice(result, page);
 		
 		return result;

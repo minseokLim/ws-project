@@ -71,14 +71,15 @@ public class CommonUtil {
 		builder.replaceQueryParam("page", pageable.getPageNumber());
 		builder.replaceQueryParam("size", pageable.getPageSize());
 		
-		try {
-			String result = URLDecoder.decode(builder.build().toUriString(), "UTF-8"); // 여기서 디코딩을 하지 않으면 인코딩된 url이 반환됨
+//		try {
+//			String result = URLDecoder.decode(builder.build().toUriString(), "UTF-8"); // 여기서 디코딩을 하지 않으면 인코딩된 url이 반환됨
+			String result = builder.build().toUriString();
 			log.debug("result : {}", result);
 			return result;
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+//		} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//			throw new RuntimeException(e);
+//		}
 	}
 	
 	/**
