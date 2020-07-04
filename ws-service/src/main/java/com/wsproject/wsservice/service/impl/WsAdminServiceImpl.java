@@ -1,17 +1,12 @@
 package com.wsproject.wsservice.service.impl;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.querydsl.core.types.Predicate;
 import com.wsproject.wsservice.domain.WsAdmin;
@@ -44,25 +39,7 @@ public class WsAdminServiceImpl implements WsAdminService {
 			page = wsAdminRepository.findAll(predicate, pageable);
 		}
 		
-		PagedModel<WsAdminResponseDto> result = setPageLinksAdvice(search, pageable, page);
-		
-		return result;
-	}
-
-	/**
-	 * HATEOAS Link 정보 추가
-	 * @param search
-	 * @param pageable
-	 * @param page
-	 * @return
-	 */
-	private static PagedModel<WsAdminResponseDto> setPageLinksAdvice(String search, Pageable pageable, Page<WsAdmin> page) {
-		List<WsAdminResponseDto> content = page.stream().map(elem -> new WsAdminResponseDto(elem)).collect(Collectors.toList());
-		
-		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
-		PagedModel<WsAdminResponseDto> result = new PagedModel<>(content, pageMetadata);
-		CommonUtil.setLinkAdvice(result, new Link(ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString()).withSelfRel());
-		CommonUtil.setPageLinksAdvice(result, page);
+		PagedModel<WsAdminResponseDto> result = CommonUtil.setPageLinksAdvice(page, WsAdminResponseDto::new);
 		
 		return result;
 	}
