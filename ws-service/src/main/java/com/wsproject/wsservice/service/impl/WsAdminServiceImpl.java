@@ -1,21 +1,19 @@
 package com.wsproject.wsservice.service.impl;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.querydsl.core.types.Predicate;
-import com.wsproject.wsservice.controller.WsAdminController;
 import com.wsproject.wsservice.domain.WsAdmin;
 import com.wsproject.wsservice.domain.search.WsAdminSearch;
 import com.wsproject.wsservice.dto.WsAdminRequestDto;
@@ -63,7 +61,7 @@ public class WsAdminServiceImpl implements WsAdminService {
 		
 		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
 		PagedModel<WsAdminResponseDto> result = new PagedModel<>(content, pageMetadata);
-		CommonUtil.setLinkAdvice(result, linkTo(methodOn(WsAdminController.class).selectWsAdminList(search, pageable)).withSelfRel());
+		CommonUtil.setLinkAdvice(result, new Link(ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString()).withSelfRel());
 		CommonUtil.setPageLinksAdvice(result, page);
 		
 		return result;
