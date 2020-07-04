@@ -1,6 +1,8 @@
 package com.wsproject.batchservice.util;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpEntity;
@@ -28,14 +30,14 @@ public class RestUtil {
 	private HttpMethod method;
 	private HttpHeaders headers;
 	private TokenInfo tokenInfo;
-	private Map<String, Object[]> queryParams;
+	private Map<String, List<String>> queryParams;
 	private Object bodyParam;
 	
 	// 토큰 정보를 Header에 주입할 때 토큰 앞에 붙일 값
 	private static final String BEARER_PREFIX = "Bearer ";
 		
 	public RestUtil(String url, HttpMethod method, HttpHeaders headers, TokenInfo tokenInfo, 
-					Map<String, Object[]> queryParams, Object bodyParam) {
+					Map<String, List<String>> queryParams, Object bodyParam) {
 		this.url = url;
 		this.method = method;
 		this.headers = headers;
@@ -74,7 +76,7 @@ public class RestUtil {
 		
 		RestTemplate restTemplate = CommonUtil.getBean(RestTemplate.class);
 		
-		ResponseEntity<T> result = restTemplate.exchange(builder.toUriString(), method, entity, clazz);
+		ResponseEntity<T> result = restTemplate.exchange(builder.build().toUri(), method, entity, clazz);
 		
 		log.debug("exchange ended - url : {}" , url);
 		return result;
@@ -90,7 +92,7 @@ public class RestUtil {
 		private HttpMethod method = HttpMethod.GET;
 		private HttpHeaders headers = new HttpHeaders();
 		private TokenInfo tokenInfo;
-		private Map<String, Object[]> queryParams = new HashMap<>();
+		private Map<String, List<String>> queryParams = new LinkedHashMap<>();
 		private Object bodyParam;
 		
 		public RestUtilBuilder url(String url) {
@@ -169,11 +171,18 @@ public class RestUtil {
 		/** 
 		 * 쿼리파라미터를 key, value형태로 추가
 		 * @param key
-		 * @param values
+		 * @param value
 		 * @return
 		 */
-		public RestUtilBuilder queryParams(String key, Object... values) {
-			queryParams.put(key, values);
+		public RestUtilBuilder queryParam(String key, String value) {
+			List<String> list = queryParams.get(key);
+			
+			if(list == null) {
+				list = new ArrayList<String>();
+				queryParams.put(key, list);
+			}
+			
+			list.add(value);
 			return this;
 		}
 
