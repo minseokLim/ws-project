@@ -1,8 +1,9 @@
 package com.wsproject.wsservice.util;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -33,12 +35,31 @@ public class CommonUtil {
 	}
 
 	/**
+	 * 페이지 관련 hateoas 정보 주입
+	 * @param <T> Entity class
+	 * @param <R> dto class
+	 * @param page 조회한 Page 객체
+	 * @param transformToDto Entity 객체를 dto로 변환시켜줄 함수
+	 * @return hateoas정보가 주입된 PagedModel 객체
+	 */
+	public static <T, R> PagedModel<R> setPageLinksAdvice(Page<T> page, Function<T, R> transformToDto) {
+		
+		List<R> content = page.stream().map(transformToDto).collect(Collectors.toList());
+		
+		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
+		PagedModel<R> result = new PagedModel<>(content, pageMetadata);
+		setLinkAdvice(result, new Link(ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString()).withSelfRel());
+		setPageLinksAdvice(result, page);
+		
+		return result;
+	}
+	
+	/**
 	 * hateoas를 위해 next, prev, first, last 등의 url을 자동 입력해주는 함수
 	 * @param model
 	 * @param page
-	 * @throws UnsupportedEncodingException 
 	 */
-	public static void setPageLinksAdvice(PagedModel<?> model, Page<?> page) {
+	private static void setPageLinksAdvice(PagedModel<?> model, Page<?> page) {
 		UriComponentsBuilder original = ServletUriComponentsBuilder.fromCurrentRequest();
 		
 		if(page.hasNext()) {
@@ -63,7 +84,6 @@ public class CommonUtil {
 	 * @param original
 	 * @param pageable
 	 * @return page 관련 파라미터들이 replace된 uri string
-	 * @throws UnsupportedEncodingException 
 	 */
 	private static String getPageParamReplacedUri(UriComponentsBuilder original, Pageable pageable) {
 		
@@ -71,15 +91,7 @@ public class CommonUtil {
 		builder.replaceQueryParam("page", pageable.getPageNumber());
 		builder.replaceQueryParam("size", pageable.getPageSize());
 		
-//		try {
-//			String result = URLDecoder.decode(builder.build().toUriString(), "UTF-8"); // 여기서 디코딩을 하지 않으면 인코딩된 url이 반환됨
-			String result = builder.build().toUriString();
-			log.debug("result : {}", result);
-			return result;
-//		} catch (UnsupportedEncodingException e) {
-//			e.printStackTrace();
-//			throw new RuntimeException(e);
-//		}
+		return builder.build().toUriString();
 	}
 	
 	/**
