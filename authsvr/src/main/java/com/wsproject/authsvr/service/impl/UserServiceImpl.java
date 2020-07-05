@@ -3,6 +3,7 @@ package com.wsproject.authsvr.service.impl;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wsproject.authsvr.domain.User;
 import com.wsproject.authsvr.domain.enums.SocialType;
@@ -12,6 +13,7 @@ import com.wsproject.authsvr.service.UserService;
 import lombok.AllArgsConstructor;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
