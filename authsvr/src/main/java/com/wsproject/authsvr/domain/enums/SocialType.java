@@ -1,5 +1,8 @@
 package com.wsproject.authsvr.domain.enums;
 
+import java.util.Arrays;
+
+import lombok.Getter;
 
 /**
  * Social 서비스 종류 <br>
@@ -7,19 +10,25 @@ package com.wsproject.authsvr.domain.enums;
  * @author mslim
  *
  */
+@Getter
 public enum SocialType {
-	FACEBOOK("facebook"),
-	GOOGLE("google"),
-	KAKAO("kakao"),
-	GITHUB("github");
+	FACEBOOK("facebook", 0),
+	GOOGLE("google", 1),
+	KAKAO("kakao", 2),
+	GITHUB("github", 3);
 	
-	private String name;
+	private String value;
+	private int code;
 	
-	SocialType(String name) {
-		this.name = name;
+	private SocialType(String value, int code) {
+		this.value = value;
+		this.code = code;
 	}
 	
-	public String getValue() {
-		return name;
+	public static SocialType ofCode(int code) {
+		return Arrays.stream(SocialType.values())
+					.filter(v -> v.getCode() == code)
+					.findAny()
+					.orElseThrow(() -> new RuntimeException(String.format("상태코드에 code=[%s]가 존재하지 않습니다.", code)));
 	}
 }
