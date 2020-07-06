@@ -34,7 +34,7 @@ public class AccessLog {
 	private LocalDateTime accessDate;
 
 	@Builder
-	public AccessLog(Long userIdx, String ip) {
+	private AccessLog(Long userIdx, String ip) {
 		this.userIdx = userIdx;
 		this.ip = ip;
 	}

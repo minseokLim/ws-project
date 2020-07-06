@@ -93,7 +93,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 	}
 	
 	@Builder
-	public User(String name, String email, String principal, SocialType socialType, String pictureUrl, String uid,
+	private User(String name, String email, String principal, SocialType socialType, String pictureUrl, String uid,
 				String password, List<String> roles, boolean accountNonExpired, boolean accountNonLocked,
 				boolean credentialsNonExpired, boolean enabled) {
 		this.name = name;

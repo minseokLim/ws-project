@@ -46,7 +46,7 @@ public class TodaysWs extends BaseTimeEntity {
 	private WsPrivate wsPrivate; // 명언(사용자 등록)
 	
 	@Builder
-	public TodaysWs(Long userIdx, WsAdmin wsAdmin, WsPrivate wsPrivate) {
+	private TodaysWs(Long userIdx, WsAdmin wsAdmin, WsPrivate wsPrivate) {
 		// 오늘의 명언은 wsAdmin, wsPrivate 둘 중 하나만 가지고 있어야한다.
 		Assert.isTrue(wsAdmin == null || wsPrivate == null, "Either wsAdmin or wsPrivate must be null");
 		Assert.isTrue(wsAdmin != null || wsPrivate != null, "Either wsAdmin or wsPrivate must be not null");

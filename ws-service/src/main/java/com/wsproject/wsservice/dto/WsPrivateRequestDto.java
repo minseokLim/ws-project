@@ -31,7 +31,7 @@ public class WsPrivateRequestDto {
 	}
 
 	@Builder
-	public WsPrivateRequestDto(String content, String author, WsType type, Long ownerIdx) {
+	private WsPrivateRequestDto(String content, String author, WsType type, Long ownerIdx) {
 		this.content = content;
 		this.author = author;
 		this.type = type;

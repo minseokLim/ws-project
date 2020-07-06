@@ -27,7 +27,7 @@ public class WsAdminRequestDto {
 	}
 
 	@Builder
-	public WsAdminRequestDto(String content, String author, WsType type) {
+	private WsAdminRequestDto(String content, String author, WsType type) {
 		this.content = content;
 		this.author = author;
 		this.type = type;
