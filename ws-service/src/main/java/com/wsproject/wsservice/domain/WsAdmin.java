@@ -50,7 +50,7 @@ public class WsAdmin extends BaseTimeEntity {
 	private List<TodaysWs> todaysWsList = new ArrayList<TodaysWs>();
 	
 	@Builder
-	public WsAdmin(String content, String author, WsType type) {
+	private WsAdmin(String content, String author, WsType type) {
 		this.content = content;
 		this.author = author;
 		this.type = type;

@@ -53,7 +53,7 @@ public class WsPrivate extends BaseTimeEntity {
 	private List<TodaysWs> todaysWsList = new ArrayList<TodaysWs>();
 	
 	@Builder
-	public WsPrivate(String content, String author, WsType type, Long ownerIdx) {
+	private WsPrivate(String content, String author, WsType type, Long ownerIdx) {
 		this.content = content;
 		this.author = author;
 		this.type = type;

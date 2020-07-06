@@ -39,7 +39,7 @@ public class WsAdminLike {
 	private Long userIdx; // 사용자의 Key value
 
 	@Builder
-	public WsAdminLike(WsAdmin ws, Long userIdx) {
+	private WsAdminLike(WsAdmin ws, Long userIdx) {
 		this.ws = ws;
 		this.userIdx = userIdx;
 	}
