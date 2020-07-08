@@ -29,6 +29,7 @@ public class WsAdminServiceImpl implements WsAdminService {
 	private WsAdminSearch wsAdminSearch;
 	
 	@Override
+	@Transactional(readOnly = true)
 	public PagedModel<WsAdminResponseDto> selectWsAdminList(String search, Pageable pageable) {
 		Page<WsAdmin> page;
 		Predicate predicate = CommonUtil.extractSearchParameter(search, wsAdminSearch);
@@ -45,6 +46,7 @@ public class WsAdminServiceImpl implements WsAdminService {
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public WsAdminResponseDto selectWsAdmin(Long id) {
 		Optional<WsAdmin> data = wsAdminRepository.findById(id);
 		
