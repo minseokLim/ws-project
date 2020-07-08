@@ -71,7 +71,7 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 
 	@Override
 	public TodaysWsResponseDto refreshTodaysWs(Long userIdx) {
-		Optional<TodaysWs> data = todaysWsRepository.findByUserIdx(userIdx);
+		Optional<TodaysWs> data = todaysWsRepositorySupport.findByUserIdx(userIdx);
 		TodaysWs todaysWs = data.orElse(new TodaysWs());
 		todaysWs.update(getRandomTodaysWs(userIdx));
 		

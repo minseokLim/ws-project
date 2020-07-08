@@ -2,6 +2,7 @@ package com.wsproject.wsservice.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,11 +38,11 @@ public class TodaysWs extends BaseTimeEntity {
 	@Column(name = "USER_IDX")
 	private Long userIdx; // 사용자의 Key Value
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "WS_ADMIN_ID")
 	private WsAdmin wsAdmin; // 명언(관리자 등록)
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "WS_PRIVATE_ID")
 	private WsPrivate wsPrivate; // 명언(사용자 등록)
 	

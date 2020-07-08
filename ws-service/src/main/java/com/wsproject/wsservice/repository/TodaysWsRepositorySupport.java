@@ -53,4 +53,13 @@ public class TodaysWsRepositorySupport extends QuerydslRepositorySupport {
 			.where(todaysWs.userIdx.eq(userIdx))
 			.fetchOne());
 	}
+	
+	public Optional<TodaysWs> findByUserIdx(Long userIdx) {
+		return Optional.ofNullable(queryFactory
+			.selectFrom(todaysWs)
+			.leftJoin(todaysWs.wsAdmin).fetchJoin()
+			.leftJoin(todaysWs.wsPrivate).fetchJoin()
+			.where(todaysWs.userIdx.eq(userIdx))
+			.fetchOne());
+	}
 }

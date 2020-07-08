@@ -2,6 +2,7 @@ package com.wsproject.wsservice.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class WsAdminLike {
 	@Column(name = "LIKE_ID")
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "WS_ADMIN_ID")
 	private WsAdmin ws; // 명언
 	
