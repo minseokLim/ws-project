@@ -37,11 +37,7 @@ public class LikeServiceImpl implements LikeService {
 			}
 			
 			WsPrivate wsPrivate = ws.get();
-			wsPrivate.setLiked(true);
-			
-			// TODO 변경감지?
-			wsPrivateRepository.save(wsPrivate);
-			
+			wsPrivate.setLiked(true); // 변경감지로 인한 업데이트
 		} else {
 			Optional<WsAdmin> ws = wsAdminRepository.findById(wsId);
 			
@@ -68,11 +64,7 @@ public class LikeServiceImpl implements LikeService {
 			}
 			
 			WsPrivate wsPrivate = ws.get();
-			wsPrivate.setLiked(false);
-			
-			// TODO 변경감지?
-			wsPrivateRepository.save(wsPrivate);
-			
+			wsPrivate.setLiked(false); // 변경감지로 인한 업데이트
 		} else {
 			Optional<WsAdmin> ws = wsAdminRepository.findById(wsId);
 			
