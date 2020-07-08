@@ -31,6 +31,7 @@ public class WsPrivateServiceImpl implements WsPrivateService {
 	private WsPrivateSearch wsPrivateSearch;
 	
 	@Override
+	@Transactional(readOnly = true)
 	public PagedModel<WsPrivateResponseDto> selectWsPrivateList(Long ownerIdx, String search, Pageable pageable) {
 		BooleanExpression predicate = CommonUtil.extractSearchParameter(search, wsPrivateSearch);
 		BooleanExpression ownerIdxCondition = wsPrivate.ownerIdx.eq(ownerIdx);
@@ -49,6 +50,7 @@ public class WsPrivateServiceImpl implements WsPrivateService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public WsPrivateResponseDto selectWsPrivate(Long ownerIdx, Long id) {
 		Optional<WsPrivate> data = wsPrivateRepository.findByIdAndOwnerIdx(id, ownerIdx);
 		
