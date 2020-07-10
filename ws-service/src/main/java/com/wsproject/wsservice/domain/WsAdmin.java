@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import com.wsproject.wsservice.domain.enums.WsType;
 import com.wsproject.wsservice.dto.WsAdminRequestDto;
@@ -48,6 +49,10 @@ public class WsAdmin extends BaseTimeEntity {
 	
 	@OneToMany(mappedBy = "wsAdmin", cascade = CascadeType.REMOVE)
 	private List<TodaysWs> todaysWsList = new ArrayList<TodaysWs>();
+	
+	@Version
+	@Column(columnDefinition = "integer default 0", nullable = false)
+	private Integer version;
 	
 	@Builder
 	private WsAdmin(String content, String author, WsType type) {
