@@ -41,13 +41,14 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 	@Override
 	public TodaysWsResponseDto selectTodaysWs(Long userIdx) {
 		
-		Optional<TodaysWsResponseDto> data = null; 
+		Optional<TodaysWs> data = null;
 		
 		// TODO 불필요한 로직. 슬루스 및 집킨에서 사용자 정의 스팬을 테스트해보기 위해 추가
 		Span newSpan = tracer.nextSpan().name("findTodaysWsByOwnerIdx");
 		
 		try(SpanInScope spanInScope = tracer.withSpanInScope(newSpan.start())) {
-			data = todaysWsRepositorySupport.findWithLikeByUserIdx(userIdx);
+//			data = todaysWsRepositorySupport.findWithLikeByUserIdx(userIdx);
+			data = todaysWsRepositorySupport.findByUserIdx(userIdx); // 1차, 2차 캐시 사용을 위해선 dto가 아닌 entity로 조회해야함
 		} finally {
 			newSpan.tag("peer.service", "mariaDB");
 			newSpan.annotate("test");
@@ -63,7 +64,7 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 		if(!data.isPresent() || data.get().getModifiedDate().isBefore(today)) {
 			result = refreshTodaysWs(userIdx);
 		} else {
-			result = data.get();
+			result = new TodaysWsResponseDto(data.get());
 		}
 		
 		return result;
