@@ -1,5 +1,6 @@
 package com.wsproject.wsservice.domain;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.Assert;
 
 import lombok.Builder;
@@ -24,6 +27,8 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Getter
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @NoArgsConstructor
 @Table(name = "TBL_TODAYS_WS", uniqueConstraints = @UniqueConstraint(columnNames = {"USER_IDX"}))
 public class TodaysWs extends BaseTimeEntity {
