@@ -76,4 +76,9 @@ public class WsAdmin extends BaseTimeEntity {
 	public void update(WsAdminRequestDto dto) {
 		update(dto.toEntity());
 	}
+
+	@Override
+	public String toString() {
+		return "WsAdmin [id=" + id + ", content=" + content + ", author=" + author + ", type=" + type + ", version=" + version + "]";
+	}
 }

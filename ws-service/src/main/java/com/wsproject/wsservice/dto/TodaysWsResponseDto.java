@@ -19,6 +19,7 @@ import com.wsproject.wsservice.util.CommonUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 오늘의 명언 Response DTO class
@@ -27,6 +28,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class TodaysWsResponseDto extends RepresentationModel<TodaysWsResponseDto> {
 	

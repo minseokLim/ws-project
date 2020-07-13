@@ -108,5 +108,12 @@ public class User extends BaseTimeEntity implements UserDetails {
 		this.accountNonLocked = accountNonLocked;
 		this.credentialsNonExpired = credentialsNonExpired;
 		this.enabled = enabled;
-	}	
+	}
+
+	@Override
+	public String toString() {
+		return "User [idx=" + idx + ", name=" + name + ", email=" + email + ", principal=" + principal + ", socialType="
+				+ socialType + ", uid=" + uid + ", roles=" + roles + ", accountNonExpired=" + accountNonExpired 
+				+ ", accountNonLocked=" + accountNonLocked + ", credentialsNonExpired=" + credentialsNonExpired + ", enabled=" + enabled + "]";
+	}
 }

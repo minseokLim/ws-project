@@ -80,4 +80,10 @@ public class WsPrivate extends BaseTimeEntity {
 	public void setLiked(boolean liked) {
 		this.liked = liked;
 	}
+
+	@Override
+	public String toString() {
+		return "WsPrivate [id=" + id + ", content=" + content + ", author=" + author + ", type=" + type + ", ownerIdx="
+				+ ownerIdx + ", liked=" + liked + "]";
+	}
 }
