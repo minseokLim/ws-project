@@ -43,4 +43,9 @@ public class AccessLog {
 		this.accessDate = LocalDateTime.now();
 		return this;
 	}
+
+	@Override
+	public String toString() {
+		return "AccessLog [idx=" + idx + ", userIdx=" + userIdx + ", ip=" + ip + ", accessDate=" + accessDate + "]";
+	}
 }

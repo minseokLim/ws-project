@@ -6,6 +6,7 @@ import com.wsproject.wsservice.domain.enums.WsType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 명언(관리자등록) Request DTO Class
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
  *
  */
 @Getter
+@ToString
 @NoArgsConstructor
 public class WsAdminRequestDto {
 	

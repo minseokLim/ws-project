@@ -50,4 +50,9 @@ public class WsAdminLike {
 		this.ws = ws;
 		this.userIdx = userIdx;
 	}
+
+	@Override
+	public String toString() {
+		return "WsAdminLike [id=" + id + ", ws=" + ws + ", userIdx=" + userIdx + "]";
+	}
 }

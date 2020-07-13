@@ -13,6 +13,7 @@ import com.wsproject.wsservice.domain.enums.WsType;
 import com.wsproject.wsservice.util.CommonUtil;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 명언(사용자등록) Response DTO Class
@@ -20,6 +21,7 @@ import lombok.Getter;
  *
  */
 @Getter
+@ToString
 public class WsPrivateResponseDto extends RepresentationModel<WsPrivateResponseDto> {
 	
 	private Long id;

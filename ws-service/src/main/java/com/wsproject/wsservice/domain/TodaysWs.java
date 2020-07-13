@@ -77,4 +77,9 @@ public class TodaysWs extends BaseTimeEntity {
 		Assert.isTrue(wsAdmin == null || wsPrivate == null, "Either wsAdmin or wsPrivate must be null");
 		Assert.isTrue(wsAdmin != null || wsPrivate != null, "Either wsAdmin or wsPrivate must be not null");
 	}
+
+	@Override
+	public String toString() {
+		return "TodaysWs [id=" + id + ", userIdx=" + userIdx + ", wsAdmin=" + wsAdmin + ", wsPrivate=" + wsPrivate + "]";
+	}
 }
