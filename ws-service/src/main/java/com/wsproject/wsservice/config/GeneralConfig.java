@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.web.client.RestOperations;
 /**
  * @author mslim
  * Bean 생성을 한 곳에서 관리하기 위한 Configuration
@@ -13,6 +14,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
 
 import com.wsproject.wsservice.util.AccessTokenInterceptor;
+import com.wsproject.wsservice.util.ImmutableRestTemplate;
 
 /**
  * @author mslim
@@ -22,11 +24,11 @@ import com.wsproject.wsservice.util.AccessTokenInterceptor;
 public class GeneralConfig {
 	
 	/**
-	 * 토큰 전파를 위한 인터셉터가 추가된 RestTemplate
-	 * @return RestTemplate
+	 * 토큰 전파를 위한 인터셉터가 추가된 RestTemplate을 필드로 가지는 커스텀 불변객체 ImmutableRestTemplate을 반환
+	 * @return RestOperations
 	 */
 	@Bean
-	public RestTemplate restTemplate() {
+	public RestOperations restTemplate() {
 		RestTemplate template = new RestTemplate();
 		List<ClientHttpRequestInterceptor> interceptors = template.getInterceptors();
 		
@@ -37,7 +39,7 @@ public class GeneralConfig {
 			template.setInterceptors(interceptors);
 		}
 		
-		return template;
+		return new ImmutableRestTemplate(template);
 	}
 
 //	@Bean
