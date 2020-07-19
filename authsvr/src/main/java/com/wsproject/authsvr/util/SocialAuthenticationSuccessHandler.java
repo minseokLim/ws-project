@@ -1,13 +1,6 @@
 package com.wsproject.authsvr.util;
 
-import static com.wsproject.authsvr.domain.enums.SocialType.FACEBOOK;
-import static com.wsproject.authsvr.domain.enums.SocialType.GITHUB;
-import static com.wsproject.authsvr.domain.enums.SocialType.GOOGLE;
-import static com.wsproject.authsvr.domain.enums.SocialType.KAKAO;
-
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,13 +12,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import com.wsproject.authsvr.domain.AccessLog;
 import com.wsproject.authsvr.domain.User;
-import com.wsproject.authsvr.domain.enums.RoleType;
 import com.wsproject.authsvr.domain.enums.SocialType;
 import com.wsproject.authsvr.service.AccessLogService;
 import com.wsproject.authsvr.service.UserService;
@@ -58,12 +49,12 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 		log.info("onAuthenticationSuccess started");
 		
 		OAuth2AuthenticationToken oAuth2Authentication = (OAuth2AuthenticationToken) authentication;
-		Map<String, Object> map = oAuth2Authentication.getPrincipal().getAttributes();
-        User convertedUser = convertUser(oAuth2Authentication.getAuthorizedClientRegistrationId(), map);
+		
+		SocialType socialType = SocialType.ofRegistrationId(oAuth2Authentication.getAuthorizedClientRegistrationId());
+		Map<String, Object> userAttr = oAuth2Authentication.getPrincipal().getAttributes();
+        User convertedUser = socialType.convertUser(userAttr);
         
         String principal = convertedUser.getPrincipal();
-        SocialType socialType = convertedUser.getSocialType();
-        
         Optional<User> foundUser = userService.selectUserByPrincipalAndSocialType(principal, socialType);
         
         User user;
@@ -86,64 +77,4 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 		
 		log.info("onAuthenticationSuccess ended");
 	}
-
-	/**
-	 * OAuth2로그인 이후 각기다른 Social 서비스로부터 넘어온 정보를 바탕으로 User 객체를 생성
-	 * @param registrationId
-	 * @param map
-	 * @return
-	 */
-	private User convertUser(String registrationId, Map<String, Object> map) {
-		User.UserBuilder userBuilder = null;
-		
-		if(FACEBOOK.getValue().equals(registrationId)) {
-        	@SuppressWarnings("unchecked")
-    		Object pictureUrl = ((HashMap<String, Object>) ((HashMap<String, Object>) map.get("picture")).get("data")).get("url");
-        	
-        	userBuilder = User.builder()
-		                    .name(CommonUtil.convertObjToStr(map.get("name")))
-		                    .email(CommonUtil.convertObjToStr(map.get("email")))
-		                    .principal(CommonUtil.convertObjToStr(map.get("id")))
-		                    .socialType(FACEBOOK)
-		                    .pictureUrl(CommonUtil.convertObjToStr(pictureUrl));
-        	
-        } else if(GOOGLE.getValue().equals(registrationId)) {
-        	
-        	userBuilder = User.builder()
-		                    .name(CommonUtil.convertObjToStr(map.get("name")))
-		                    .email(CommonUtil.convertObjToStr(map.get("email")))
-		                    .principal(CommonUtil.convertObjToStr(map.get(IdTokenClaimNames.SUB)))
-		                    .socialType(GOOGLE)
-		                    .pictureUrl(CommonUtil.convertObjToStr(map.get("picture")));
-        	
-        } else if(KAKAO.getValue().equals(registrationId)) {
-        	@SuppressWarnings("unchecked")
-    		Map<String, String> propertyMap = (HashMap<String, String>) map.get("properties");
-        	
-        	userBuilder = User.builder()
-		                    .name(propertyMap.get("nickname"))
-		                    .email(CommonUtil.convertObjToStr(map.get("kaccount_email")))
-		                    .principal(CommonUtil.convertObjToStr(map.get("id")))
-		                    .socialType(KAKAO)
-		                    .pictureUrl(propertyMap.get("thumbnail_image"));
-        	
-        } else if(GITHUB.getValue().equals(registrationId)) {
-        	
-        	userBuilder = User.builder()
-		                    .name(CommonUtil.convertObjToStr(map.get("name")))
-		                    .email(CommonUtil.convertObjToStr(map.get("email")))
-		                    .principal(CommonUtil.convertObjToStr(map.get("id")))
-		                    .socialType(GITHUB)
-		                    .pictureUrl(CommonUtil.convertObjToStr(map.get("avatar_url")));
-        } else {
-        	return null;
-        }
-        
-        return userBuilder.roles(Collections.singletonList(RoleType.USER.getValue()))
-			        	  .accountNonExpired(true)
-			              .accountNonLocked(true)
-			              .credentialsNonExpired(true)
-			              .enabled(true)
-			              .build();
-    }
 }

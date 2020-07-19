@@ -1,6 +1,9 @@
 package com.wsproject.wsservice.domain.enums;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import lombok.Getter;
 
@@ -19,15 +22,14 @@ public enum WsType {
 	private String desc;
 	private int code;
 	
+	private static final Map<Integer, WsType> codeToEnum = Arrays.stream(values()).collect(Collectors.toMap(WsType::getCode, e -> e));
+	
 	private WsType(String desc, int code) {
 		this.desc = desc;
 		this.code = code;
 	}
 	
 	public static WsType ofCode(int code) {
-		return Arrays.stream(WsType.values())
-					.filter(v -> v.getCode() == code)
-					.findAny()
-					.orElseThrow(() -> new RuntimeException(String.format("상태코드에 code=[%s]가 존재하지 않습니다.", code)));
+		return Optional.ofNullable(codeToEnum.get(code)).orElseThrow(() -> new RuntimeException(String.format("상태코드에 code=[%s]가 존재하지 않습니다.", code)));
 	}
 }
