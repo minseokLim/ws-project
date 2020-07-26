@@ -1,10 +1,15 @@
 package com.wsproject.wsservice.controller;
 
+import static com.wsproject.wsservice.util.CommonUtil.getErrorMessages;
+
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +37,8 @@ import lombok.AllArgsConstructor;
 public class WsPrivateController {
 	
 	private WsPrivateService wsPrivateService;
+	
+	private static final String OWNER_IDX_DIFFER_ERR = "OwnerIdx in dto is different from the one in uri as a path variable";
 	
 	/**
 	 * 사용자 명언 리스트 조회
@@ -76,12 +83,16 @@ public class WsPrivateController {
 	 * @return
 	 */
 	@PostMapping
-	public ResponseEntity<WsPrivateResponseDto> insertWsPrivate(@PathVariable("ownerIdx") Long ownerIdx, @RequestBody WsPrivateRequestDto dto) {
+	public ResponseEntity<?> insertWsPrivate(@PathVariable("ownerIdx") Long ownerIdx, @Valid @RequestBody WsPrivateRequestDto dto, 
+											Errors errors) {
+		if(errors.hasErrors()) {
+			return new ResponseEntity<String>(getErrorMessages(errors, "|"), HttpStatus.BAD_REQUEST);
+		}
 		
 		if(dto.getOwnerIdx() == null) {
 			dto.setOwnerIdx(ownerIdx);
 		} else if(!dto.getOwnerIdx().equals(ownerIdx)) {
-			return ResponseEntity.badRequest().build();
+			return new ResponseEntity<String>(OWNER_IDX_DIFFER_ERR, HttpStatus.BAD_REQUEST);
 		}
 		
 		WsPrivateResponseDto result = wsPrivateService.insertWsPrivate(dto);
@@ -97,12 +108,17 @@ public class WsPrivateController {
 	 * @return
 	 */
 	@PutMapping("/{id}")
-	public ResponseEntity<WsPrivateResponseDto> updateWsPrivate(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id, @RequestBody WsPrivateRequestDto dto) {
+	public ResponseEntity<?> updateWsPrivate(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id, 
+											@Valid @RequestBody WsPrivateRequestDto dto, Errors errors) {
+		
+		if(errors.hasErrors()) {
+			return new ResponseEntity<String>(getErrorMessages(errors, "|"), HttpStatus.BAD_REQUEST);
+		}
 		
 		if(dto.getOwnerIdx() == null) {
 			dto.setOwnerIdx(ownerIdx);
 		} else if(!dto.getOwnerIdx().equals(ownerIdx)) {
-			return ResponseEntity.badRequest().build();
+			return new ResponseEntity<String>(OWNER_IDX_DIFFER_ERR, HttpStatus.BAD_REQUEST);
 		}
 		
 		WsPrivateResponseDto result = wsPrivateService.updateWsPrivate(ownerIdx, id, dto);

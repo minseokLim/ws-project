@@ -39,10 +39,10 @@ public class WsAdminLike {
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "WS_ADMIN_ID")
+	@JoinColumn(name = "WS_ADMIN_ID", nullable = false)
 	private WsAdmin ws; // 명언
 	
-	@Column(name = "USER_IDX")
+	@Column(name = "USER_IDX", nullable = false)
 	private Long userIdx; // 사용자의 Key value
 
 	@Builder

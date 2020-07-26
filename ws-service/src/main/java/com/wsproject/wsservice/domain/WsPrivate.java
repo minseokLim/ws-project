@@ -48,11 +48,13 @@ public class WsPrivate extends BaseTimeEntity {
 	@Column(nullable = false)
 	private String author; // 말한 사람
 	
+	@Column(nullable = false)
 	private WsType type; // 명언 종류
 	
 	@Column(name = "OWNER_IDX", nullable = false)
 	private Long ownerIdx;
 
+	@Column(nullable = false)
 	private boolean liked; // 사용자가 좋아요를 눌렀는지의 여부
 	
 	@OneToMany(mappedBy = "wsPrivate", cascade = CascadeType.REMOVE)

@@ -48,6 +48,7 @@ public class WsAdmin extends BaseTimeEntity {
 	@Column(nullable = false)
 	private String author; // 말한 사람
 	
+	@Column(nullable = false)
 	private WsType type; // 명언 종류
 	
 	@OneToMany(mappedBy = "ws", cascade = CascadeType.REMOVE)

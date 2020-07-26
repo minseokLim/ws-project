@@ -15,6 +15,8 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -164,5 +166,15 @@ public class CommonUtil {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+	}
+	
+	/**
+	 * 발생한 에러 메시지를 delimiter를 이용해 하나의 String으로 합쳐서 반환
+	 * @param errors
+	 * @param delimiter
+	 * @return
+	 */
+	public static String getErrorMessages(Errors errors, String delimiter) {
+		return errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(delimiter));
 	}
 }

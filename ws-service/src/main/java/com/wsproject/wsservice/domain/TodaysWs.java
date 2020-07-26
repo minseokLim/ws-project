@@ -40,7 +40,7 @@ public class TodaysWs extends BaseTimeEntity {
 	
 	// 현재는 USER_IDX를 PK로 잡아도 관계없으나, 요구사항은 언제든지 바뀔 수 있기 때문에 
 	// 한 사용자가 여러 개의 오늘의 명언을 가지게 되는 상황이 왔을 때를 대비
-	@Column(name = "USER_IDX")
+	@Column(name = "USER_IDX", nullable = false)
 	private Long userIdx; // 사용자의 Key Value
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -53,33 +53,41 @@ public class TodaysWs extends BaseTimeEntity {
 	
 	@Builder
 	private TodaysWs(Long userIdx, WsAdmin wsAdmin, WsPrivate wsPrivate) {
-		// 오늘의 명언은 wsAdmin, wsPrivate 둘 중 하나만 가지고 있어야한다.
-		Assert.isTrue(wsAdmin == null || wsPrivate == null, "Either wsAdmin or wsPrivate must be null");
-		Assert.isTrue(wsAdmin != null || wsPrivate != null, "Either wsAdmin or wsPrivate must be not null");
 		this.userIdx = userIdx;
 		this.wsAdmin = wsAdmin;
 		this.wsPrivate = wsPrivate;
-	}	
+		validate();
+	}
 	
 	public void update(TodaysWs todaysWs) {
+		todaysWs.validate();
+		
 		this.userIdx = todaysWs.getUserIdx() != null ? todaysWs.getUserIdx() : userIdx;
 		
 		if(todaysWs.getWsAdmin() != null) {
 			this.wsAdmin = todaysWs.getWsAdmin();
 			this.wsPrivate = null;
-		}
-		
-		if(todaysWs.getWsPrivate() != null) {
+		} else {
 			this.wsPrivate = todaysWs.getWsPrivate();
 			this.wsAdmin = null;
 		}
 		
-		Assert.isTrue(wsAdmin == null || wsPrivate == null, "Either wsAdmin or wsPrivate must be null");
-		Assert.isTrue(wsAdmin != null || wsPrivate != null, "Either wsAdmin or wsPrivate must be not null");
+		validate();
 	}
 
 	@Override
 	public String toString() {
 		return "TodaysWs [id=" + id + ", userIdx=" + userIdx + ", wsAdmin=" + wsAdmin + ", wsPrivate=" + wsPrivate + "]";
+	}
+	
+	/**
+	 * 유효성 검사 <br>
+	 * 오늘의 명언은 wsAdmin, wsPrivate 둘 중 하나만 가지고 있어야한다.
+	 * @param wsAdmin
+	 * @param wsPrivate
+	 */
+	private void validate() {
+		Assert.isTrue((wsAdmin != null && wsPrivate == null) || (wsAdmin == null && wsPrivate != null), 
+					  "TodaysWs must have only one NonNull value between wsAdmin and wsPrivate");
 	}
 }

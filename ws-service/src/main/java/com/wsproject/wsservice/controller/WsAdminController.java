@@ -1,10 +1,15 @@
 package com.wsproject.wsservice.controller;
 
+import static com.wsproject.wsservice.util.CommonUtil.getErrorMessages;
+
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,7 +76,12 @@ public class WsAdminController {
 	 * @return
 	 */
 	@PostMapping
-	public ResponseEntity<WsAdminResponseDto> insertWsAdmin(@RequestBody WsAdminRequestDto dto) {
+	public ResponseEntity<?> insertWsAdmin(@Valid @RequestBody WsAdminRequestDto dto, Errors errors) {
+		
+		if(errors.hasErrors()) {
+			return new ResponseEntity<String>(getErrorMessages(errors, "|"), HttpStatus.BAD_REQUEST);
+		}
+		
 		WsAdminResponseDto result = wsAdminService.insertWsAdmin(dto);
 		
 		return new ResponseEntity<WsAdminResponseDto>(result, HttpStatus.CREATED);
@@ -84,7 +94,12 @@ public class WsAdminController {
 	 * @return
 	 */
 	@PutMapping("/{id}")
-	public ResponseEntity<WsAdminResponseDto> updateWsAdmin(@PathVariable("id") Long id, @RequestBody WsAdminRequestDto dto) {
+	public ResponseEntity<?> updateWsAdmin(@PathVariable("id") Long id, @Valid @RequestBody WsAdminRequestDto dto, Errors errors) {
+		
+		if(errors.hasErrors()) {
+			return new ResponseEntity<String>(getErrorMessages(errors, "|"), HttpStatus.BAD_REQUEST);
+		}
+		
 		WsAdminResponseDto result = wsAdminService.updateWsAdmin(id, dto);
 		
 		if(result != null) {
