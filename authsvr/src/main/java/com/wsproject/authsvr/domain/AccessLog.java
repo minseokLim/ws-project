@@ -2,6 +2,7 @@ package com.wsproject.authsvr.domain;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,10 +28,13 @@ public class AccessLog {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idx;
 	
+	@Column(nullable = false)
 	private Long userIdx;
 	
+	@Column(nullable = false)
 	private String ip;
 	
+	@Column(nullable = false)
 	private LocalDateTime accessDate;
 
 	@Builder
