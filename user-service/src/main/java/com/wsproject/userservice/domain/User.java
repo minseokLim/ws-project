@@ -1,9 +1,11 @@
 package com.wsproject.userservice.domain;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -23,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wsproject.userservice.domain.enums.SocialType;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +37,7 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "TBL_USER", uniqueConstraints = {@UniqueConstraint(columnNames = {"principal", "socialType"})})
 public class User extends BaseTimeEntity implements UserDetails {
 	
@@ -83,7 +86,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+		return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
 	}
 	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -96,14 +99,14 @@ public class User extends BaseTimeEntity implements UserDetails {
 	private User(String name, String email, String principal, SocialType socialType, String pictureUrl, String uid,
 				String password, List<String> roles, boolean accountNonExpired, boolean accountNonLocked,
 				boolean credentialsNonExpired, boolean enabled) {
-		this.name = name;
+		this.name = Objects.requireNonNull(name);
 		this.email = email;
 		this.principal = principal;
 		this.socialType = socialType;
 		this.pictureUrl = pictureUrl;
 		this.uid = uid;
 		this.password = password;
-		this.roles = roles;
+		this.roles = Objects.requireNonNull(roles);
 		this.accountNonExpired = accountNonExpired;
 		this.accountNonLocked = accountNonLocked;
 		this.credentialsNonExpired = credentialsNonExpired;

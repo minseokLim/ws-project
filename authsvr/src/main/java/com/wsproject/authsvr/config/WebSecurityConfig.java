@@ -1,8 +1,9 @@
 package com.wsproject.authsvr.config;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
@@ -73,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 													return socialType.getRegistration(oAuth2ClientProperties);
 												})
 												.filter(Objects::nonNull)
-												.collect(Collectors.toList());
+												.collect(toList());
 		
 		return new InMemoryClientRegistrationRepository(registrations);
 	}

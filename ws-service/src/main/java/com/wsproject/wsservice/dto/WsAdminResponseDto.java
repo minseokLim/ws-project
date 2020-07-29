@@ -44,6 +44,6 @@ public class WsAdminResponseDto extends RepresentationModel<WsAdminResponseDto> 
 		this.modifiedDate = ws.getModifiedDate();
 		
 		// HATEOAS Link 정보 추가
-		CommonUtil.setLinkAdvice(this, linkTo(WsAdminController.class).slash(this.id).withSelfRel());
+		CommonUtil.setLink(this, linkTo(WsAdminController.class).slash(this.id).withSelfRel());
 	}
 }

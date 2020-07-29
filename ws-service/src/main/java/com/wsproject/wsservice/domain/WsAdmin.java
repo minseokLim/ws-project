@@ -2,6 +2,7 @@ package com.wsproject.wsservice.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
@@ -18,8 +19,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.wsproject.wsservice.domain.enums.WsType;
-import com.wsproject.wsservice.dto.WsAdminRequestDto;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "TBL_WS_ADMIN")
 public class WsAdmin extends BaseTimeEntity {
 
@@ -63,19 +64,16 @@ public class WsAdmin extends BaseTimeEntity {
 	
 	@Builder
 	private WsAdmin(String content, String author, WsType type) {
-		this.content = content;
-		this.author = author;
-		this.type = type;
+		this.content = Objects.requireNonNull(content);
+		this.author = Objects.requireNonNull(author);
+		this.type = Objects.requireNonNull(type);
 	}
 
-	public void update(WsAdmin ws) {
+	public WsAdmin update(WsAdmin ws) {
 		this.content = ws.getContent() != null ? ws.getContent() : content;
 		this.author = ws.getAuthor() != null ? ws.getAuthor() : author;
 		this.type = ws.getType() != null ? ws.getType() : type;
-	}
-	
-	public void update(WsAdminRequestDto dto) {
-		update(dto.toEntity());
+		return this;
 	}
 
 	@Override

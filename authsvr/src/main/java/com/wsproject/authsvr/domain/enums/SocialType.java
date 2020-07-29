@@ -1,14 +1,14 @@
 package com.wsproject.authsvr.domain.enums;
 
 import static com.wsproject.authsvr.util.CommonUtil.convertObjToStr;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toMap;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties.Registration;
@@ -42,7 +42,7 @@ public enum SocialType {
 					.principal(convertObjToStr(requireNonNull(userAttr.get("id"))))
 					.socialType(FACEBOOK)
 					.pictureUrl(convertObjToStr(pictureUrl))
-					.roles(Collections.singletonList(RoleType.USER.getValue()))
+					.roles(singletonList(RoleType.USER.getValue()))
 					.accountNonExpired(true)
 					.accountNonLocked(true)
 					.credentialsNonExpired(true)
@@ -71,7 +71,7 @@ public enum SocialType {
 					.principal(convertObjToStr(requireNonNull(userAttr.get(IdTokenClaimNames.SUB))))
 					.socialType(GOOGLE)
 					.pictureUrl(convertObjToStr(userAttr.get("picture")))
-					.roles(Collections.singletonList(RoleType.USER.getValue()))
+					.roles(singletonList(RoleType.USER.getValue()))
 					.accountNonExpired(true)
 					.accountNonLocked(true)
 					.credentialsNonExpired(true)
@@ -101,7 +101,7 @@ public enum SocialType {
                     .principal(convertObjToStr(requireNonNull(userAttr.get("id"))))
                     .socialType(KAKAO)
                     .pictureUrl(propertyMap.get("thumbnail_image"))
-                    .roles(Collections.singletonList(RoleType.USER.getValue()))
+                    .roles(singletonList(RoleType.USER.getValue()))
 					.accountNonExpired(true)
 					.accountNonLocked(true)
 					.credentialsNonExpired(true)
@@ -127,7 +127,7 @@ public enum SocialType {
                     .principal(convertObjToStr(requireNonNull(userAttr.get("id"))))
                     .socialType(GITHUB)
                     .pictureUrl(convertObjToStr(userAttr.get("avatar_url")))
-                    .roles(Collections.singletonList(RoleType.USER.getValue()))
+                    .roles(singletonList(RoleType.USER.getValue()))
 					.accountNonExpired(true)
 					.accountNonLocked(true)
 					.credentialsNonExpired(true)
@@ -149,8 +149,8 @@ public enum SocialType {
 	private String registrationId;
 	private int code;
 	
-	private static final Map<String, SocialType> registrationIdToEnum = Arrays.stream(values()).collect(Collectors.toMap(SocialType::getRegistrationId, e -> e));
-	private static final Map<Integer, SocialType> codeToEnum = Arrays.stream(values()).collect(Collectors.toMap(SocialType::getCode, e -> e));
+	private static final Map<String, SocialType> registrationIdToEnum = Arrays.stream(values()).collect(toMap(SocialType::getRegistrationId, e -> e));
+	private static final Map<Integer, SocialType> codeToEnum = Arrays.stream(values()).collect(toMap(SocialType::getCode, e -> e));
 	
 	private SocialType(String registrationId, int code) {
 		this.registrationId = registrationId;

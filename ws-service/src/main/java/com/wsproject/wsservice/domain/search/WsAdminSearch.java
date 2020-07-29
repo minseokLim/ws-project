@@ -2,19 +2,14 @@ package com.wsproject.wsservice.domain.search;
 
 import static com.wsproject.wsservice.domain.QWsAdmin.wsAdmin;
 
-import java.util.function.Function;
-
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.wsproject.wsservice.domain.enums.WsType;
 
-@Component
-public class WsAdminSearch implements Function<String, BooleanExpression> {
+public class WsAdminSearch {
 
-	@Override
-	public BooleanExpression apply(String param) {
+	public static BooleanExpression getBooleanExpression(String param) {
 		String[] keyValue = param.split("=");
 		Assert.isTrue(keyValue.length == 2, "Search Parameter must be look like 'key=value'");
 		
@@ -32,6 +27,6 @@ public class WsAdminSearch implements Function<String, BooleanExpression> {
 			return wsAdmin.type.eq(WsType.valueOf(value));
 		}
 		
-		return null;
+		throw new IllegalArgumentException();
 	}
 }

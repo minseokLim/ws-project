@@ -1,6 +1,7 @@
 package com.wsproject.authsvr.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +22,7 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "TBL_ACCESS_LOG")
 public class AccessLog {
 	
@@ -38,14 +40,10 @@ public class AccessLog {
 	private LocalDateTime accessDate;
 
 	@Builder
-	private AccessLog(Long userIdx, String ip) {
-		this.userIdx = userIdx;
-		this.ip = ip;
-	}
-	
-	public AccessLog setNowOnAccessDate() {
-		this.accessDate = LocalDateTime.now();
-		return this;
+	private AccessLog(Long userIdx, String ip, LocalDateTime accessDate) {
+		this.userIdx = Objects.requireNonNull(userIdx);
+		this.ip = Objects.requireNonNull(ip);
+		this.accessDate = Objects.requireNonNull(accessDate);
 	}
 
 	@Override

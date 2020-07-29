@@ -2,19 +2,14 @@ package com.wsproject.wsservice.domain.search;
 
 import static com.wsproject.wsservice.domain.QWsPrivate.wsPrivate;
 
-import java.util.function.Function;
-
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.wsproject.wsservice.domain.enums.WsType;
 
-@Component
-public class WsPrivateSearch implements Function<String, BooleanExpression> {
+public class WsPrivateSearch {
 
-	@Override
-	public BooleanExpression apply(String param) {
+	public static BooleanExpression getBooleanExpression(String param) {
 		String[] keyValue = param.split("=");
 		Assert.isTrue(keyValue.length == 2, "Search Parameter must be look like 'key=value'");
 		
@@ -36,6 +31,6 @@ public class WsPrivateSearch implements Function<String, BooleanExpression> {
 			return wsPrivate.liked.eq(Boolean.parseBoolean(value));
 		}
 		
-		return null;
+		throw new IllegalArgumentException();
 	}
 }

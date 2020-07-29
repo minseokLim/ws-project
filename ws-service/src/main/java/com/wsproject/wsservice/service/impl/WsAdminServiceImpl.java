@@ -26,13 +26,11 @@ public class WsAdminServiceImpl implements WsAdminService {
 		
 	private WsAdminRepository wsAdminRepository;
 	
-	private WsAdminSearch wsAdminSearch;
-	
 	@Override
 	@Transactional(readOnly = true)
 	public PagedModel<WsAdminResponseDto> selectWsAdminList(String search, Pageable pageable) {
 		Page<WsAdmin> page;
-		Predicate predicate = CommonUtil.extractSearchParameter(search, wsAdminSearch);
+		Predicate predicate = CommonUtil.extractSearchParameter(search, WsAdminSearch::getBooleanExpression);
 		
 		if(predicate == null) {
 			page = wsAdminRepository.findAll(pageable);
@@ -73,7 +71,7 @@ public class WsAdminServiceImpl implements WsAdminService {
 		}
 		
 		WsAdmin ws = data.get();
-		ws.update(dto); // 변경감지로 인한 업데이트
+		ws.update(dto.toEntity()); // 변경감지로 인한 업데이트
 		
 		return new WsAdminResponseDto(ws);
 	}

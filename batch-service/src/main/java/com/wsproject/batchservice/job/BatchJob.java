@@ -1,7 +1,8 @@
 package com.wsproject.batchservice.job;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 import org.springframework.batch.core.Job;
@@ -58,7 +59,7 @@ public class BatchJob {
 			tokenInfo = tokenUtil.getTokenInfo();
 			RestUtil restUtil = RestUtil.builder().url("/user-service/v1.0/users/maxIdx").tokenInfo(tokenInfo).build();
 			long maxUserIdx = restUtil.exchange(Long.class).getBody(); // auto increment로 설정되어있는 userIdx의 최대값을 구한다.
-			List<Long> userIdxList = LongStream.rangeClosed(1, maxUserIdx).mapToObj(Long::new).collect(Collectors.toList());
+			List<Long> userIdxList = LongStream.rangeClosed(1, maxUserIdx).mapToObj(Long::new).collect(toList());
 			
 			return new QueueItemReader<Long>(userIdxList);
 		} catch (Exception e) {

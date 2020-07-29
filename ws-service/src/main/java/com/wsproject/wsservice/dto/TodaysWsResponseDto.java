@@ -18,7 +18,6 @@ import com.wsproject.wsservice.util.CommonUtil;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -27,7 +26,6 @@ import lombok.ToString;
  *
  */
 @Getter
-@Setter
 @ToString
 @NoArgsConstructor
 public class TodaysWsResponseDto extends RepresentationModel<TodaysWsResponseDto> {
@@ -83,7 +81,7 @@ public class TodaysWsResponseDto extends RepresentationModel<TodaysWsResponseDto
 		this.modifiedDate = todaysWs.getModifiedDate();
 		
 		// HATEOAS Link 정보 추가
-		CommonUtil.setLinkAdvice(this, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(this.userIdx)).withSelfRel());
+		CommonUtil.setLink(this, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(this.userIdx)).withSelfRel());
 	}
 
 	@QueryProjection
@@ -101,6 +99,6 @@ public class TodaysWsResponseDto extends RepresentationModel<TodaysWsResponseDto
 		this.modifiedDate = modifiedDate;
 		
 		// HATEOAS Link 정보 추가
-		CommonUtil.setLinkAdvice(this, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(this.userIdx)).withSelfRel());
+		CommonUtil.setLink(this, linkTo(methodOn(TodaysWsController.class).selectTodaysWs(this.userIdx)).withSelfRel());
 	}
 }

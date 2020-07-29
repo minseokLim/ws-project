@@ -1,9 +1,10 @@
 package com.wsproject.wsservice.domain.enums;
 
+import static java.util.stream.Collectors.toMap;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import lombok.Getter;
 
@@ -22,7 +23,7 @@ public enum WsType {
 	private String desc;
 	private int code;
 	
-	private static final Map<Integer, WsType> codeToEnum = Arrays.stream(values()).collect(Collectors.toMap(WsType::getCode, e -> e));
+	private static final Map<Integer, WsType> codeToEnum = Arrays.stream(values()).collect(toMap(WsType::getCode, e -> e));
 	
 	private WsType(String desc, int code) {
 		this.desc = desc;

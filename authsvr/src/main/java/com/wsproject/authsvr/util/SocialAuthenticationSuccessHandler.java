@@ -1,5 +1,8 @@
 package com.wsproject.authsvr.util;
 
+import static com.wsproject.authsvr.util.CommonUtil.getClientIP;
+import static java.time.LocalDateTime.now;
+
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
@@ -70,7 +73,7 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userIdx, "N/A", user.getAuthorities()));
         
 		// 액세스 로그 저장
-		AccessLog accessLog = AccessLog.builder().userIdx(userIdx).ip(CommonUtil.getClientIP(request)).build();
+		AccessLog accessLog = AccessLog.builder().userIdx(userIdx).ip(getClientIP(request)).accessDate(now()).build();
         accessLogService.insertAccessLog(accessLog);
         
         super.onAuthenticationSuccess(request, response, authentication);
