@@ -1,9 +1,12 @@
 package com.wsproject.wsservice.util;
 
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -38,47 +41,49 @@ public class CommonUtil {
 
 	/**
 	 * 페이지 관련 hateoas 정보 주입
-	 * @param <T> Entity class
+	 * @param <E> Entity class
 	 * @param <R> dto class
 	 * @param page 조회한 Page 객체
 	 * @param transformToDto Entity 객체를 dto로 변환시켜줄 함수
 	 * @return hateoas정보가 주입된 PagedModel 객체
 	 */
-	public static <T, R> PagedModel<R> setPageLinksAdvice(Page<T> page, Function<T, R> transformToDto) {
+	public static <E, R extends RepresentationModel<R>> PagedModel<R> setPageLinksAdvice(Page<E> page, Function<E, R> transformToDto) {
 		
-		List<R> content = page.stream().map(transformToDto).collect(Collectors.toList());
+		List<R> content = page.stream().map(transformToDto).collect(toList());
 		
 		PageMetadata pageMetadata = new PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements());
 		PagedModel<R> result = new PagedModel<>(content, pageMetadata);
-		setLinkAdvice(result, new Link(ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString()).withSelfRel());
-		setPageLinksAdvice(result, page);
+		setLink(result, new Link(ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString()).withSelfRel());
+		setPageLinks(result, page);
 		
 		return result;
 	}
-	
+
 	/**
 	 * hateoas를 위해 next, prev, first, last 등의 url을 자동 입력해주는 함수
+	 * @param <E> Entity class
+	 * @param <R> dto class
 	 * @param model
 	 * @param page
 	 */
-	private static void setPageLinksAdvice(PagedModel<?> model, Page<?> page) {
+	private static <E, R extends RepresentationModel<R>> void setPageLinks(PagedModel<R> model, Page<E> page) {
 		UriComponentsBuilder original = ServletUriComponentsBuilder.fromCurrentRequest();
 		
 		if(page.hasNext()) {
 			String nextUri = getPageParamReplacedUri(original, page.nextPageable());
-			setLinkAdvice(model, new Link(nextUri).withRel("next"));
+			setLink(model, new Link(nextUri).withRel("next"));
 		}
 		
 		if(page.hasPrevious()) {
 			String prevUri = getPageParamReplacedUri(original, page.previousPageable());
-			setLinkAdvice(model, new Link(prevUri).withRel("prev"));
+			setLink(model, new Link(prevUri).withRel("prev"));
 		}
 		
 		String firstUri = getPageParamReplacedUri(original, PageRequest.of(0, page.getSize(), page.getSort()));
-		setLinkAdvice(model, new Link(firstUri).withRel("first"));
+		setLink(model, new Link(firstUri).withRel("first"));
 		
 		String lastUri = getPageParamReplacedUri(original, PageRequest.of(page.getTotalPages() - 1 >= 0 ? page.getTotalPages() - 1 : 0, page.getSize(), page.getSort()));
-		setLinkAdvice(model, new Link(lastUri).withRel("last"));
+		setLink(model, new Link(lastUri).withRel("last"));
 	}
 
 	/** 
@@ -101,7 +106,7 @@ public class CommonUtil {
 	 * @param dto
 	 * @param link
 	 */
-	public static void setLinkAdvice(RepresentationModel<?> dto, Link link) {
+	public static <E extends RepresentationModel<E>> void setLink(E dto, Link link) {
 		String linkStr = link.getHref();
 		log.debug("link : {}", linkStr);
 		dto.add(new Link(replaceBaseUri(linkStr), link.getRel()));
@@ -124,13 +129,13 @@ public class CommonUtil {
 	/** 
 	 * Bean객체를 얻는다
 	 * @param <T>
-	 * @param classType
+	 * @param clazz
 	 * @return Bean 객체
 	 */
-	public static <T> T getBean(Class<T> classType) {
+	public static <T> T getBean(Class<T> clazz) {
 		ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
 		
-		return applicationContext.getBean(classType);
+		return applicationContext.getBean(clazz);
 	}
 	
 	/**
@@ -162,8 +167,7 @@ public class CommonUtil {
 			}
 			
 			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -175,6 +179,6 @@ public class CommonUtil {
 	 * @return
 	 */
 	public static String getErrorMessages(Errors errors, String delimiter) {
-		return errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining(delimiter));
+		return errors.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(joining(delimiter));
 	}
 }

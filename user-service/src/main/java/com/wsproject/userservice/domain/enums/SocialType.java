@@ -1,9 +1,10 @@
 package com.wsproject.userservice.domain.enums;
 
+import static java.util.stream.Collectors.toMap;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import lombok.Getter;
 
@@ -23,8 +24,8 @@ public enum SocialType {
 	private String registrationId;
 	private int code;
 	
-	private static final Map<String, SocialType> registrationIdToEnum = Arrays.stream(values()).collect(Collectors.toMap(SocialType::getRegistrationId, e -> e));
-	private static final Map<Integer, SocialType> codeToEnum = Arrays.stream(values()).collect(Collectors.toMap(SocialType::getCode, e -> e));
+	private static final Map<String, SocialType> registrationIdToEnum = Arrays.stream(values()).collect(toMap(SocialType::getRegistrationId, e -> e));
+	private static final Map<Integer, SocialType> codeToEnum = Arrays.stream(values()).collect(toMap(SocialType::getCode, e -> e));
 	
 	private SocialType(String registrationId, int code) {
 		this.registrationId = registrationId;

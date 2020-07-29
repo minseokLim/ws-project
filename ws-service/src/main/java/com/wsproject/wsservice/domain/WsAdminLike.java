@@ -1,5 +1,7 @@
 package com.wsproject.wsservice.domain;
 
+import java.util.Objects;
+
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,7 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "TBL_WS_ADMIN_LIKE", uniqueConstraints = @UniqueConstraint(columnNames = {"WS_ADMIN_ID", "USER_IDX"}))
 public class WsAdminLike {
 	
@@ -47,8 +50,8 @@ public class WsAdminLike {
 
 	@Builder
 	private WsAdminLike(WsAdmin ws, Long userIdx) {
-		this.ws = ws;
-		this.userIdx = userIdx;
+		this.ws = Objects.requireNonNull(ws);
+		this.userIdx = Objects.requireNonNull(userIdx);
 	}
 
 	@Override

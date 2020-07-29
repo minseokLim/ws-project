@@ -51,6 +51,6 @@ public class WsPrivateResponseDto extends RepresentationModel<WsPrivateResponseD
 		this.modifiedDate = ws.getModifiedDate();
 		
 		// HATEOAS Link 정보 추가
-		CommonUtil.setLinkAdvice(this, linkTo(methodOn(WsPrivateController.class).selectWsPrivate(this.ownerIdx, this.id)).withSelfRel());
+		CommonUtil.setLink(this, linkTo(methodOn(WsPrivateController.class).selectWsPrivate(this.ownerIdx, this.id)).withSelfRel());
 	}
 }

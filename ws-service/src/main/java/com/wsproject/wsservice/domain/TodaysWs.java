@@ -1,5 +1,7 @@
 package com.wsproject.wsservice.domain;
 
+import java.util.Objects;
+
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +18,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.Assert;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "TBL_TODAYS_WS", uniqueConstraints = @UniqueConstraint(columnNames = {"USER_IDX"}))
 public class TodaysWs extends BaseTimeEntity {
 	
@@ -53,13 +56,13 @@ public class TodaysWs extends BaseTimeEntity {
 	
 	@Builder
 	private TodaysWs(Long userIdx, WsAdmin wsAdmin, WsPrivate wsPrivate) {
-		this.userIdx = userIdx;
+		this.userIdx = Objects.requireNonNull(userIdx);
 		this.wsAdmin = wsAdmin;
 		this.wsPrivate = wsPrivate;
 		validate();
 	}
 	
-	public void update(TodaysWs todaysWs) {
+	public TodaysWs update(TodaysWs todaysWs) {
 		todaysWs.validate();
 		
 		this.userIdx = todaysWs.getUserIdx() != null ? todaysWs.getUserIdx() : userIdx;
@@ -73,6 +76,8 @@ public class TodaysWs extends BaseTimeEntity {
 		}
 		
 		validate();
+		
+		return this;
 	}
 
 	@Override

@@ -18,6 +18,6 @@ public class AccessLogServiceImpl implements AccessLogService {
 	
 	@Override
 	public AccessLog insertAccessLog(AccessLog accessLog) {
-		return accessLogRepository.save(accessLog.setNowOnAccessDate());
+		return accessLogRepository.save(accessLog);
 	}
 }

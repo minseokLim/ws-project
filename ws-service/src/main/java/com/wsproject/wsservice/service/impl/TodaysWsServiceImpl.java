@@ -72,11 +72,16 @@ public class TodaysWsServiceImpl implements TodaysWsService {
 
 	@Override
 	public TodaysWsResponseDto refreshTodaysWs(Long userIdx) {
+		TodaysWs newTodaysWs = getRandomTodaysWs(userIdx);
 		Optional<TodaysWs> data = todaysWsRepositorySupport.findByUserIdx(userIdx);
-		TodaysWs todaysWs = data.orElse(new TodaysWs());
-		todaysWs.update(getRandomTodaysWs(userIdx));
 		
-		TodaysWsResponseDto result = new TodaysWsResponseDto(todaysWsRepository.save(todaysWs));
+		if(data.isPresent()) {
+			newTodaysWs = data.get().update(newTodaysWs); // 변경 감지로 인한 업데이트
+		} else {
+			newTodaysWs = todaysWsRepository.save(newTodaysWs);
+		}
+		
+		TodaysWsResponseDto result = new TodaysWsResponseDto(newTodaysWs);
 		
 		return result;
 	}

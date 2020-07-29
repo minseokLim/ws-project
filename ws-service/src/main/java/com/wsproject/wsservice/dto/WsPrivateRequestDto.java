@@ -18,7 +18,6 @@ import lombok.ToString;
  *
  */
 @Getter
-@Setter
 @ToString
 @NoArgsConstructor
 public class WsPrivateRequestDto {
@@ -32,6 +31,7 @@ public class WsPrivateRequestDto {
 	@NotNull(message = "type is required")
 	private WsType type;
 	
+	@Setter
 	private Long ownerIdx;
 	
 	public WsPrivate toEntity() {

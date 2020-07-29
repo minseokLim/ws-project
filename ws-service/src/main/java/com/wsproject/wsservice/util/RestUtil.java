@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,7 +34,7 @@ public class RestUtil {
 	
 	public RestUtil(String url, HttpMethod method, HttpHeaders headers, Map<String, List<String>> queryParams, 
 			 		Object bodyParam) {
-		this.url = url;
+		this.url = Objects.requireNonNull(url);
 		this.method = method;
 		this.headers = headers;
 		this.queryParams = queryParams;
