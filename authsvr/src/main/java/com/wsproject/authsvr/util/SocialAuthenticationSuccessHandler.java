@@ -60,13 +60,7 @@ public class SocialAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         String principal = convertedUser.getPrincipal();
         Optional<User> foundUser = userService.selectUserByPrincipalAndSocialType(principal, socialType);
         
-        User user;
-        
-        if(foundUser.isPresent()) {
-        	user = foundUser.get();
-        } else {
-        	user = userService.insertUser(convertedUser);
-        }
+        User user = foundUser.orElseGet(() -> userService.insertUser(convertedUser));
         
         Long userIdx = user.getIdx();
         // 인증서버에서 관리하는 key값(userIdx)을 기반으로 Token을 생성하여 저장

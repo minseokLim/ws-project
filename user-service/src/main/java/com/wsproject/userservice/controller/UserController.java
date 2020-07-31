@@ -44,11 +44,8 @@ public class UserController {
 		
 		Optional<User> user = userService.selectUser(userIdx);
 		
-		if(user.isPresent()) {
-			return new ResponseEntity<User>(user.get(), HttpStatus.OK);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		return user.map(userInfo -> new ResponseEntity<User>(userInfo, HttpStatus.OK))
+				   .orElseGet(() -> ResponseEntity.notFound().build());
 	}
 	
 	/**

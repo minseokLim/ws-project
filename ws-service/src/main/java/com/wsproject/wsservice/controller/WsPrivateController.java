@@ -2,6 +2,8 @@ package com.wsproject.wsservice.controller;
 
 import static com.wsproject.wsservice.util.CommonUtil.getErrorMessages;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
@@ -50,13 +52,10 @@ public class WsPrivateController {
 	@GetMapping
 	public ResponseEntity<PagedModel<WsPrivateResponseDto>> selectWsPrivateList(@PathVariable("ownerIdx") Long ownerIdx, 
 			@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
+		
 		PagedModel<WsPrivateResponseDto> result = wsPrivateService.selectWsPrivateList(ownerIdx, search, pageable);
 		
-		if(result != null) {
-			return ResponseEntity.ok(result);
-		} else {
-			return ResponseEntity.notFound().build();
-		}	
+		return ResponseEntity.ok(result); // TODO result가 null일 수 있을까? 없을 거 같은데...
 	}
 	
 	/**
@@ -67,13 +66,10 @@ public class WsPrivateController {
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<WsPrivateResponseDto> selectWsPrivate(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
-		WsPrivateResponseDto result = wsPrivateService.selectWsPrivate(ownerIdx, id);
 		
-		if(result != null) {
-			return ResponseEntity.ok(result);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		Optional<WsPrivateResponseDto> result = wsPrivateService.selectWsPrivate(ownerIdx, id);
+		
+		return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 	}
 	
 	/**
@@ -121,13 +117,8 @@ public class WsPrivateController {
 			return new ResponseEntity<String>(OWNER_IDX_DIFFER_ERR, HttpStatus.BAD_REQUEST);
 		}
 		
-		WsPrivateResponseDto result = wsPrivateService.updateWsPrivate(ownerIdx, id, dto);
-		
-		if(result != null) {
-			return ResponseEntity.ok(result);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		Optional<WsPrivateResponseDto> result = wsPrivateService.updateWsPrivate(ownerIdx, id, dto);
+		return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 	}
 	
 	/**
@@ -138,6 +129,7 @@ public class WsPrivateController {
 	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteWsPrivate(@PathVariable("ownerIdx") Long ownerIdx, @PathVariable("id") Long id) {
+		
 		wsPrivateService.deleteWsPrivate(ownerIdx, id);
 		
 		return ResponseEntity.noContent().build();

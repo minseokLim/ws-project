@@ -31,6 +31,6 @@ public class WsPrivateSearch {
 			return wsPrivate.liked.eq(Boolean.parseBoolean(value));
 		}
 		
-		throw new IllegalArgumentException();
+		throw new IllegalArgumentException("Invalid Search Parameter");
 	}
 }

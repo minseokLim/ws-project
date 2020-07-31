@@ -2,6 +2,8 @@ package com.wsproject.wsservice.controller;
 
 import static com.wsproject.wsservice.util.CommonUtil.getErrorMessages;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
@@ -45,13 +47,10 @@ public class WsAdminController {
 	 */
 	@GetMapping
 	public ResponseEntity<PagedModel<WsAdminResponseDto>> selectWsAdminList(@RequestParam(required = false) String search, @PageableDefault Pageable pageable) {
+		
 		PagedModel<WsAdminResponseDto> result = wsAdminService.selectWsAdminList(search, pageable);
 		
-		if(result != null) {
-			return ResponseEntity.ok(result);
-		} else {
-			return ResponseEntity.notFound().build();
-		}	
+		return ResponseEntity.ok(result); // TODO result가 null일 수 있을까? 없을 거 같은데...
 	}
 	
 	/**
@@ -61,13 +60,10 @@ public class WsAdminController {
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<WsAdminResponseDto> selectWsAdmin(@PathVariable("id") Long id) {
-		WsAdminResponseDto result = wsAdminService.selectWsAdmin(id);
 		
-		if(result != null) {
-			return ResponseEntity.ok(result);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		Optional<WsAdminResponseDto> result = wsAdminService.selectWsAdmin(id);
+		
+		return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 	}
 	
 	/**
@@ -100,13 +96,8 @@ public class WsAdminController {
 			return new ResponseEntity<String>(getErrorMessages(errors, "|"), HttpStatus.BAD_REQUEST);
 		}
 		
-		WsAdminResponseDto result = wsAdminService.updateWsAdmin(id, dto);
-		
-		if(result != null) {
-			return ResponseEntity.ok(result);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		Optional<WsAdminResponseDto> result = wsAdminService.updateWsAdmin(id, dto);
+		return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 	}
 	
 	/**
@@ -116,6 +107,7 @@ public class WsAdminController {
 	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteWsAdmin(@PathVariable("id") Long id) {
+		
 		wsAdminService.deleteWsAdmin(id);
 		
 		return ResponseEntity.noContent().build();
