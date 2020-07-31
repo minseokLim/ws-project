@@ -27,6 +27,6 @@ public class WsAdminSearch {
 			return wsAdmin.type.eq(WsType.valueOf(value));
 		}
 		
-		throw new IllegalArgumentException();
+		throw new IllegalArgumentException("Invalid Search Parameter");
 	}
 }

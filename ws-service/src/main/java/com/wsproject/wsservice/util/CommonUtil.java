@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.toList;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -144,7 +145,7 @@ public class CommonUtil {
 	 * @param searchFunc
 	 * @return QuerydslPredicate
 	 */
-	public static BooleanExpression extractSearchParameter(String search, Function<String, BooleanExpression> searchFunc) {
+	public static Optional<BooleanExpression> extractSearchParameter(String search, Function<String, BooleanExpression> searchFunc) {
 		try {
 			BooleanExpression result = null;
 			
@@ -166,7 +167,7 @@ public class CommonUtil {
 				}
 			}
 			
-			return result;
+			return Optional.ofNullable(result);
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
