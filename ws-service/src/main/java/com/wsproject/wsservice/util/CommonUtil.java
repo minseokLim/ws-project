@@ -169,7 +169,7 @@ public class CommonUtil {
 			
 			return Optional.ofNullable(result);
 		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
+			throw new AssertionError("UTF-8 not supported");
 		}
 	}
 	

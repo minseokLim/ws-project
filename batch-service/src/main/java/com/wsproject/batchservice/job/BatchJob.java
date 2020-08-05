@@ -36,14 +36,14 @@ public class BatchJob {
 	private TokenInfo tokenInfo;
 		
 	@Bean
-	public Job todaysWsJob() throws Exception {
+	public Job todaysWsJob() {
 		return jobBuilderFactory.get("todaysWsJob")
 					.start(todaysWsStep())
 					.build();
 	}
 	
 	@Bean
-	public Step todaysWsStep() throws Exception {
+	public Step todaysWsStep() {
 		return stepBuilderFactory.get("todaysWsStep")
 					.<Long, Long> chunk(1) // DB를 통해 배치 실행을 하는 것이 아니기 때문에 chunk사이즈는 의미가 없다.
 					.faultTolerant().retryLimit(10).retry(Exception.class) // 배치 실패 시에도 10번까지는 재시도를 한다.
@@ -54,18 +54,13 @@ public class BatchJob {
 	
 	@Bean
 	@StepScope
-	public QueueItemReader<Long> todaysWsReader() throws Exception {
-		try {
-			tokenInfo = tokenUtil.getTokenInfo();
-			RestUtil restUtil = RestUtil.builder().url("/user-service/v1.0/users/maxIdx").tokenInfo(tokenInfo).build();
-			long maxUserIdx = restUtil.exchange(Long.class).getBody(); // auto increment로 설정되어있는 userIdx의 최대값을 구한다.
-			List<Long> userIdxList = LongStream.rangeClosed(1, maxUserIdx).mapToObj(Long::new).collect(toList());
-			
-			return new QueueItemReader<Long>(userIdxList);
-		} catch (Exception e) {
-			log.info("todaysWsReader failed");
-			throw e;
-		}
+	public QueueItemReader<Long> todaysWsReader() {
+		tokenInfo = tokenUtil.getTokenInfo();
+		RestUtil restUtil = RestUtil.builder().url("/user-service/v1.0/users/maxIdx").tokenInfo(tokenInfo).build();
+		long maxUserIdx = restUtil.exchange(Long.class).getBody(); // auto increment로 설정되어있는 userIdx의 최대값을 구한다.
+		List<Long> userIdxList = LongStream.rangeClosed(1, maxUserIdx).mapToObj(Long::new).collect(toList());
+		
+		return new QueueItemReader<Long>(userIdxList);
 	}
 	
 	public ItemWriter<Long> todaysWsWriter() {

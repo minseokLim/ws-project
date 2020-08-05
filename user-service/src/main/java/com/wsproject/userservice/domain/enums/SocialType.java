@@ -33,11 +33,11 @@ public enum SocialType {
 	}
 	
 	public static SocialType ofCode(int code) {
-		return Optional.ofNullable(codeToEnum.get(code)).orElseThrow(() -> new RuntimeException(String.format("상태코드에 code=[%s]가 존재하지 않습니다.", code)));
+		return Optional.ofNullable(codeToEnum.get(code)).orElseThrow(() -> new IllegalArgumentException(String.format("상태코드에 code=[%s]가 존재하지 않습니다.", code)));
 	}
 	
 	public static SocialType ofRegistrationId(String registrationId) {
 		return Optional.ofNullable(registrationIdToEnum.get(registrationId))
-				.orElseThrow(() -> new RuntimeException(String.format("상태코드에 registrationId=[%s]가 존재하지 않습니다.", registrationId)));
+				.orElseThrow(() -> new IllegalArgumentException(String.format("상태코드에 registrationId=[%s]가 존재하지 않습니다.", registrationId)));
 	}
 }
