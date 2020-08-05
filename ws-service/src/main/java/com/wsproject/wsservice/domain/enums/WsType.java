@@ -31,6 +31,6 @@ public enum WsType {
 	}
 	
 	public static WsType ofCode(int code) {
-		return Optional.ofNullable(codeToEnum.get(code)).orElseThrow(() -> new RuntimeException(String.format("상태코드에 code=[%s]가 존재하지 않습니다.", code)));
+		return Optional.ofNullable(codeToEnum.get(code)).orElseThrow(() -> new IllegalArgumentException(String.format("상태코드에 code=[%s]가 존재하지 않습니다.", code)));
 	}
 }

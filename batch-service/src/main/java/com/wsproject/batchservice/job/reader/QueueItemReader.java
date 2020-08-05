@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Queue;
 
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 
 /**
  * 데이터를 한 개씩 읽어오지 않고 복수의 데이터를 List형태로 한꺼번에 읽어온후, <br>
@@ -25,7 +22,7 @@ public class QueueItemReader<T> implements ItemReader<T> {
 	}
 
 	@Override
-	public T read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+	public T read() {
 		return queue.poll();
 	}
 }
