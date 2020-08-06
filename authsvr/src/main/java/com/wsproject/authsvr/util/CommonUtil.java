@@ -13,27 +13,16 @@ public class CommonUtil {
 	 * @return 진짜 IP
 	 */
 	public static String getClientIP(HttpServletRequest request) {
-	    String ip = request.getHeader("X-Forwarded-For");
-	    log.debug("> X-FORWARDED-FOR : " + ip);
-
-	    if (ip == null) {
-	        ip = request.getHeader("Proxy-Client-IP");
-	        log.debug("> Proxy-Client-IP : " + ip);
-	    }
+		String[] headerNames = {"X-Forwarded-For", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR"};
+	    String ip = null;
 	    
-	    if (ip == null) {
-	        ip = request.getHeader("WL-Proxy-Client-IP");
-	        log.debug(">  WL-Proxy-Client-IP : " + ip);
-	    }
-	    
-	    if (ip == null) {
-	        ip = request.getHeader("HTTP_CLIENT_IP");
-	        log.debug("> HTTP_CLIENT_IP : " + ip);
-	    }
-	    
-	    if (ip == null) {
-	        ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-	        log.debug("> HTTP_X_FORWARDED_FOR : " + ip);
+	    for(String headerName : headerNames) {
+	    	ip = request.getHeader(headerName);
+	    	
+	    	if(ip != null) {
+	    		log.debug("{} : {}", headerName, ip);
+	    		break;
+	    	}
 	    }
 	    
 	    if (ip == null) {
