@@ -2,7 +2,6 @@ package com.wsproject.authsvr.controller;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,12 +61,8 @@ public class LoginController {
 		
 		if(savedRequest != null) {
 			UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(savedRequest.getRedirectUrl()).build();
-			Set<String> keySet = uriComponents.getQueryParams().keySet();
 			List<String> params = Arrays.asList("response_type", "client_id", "scope", "state", "redirect_uri"); // 넘어와야하는 파라미터
-			
-			if(keySet.containsAll(params)) {
-				result = true;
-			}
+			result = uriComponents.getQueryParams().keySet().containsAll(params);
 			
 			log.debug("Query String {}", uriComponents.getQuery());
 		}

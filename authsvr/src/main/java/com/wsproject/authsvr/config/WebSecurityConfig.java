@@ -69,10 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public ClientRegistrationRepository clientRegistrationRepository(OAuth2ClientProperties oAuth2ClientProperties) {
 		List<ClientRegistration> registrations = oAuth2ClientProperties.getRegistration().keySet().stream()
-												.map(registrationId -> {
-													SocialType socialType = SocialType.ofRegistrationId(registrationId);
-													return socialType.getRegistration(oAuth2ClientProperties);
-												})
+												.map(registrationId -> SocialType.ofRegistrationId(registrationId).getRegistration(oAuth2ClientProperties))
 												.filter(Objects::nonNull)
 												.collect(toList());
 		
