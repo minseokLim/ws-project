@@ -8,4 +8,6 @@ import com.wsproject.authsvr.domain.enums.SocialType;
 public interface UserService {
 	public Optional<User> selectUserByPrincipalAndSocialType(String principal, SocialType socialType);
 	public User insertUser(User user);
+	public Optional<User> selectUser(Long userIdx);
+	public Long getMaxUserIdx();
 }

@@ -28,4 +28,14 @@ public class UserServiceImpl implements UserService {
 	public User insertUser(User user) {
 		return userRepository.save(user);
 	}
+	
+	@Override
+	public Optional<User> selectUser(Long userIdx) {
+		return userRepository.findById(userIdx);
+	}
+
+	@Override
+	public Long getMaxUserIdx() {
+		return userRepository.getMaxUserIdx();
+	}
 }
